@@ -1,0 +1,11 @@
+:host{display:block;min-width:0;font:13px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.schema-shell{color:var(--color-text);background:var(--color-canvas);overflow-wrap:anywhere;min-width:0;padding:0;border-radius:8px}
+.schema-shell p{margin:6px 0}.schema-shell code{font-family:var(--font-mono)}
+.schema-shell pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%;overflow:auto}
+.schema-shell a{text-decoration:underline;overflow-wrap:anywhere}
+.schema-shell :focus-visible{outline:2px solid var(--color-primary);outline-offset:2px}
+@media(max-width:600px){.schema-shell{padding:0}}
+
+.schema-native-select{font:inherit;line-height:1.5;color:var(--color-text);background:var(--color-canvas);border:1px solid var(--color-border);border-radius:5px;padding:3px 6px;max-width:100%;appearance:auto;cursor:pointer}
+
+.schema-shell [role="button"]>.svg-inline--fa{width:12px;height:12px;flex:none}
