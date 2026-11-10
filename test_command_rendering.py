@@ -9,8 +9,11 @@ class CommandRendering(unittest.TestCase):
     def test_execution_evidence_and_safe_literal_inputs(self):
         script = r'''
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const zh=JSON.parse(fs.readFileSync('designs/browser/locales/zh-CN.json','utf8'));
+function t(key,params={}){let value=zh[key];if(value&&typeof value==='object'){const count=params.count;value=count===1&&value.one?value.one:value.other??value.one??key;}if(!value)value=key;return String(value).replace(/\{(\w+)\}/g,(_,n)=>String(params[n]??''));}
+function tp(key,count,params={}){return t(key,{...params,count});}
 const source=fs.readFileSync('designs/browser/app.js','utf8');
-const ctx={actionIcon:()=>'',toolJsonMarker:()=>'',parsedInput:x=>{try{return JSON.parse(x.text)}catch{return null}}};
+const ctx={actionIcon:()=>'',toolJsonMarker:()=>'',parsedInput:x=>{try{return JSON.parse(x.text)}catch{return null}},t,tp};
 vm.createContext(ctx);
 vm.runInContext(source.slice(source.indexOf('const esc='),source.indexOf('\n',source.indexOf('const esc=')))+'\n'+source.slice(source.indexOf('function commandReturn('),source.indexOf('async function hydrateStep(')),ctx);
 const wrapped=(text,result)=>({name:'exec',text,output:'Script completed\nWall time 1 seconds\nOutput:\n'+JSON.stringify(result)});

@@ -116,8 +116,8 @@ class Operations(unittest.TestCase):
         self.assertEqual(len(row),1)
         self.assertEqual((row[0]['summary'],row[0]['evidence']),('查看图片 a b.png',['script','native']))
         self.assertEqual(parse(completed(img))[0]['operations'][0]['arguments']['path'],'/demo/images/a b.png')
-        for chars,action in [('', '等待后台终端'),('\n','向后台终端输入')]:
-            self.assertEqual(ops.classify('write_stdin',dict(session_id=7,chars=chars))[1],action)
+        for chars, key in [('', 'tools.action.sessionWait'), ('\n', 'tools.action.sessionInput')]:
+            self.assertEqual(ops.classify('write_stdin', dict(session_id=7, chars=chars))[1], key)
 
     def test_parallel_inputs_preserve_order(self):
         source='text(await Promise.allSettled(["one","two"].map(cmd=>tools.exec_command({cmd}))))'

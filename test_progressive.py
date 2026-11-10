@@ -52,7 +52,8 @@ class ProgressiveHistory(unittest.TestCase):
         result=server.page_payload(items,{'q':['unique-tail']})
         self.assertFalse(result['has_more'])
         self.assertEqual(result['items'][1]['output'],items[2]['output'])
-        with self.assertRaises(ValueError):server.page_payload(items,{'item':['-1']})
+        from message_i18n import I18nError
+        with self.assertRaises(I18nError):server.page_payload(items,{'item':['-1']})
 
     @unittest.skipUnless(shutil.which('zstd'), 'zstd CLI unavailable')
     def test_compressed_sibling_magic_and_corruption(self):
@@ -70,7 +71,8 @@ class ProgressiveHistory(unittest.TestCase):
         compressed.rename(self.path)
         self.assertEqual(server.history(self.path),expected)
         self.path.write_bytes(b'\x28\xb5\x2f\xfd broken frame')
-        with self.assertRaises(ValueError):
+        from message_i18n import SessionIOError
+        with self.assertRaises(SessionIOError):
             with open_rollout(self.path) as f:list(f)
 
     def test_parent_relations_use_ids_not_titles(self):

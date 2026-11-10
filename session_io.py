@@ -7,6 +7,8 @@ from collections import OrderedDict
 from contextlib import contextmanager
 from pathlib import Path
 
+from message_i18n import SessionIOError, SessionIORuntime
+
 MAGIC = b'\x28\xb5\x2f\xfd'
 CACHE = OrderedDict()
 LOCK = threading.RLock()
@@ -36,14 +38,14 @@ def open_rollout(path):
             with zstd.open(path, 'rt', encoding='utf-8') as f:
                 yield f
         except zstd.ZstdError as error:
-            raise ValueError('zstd 会话解压失败，文件可能损坏。') from error
+            raise SessionIOError('errors.zstdCorrupt') from error
         return
     # LaunchAgents may have a minimal PATH. No shell or user supplied command.
     executable = shutil.which('zstd')
     if not executable:
         executable = next((p for p in ('/opt/homebrew/bin/zstd', '/usr/local/bin/zstd') if Path(p).is_file()), None)
     if not executable:
-        raise RuntimeError('该会话已压缩：需要 Python 3.14+ 或安装 zstd 后重试。')
+        raise SessionIORuntime('errors.zstdNeed')
     proc = subprocess.Popen([executable, '-dc', '--', str(path)], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     try:
         completed = [False]
@@ -53,7 +55,7 @@ def open_rollout(path):
                 completed[0] = True
             yield lines()
         if completed[0] and proc.wait() != 0:
-            raise ValueError('zstd 会话解压失败，文件可能损坏。')
+            raise SessionIOError('errors.zstdCorrupt')
     finally:
         if proc.poll() is None:
             proc.terminate()

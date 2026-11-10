@@ -20,9 +20,20 @@ COLLAB_ACTIONS = {
     'interruptAgent': 'interrupt_agent', 'interrupt_agent': 'interrupt_agent',
     'listAgents': 'list_agents', 'list_agents': 'list_agents',
 }
-AGENT_LABELS = {'started':'子任务已启动', 'interacted':'子任务发生交互', 'completed':'子任务已完成', 'interrupted':'子任务已中断'}
-TOOL_LABELS = {'spawn_agent':'启动子任务', 'wait_agent':'等待子任务', 'send_message':'发送子任务消息',
-               'followup_task':'追加子任务', 'interrupt_agent':'请求中断子任务', 'list_agents':'查看子任务'}
+AGENT_LABEL_KEYS = {
+    'started': 'tools.native.agent.started',
+    'interacted': 'tools.native.agent.interacted',
+    'completed': 'tools.native.agent.completed',
+    'interrupted': 'tools.native.agent.interrupted',
+}
+TOOL_LABEL_KEYS = {
+    'spawn_agent': 'tools.native.spawn',
+    'wait_agent': 'tools.native.wait',
+    'send_message': 'tools.native.send',
+    'followup_task': 'tools.native.followup',
+    'interrupt_agent': 'tools.native.interrupt',
+    'list_agents': 'tools.native.list',
+}
 
 
 def family(event):

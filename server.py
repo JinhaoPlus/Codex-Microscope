@@ -6,6 +6,7 @@ import exec_presentation as exec_ui
 import mcp_output
 import pricing
 import tool_operations as classification
+from message_i18n import DatabaseUnavailable, I18nError, error_payload, i18n_error, legacy, msg
 from token_usage import report as usage_report
 from session_io import open_rollout,resolve_rollout,cached_history,stamp
 from urllib.parse import unquote, urlencode
@@ -14,7 +15,6 @@ from http.server import ThreadingHTTPServer,BaseHTTPRequestHandler
 from urllib.parse import urlparse,parse_qs
 ROOT=Path(__file__).parent
 HOME=Path(os.environ.get('CODEX_HOME',Path.home()/'.codex'))
-class DatabaseUnavailable(RuntimeError):pass
 
 def read_sql(path,query,params=()):
  # Always close, including failed queries. URI quoting preserves spaces, # and ?.
@@ -27,7 +27,7 @@ def read_sql(path,query,params=()):
    if not any(value in str(exc).lower() for value in ('unable to open','locked','busy')):raise
    if attempt<2:time.sleep(.15*(attempt+1));continue
    print(f'Database read failed: {Path(path).name}: {exc}; exists={Path(path).exists()}; readable={os.access(path,os.R_OK)}; code={getattr(exc,"sqlite_errorname",None)}',file=sys.stderr,flush=True)
-   raise DatabaseUnavailable(f'暂时无法读取 {Path(path).name}，正在等待恢复。请确认 Codex 数据目录可访问。') from exc
+   raise DatabaseUnavailable('errors.dbBusy', params=dict(name=Path(path).name)) from exc
 
 HISTORY_CACHE = {}
 HISTORY_LOCK = threading.RLock()
@@ -35,7 +35,7 @@ HISTORY_FAILURE = {'home': None, 'retry_after': 0}
 def history_warning():
  with HISTORY_LOCK:
   unavailable = HISTORY_FAILURE['home'] == str(HOME) and HISTORY_FAILURE['retry_after'] > time.monotonic()
- return '状态与耗时数据库暂不可用，已保留可读取的会话内容。' if unavailable else None
+ return msg('errors.historyUnavailable') if unavailable else None
 
 def history_sql(query, params=(), required=False):
  path = HOME/'thread_history_1.sqlite'
@@ -43,14 +43,14 @@ def history_sql(query, params=(), required=False):
  with HISTORY_LOCK:
   cached = HISTORY_CACHE.get(key)
   if history_warning():
-   if required and cached is None:raise DatabaseUnavailable('备用正文数据库暂不可用，请稍后重试。')
+   if required and cached is None:raise DatabaseUnavailable('errors.historyDbBusy')
    return cached if cached is not None else []
   if not path.is_file():return cached if cached is not None else []
   try:
    result = read_sql(path, query, params)
   except (DatabaseUnavailable, sqlite3.OperationalError) as error:
    HISTORY_FAILURE.update(home=str(HOME), retry_after=time.monotonic()+5)
-   if required and cached is None:raise DatabaseUnavailable('备用正文数据库暂不可用，请稍后重试。') from error
+   if required and cached is None:raise DatabaseUnavailable('errors.historyDbBusy') from error
    return cached if cached is not None else []
   HISTORY_FAILURE.update(home=None, retry_after=0)
   HISTORY_CACHE[key] = result
@@ -79,7 +79,7 @@ def workspace_names():
 
 def rows():
  databases=sorted(HOME.glob('state_*.sqlite'),key=lambda p:p.stat().st_mtime)
- if not databases:raise DatabaseUnavailable('未找到 Codex 会话索引，请确认 CODEX_HOME 指向已有的数据目录。')
+ if not databases:raise DatabaseUnavailable('errors.noIndex')
  names=workspace_names()
  result=[dict(r) for r in read_sql(databases[-1],'select id,title,name,source,originator,cwd,updated_at,archived,model,tokens_used,rollout_path from threads order by updated_at desc')]
  for row in result:
@@ -101,9 +101,18 @@ def text(v):
  if isinstance(v,str):return v
  if isinstance(v,list):return '\n'.join(text(x) for x in v)
  if isinstance(v,dict):
-  if v.get('type') in ('audio','input_audio'):return '[音频]'
-  return v.get('text') or ('[图片]' if 'image' in v.get('type','') else json.dumps(v,ensure_ascii=False))
+  if v.get('type') in ('audio','input_audio'):return legacy('session.multimodal.audio')
+  return v.get('text') or (legacy('session.multimodal.image') if 'image' in v.get('type','') else json.dumps(v,ensure_ascii=False))
  return str(v)
+def text_message(v):
+ # Preserve raw content; only synthetic media placeholders are product messages.
+ if isinstance(v,list):
+  parts=[text_message(x) for x in v]
+  return {'join':parts,'separator':'\n'} if any(isinstance(x,dict) for x in parts) else text(v)
+ if isinstance(v,dict):
+  if v.get('type') in ('audio','input_audio'):return msg('session.multimodal.audio')
+  if not v.get('text') and 'image' in v.get('type',''):return msg('session.multimodal.image')
+ return text(v)
 def history(path):
  return cached_history(path,parse_history)[:2]
 def native_actions(item):
@@ -310,6 +319,8 @@ def parse_rollout(stream):
    if o.get('type')!='response_item':continue
    if typ=='message':
     role=p.get('role');entry.update(role=role,text=text(p.get('content',[])))
+    presented=text_message(p.get('content',[]))
+    if isinstance(presented,dict):entry['text_message']=presented
     if role not in ('user','assistant'):entry['kind']='context'
    elif typ in ('function_call','custom_tool_call'):
     entry.update(kind='tool',record_type='tool_call',call_id=p.get('call_id'),name=p.get('name'),text=text(p.get('arguments',p.get('input',''))),output=None)
@@ -335,7 +346,7 @@ def parse_rollout(stream):
       origins=process_calls.setdefault((call.get('turn_id'),pid),[])
       if not any(owner is call and source==pos for owner,source in origins):origins.append((call,pos))
      open_calls.pop(p['call_id'],None);continue
-    entry.update(kind='tool',name='工具结果',text=result,_raw_lines=[line_no])
+    entry.update(kind='tool',name=legacy('session.orphanToolName'),name_key='session.orphanToolName',text=result,_raw_lines=[line_no])
    elif typ=='reasoning':
     summary=text(p.get('summary',[]))
     if not summary:continue
@@ -367,6 +378,8 @@ def project_stored_rows(rows):
   v=json.loads(raw);t=v.get('type');e={'time':ts/1000,'turn_id':turn_id,'kind':'tool','name':v.get('tool',t)}
   if t in ('userMessage','agentMessage','plan'):
    e.update(kind='message',role='user' if t=='userMessage' else 'assistant',text=v.get('text') or text(v.get('content',[])))
+   presented=text_message(v.get('content',[]))
+   if not v.get('text') and isinstance(presented,dict):e['text_message']=presented
   elif t=='reasoning':
    summary=text(v.get('summary',[]))
    if not summary:continue
@@ -429,7 +442,7 @@ def page_payload(items,q):
  if q.get('view')==['context']:return {'items':[x for x in items if context_item(x)]}
  if 'item' in q:
   index=int(q['item'][0])
-  if not 0<=index<len(items):raise ValueError('执行记录不存在')
+  if not 0<=index<len(items):raise I18nError('errors.execMissing')
   item=items[index]
   if item.get('kind')=='tool' and 'operations' not in item:item=classification.describe(dict(item))
   return {'item':{k:v for k,v in item.items() if k not in ('_raw_lines','_stored_raw','_return_lines')}}
@@ -513,9 +526,9 @@ def demo_response(path,q):
  import demo_cases
  if path=='/api/demo/threads':return 200,demo_cases.catalog()
  identifier=q.get('id',[''])[0]
- if identifier not in demo_cases.CASES:return 404,{'error':'示例不存在'}
+ if identifier not in demo_cases.CASES:return 404,error_payload('errors.demoMissing')
  if path=='/api/demo/revision':return 200,{'list':'demo','thread':identifier}
- if path!='/api/demo/thread':return 404,{'error':'未知演示接口'}
+ if path!='/api/demo/thread':return 404,error_payload('errors.demoUnknown')
  lines=demo_cases.lines(identifier)
  is_database=demo_cases.CASES[identifier][0].get('record_format')=='database'
  if is_database:
@@ -525,7 +538,7 @@ def demo_response(path,q):
  if q.get('view')==['turn-context']:return 200,{'records':snapshots.get(q.get('turn',[''])[0],[])}
  if 'item' in q and q.get('raw')==['1']:
   index=int(q['item'][0])
-  if not 0<=index<len(items) or items[index]['kind']!='tool':raise ValueError('工具记录不存在')
+  if not 0<=index<len(items) or items[index]['kind']!='tool':raise I18nError('errors.toolMissing')
   if is_database:return 200,{'records':raw_tool_records(items[index],None)}
   return 200,{'records':mcp_output.visible_records(items[index],[lines[n-1] for n in items[index]['_raw_lines']])}
  payload=page_payload(items,q)
@@ -554,28 +567,29 @@ class Handler(BaseHTTPRequestHandler):
    emit(dict(type='result',data=result))
   except (BrokenPipeError,ConnectionResetError):pass
   except Exception as error:
-   try:emit(dict(type='error',error=str(error)))
+   try:emit(dict(type='error',**i18n_error(error)))
    except (BrokenPipeError,ConnectionResetError):pass
  def send(self,status,data,mime='application/json'):
   b=data if isinstance(data,bytes) else json.dumps(data,ensure_ascii=False).encode()
   self.send_response(status);self.send_header('Content-Type',mime);self.send_header('Content-Length',str(len(b)));self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'");self.end_headers();self.wfile.write(b)
  def do_POST(self):
   host=self.headers.get('Host','')
-  if host.split(':')[0] not in ('localhost','127.0.0.1'):return self.send(403,{'error':'仅允许 localhost 访问'})
+  if host.split(':')[0] not in ('localhost','127.0.0.1'):return self.send(403,error_payload('errors.localhostOnly'))
   origin=self.headers.get('Origin')
-  if origin and origin not in ('http://'+host,):return self.send(403,{'error':'拒绝跨站设置请求'})
-  if self.headers.get('Content-Type','').split(';')[0]!='application/json':return self.send(415,{'error':'需要 JSON 请求'})
+  if origin and origin not in ('http://'+host,):return self.send(403,error_payload('errors.csrf'))
+  if self.headers.get('Content-Type','').split(';')[0]!='application/json':return self.send(415,error_payload('errors.needJson'))
   try:
    length=int(self.headers.get('Content-Length','0'))
-   if length<1 or length>16384:return self.send(413,{'error':'请求大小不合法'})
+   if length<1 or length>16384:return self.send(413,error_payload('errors.badSize'))
    value=json.loads(self.rfile.read(length))
    if self.path=='/api/pricing/settings':return self.send(200,pricing.configure(value))
    if self.path=='/api/pricing/refresh':return self.send(200,pricing.refresh(value.get('source')))
-   return self.send(404,{'error':'未找到设置'})
-  except (ValueError,TypeError,AttributeError) as error:return self.send(400,{'error':str(error)})
-  except Exception as error:return self.send(502,{'error':'同步失败，已有缓存已保留：'+str(error)})
+   return self.send(404,error_payload('errors.settingsMissing'))
+  except I18nError as error:return self.send(400,i18n_error(error))
+  except (ValueError,TypeError,AttributeError) as error:return self.send(400,i18n_error(error))
+  except Exception as error:return self.send(502,error_payload('errors.syncFailed',detail=str(error)))
  def do_GET(self):
-  if self.headers.get('Host','').split(':')[0] not in ('localhost','127.0.0.1'):return self.send(403,{'error':'仅允许 localhost 访问'})
+  if self.headers.get('Host','').split(':')[0] not in ('localhost','127.0.0.1'):return self.send(403,error_payload('errors.localhostOnly'))
   u=urlparse(self.path)
   try:
    if u.path in ('/demo','/demo/'):
@@ -594,47 +608,50 @@ class Handler(BaseHTTPRequestHandler):
     return self.send(200,rs)
    if u.path=='/api/thread':
     id=parse_qs(u.query).get('id',[''])[0];r=next((x for x in rows() if x['id']==id),None)
-    if not r:return self.send(404,{'error':'会话不存在'})
+    if not r:return self.send(404,error_payload('errors.threadMissing'))
     p=resolve_rollout(r.pop('rollout_path')).resolve()
-    if not p.is_relative_to(HOME.resolve()):return self.send(403,{'error':'记录位于数据目录之外'})
+    if not p.is_relative_to(HOME.resolve()):return self.send(403,error_payload('errors.outsideHome'))
     q=parse_qs(u.query)
     if q.get('view')==['turn-context']:
      records=cached_history(p,parse_history)[2].get(q.get('turn',[''])[0],[]) if p.is_file() else []
      return self.send(200,{'records':records})
     its,bad=history(p) if p.exists() else (stored_history(id),0)
-    if not its:return self.send(404,{'error':'没有可读取的会话内容'})
+    if not its:return self.send(404,error_payload('errors.noContent'))
     q=parse_qs(u.query)
     if 'item' in q and q.get('raw')==['1']:
      index=int(q['item'][0])
-     if not 0<=index<len(its) or its[index].get('kind')!='tool':raise ValueError('工具记录不存在')
+     if not 0<=index<len(its) or its[index].get('kind')!='tool':raise I18nError('errors.toolMissing')
      return self.send(200,{'records':raw_tool_records(its[index],p)})
     payload=page_payload(its,q)
     if 'item' not in q and 'view' not in q:payload.update(thread=r,skipped=bad,turns=stored_turns(id),relations=relations(id),history_warning=history_warning())
     return self.send(200,payload)
    if u.path=='/api/local-file':
     q=parse_qs(u.query);id=q.get('id',[''])[0];r=next((x for x in rows() if x['id']==id),None)
-    if not r:return self.send(404,{'error':'会话不存在'})
+    if not r:return self.send(404,error_payload('errors.threadMissing'))
     rollout=resolve_rollout(r['rollout_path']).resolve()
-    if not rollout.is_relative_to(HOME.resolve()):return self.send(403,{'error':'记录位于数据目录之外'})
+    if not rollout.is_relative_to(HOME.resolve()):return self.send(403,error_payload('errors.outsideHome'))
     items=history(rollout)[0] if rollout.is_file() else stored_history(id)
     allowed=referenced_files(items)
     raw=re.sub(r':\d+(?::\d+)?$','',q.get('path',[''])[0]);p=Path(raw).resolve()
-    if str(p) not in allowed:return self.send(403,{'error':'仅允许访问此会话明确引用的文件'})
-    if not p.exists():return self.send(404,{'error':'原文件已移动或不存在'})
+    if str(p) not in allowed:return self.send(403,error_payload('errors.localFileDenied'))
+    if not p.exists():return self.send(404,error_payload('errors.localFileGone'))
     if p.is_dir():
      children=[Path(v) for v in sorted(allowed) if Path(v).is_relative_to(p) and Path(v)!=p]
      links=''.join('<li><a href="/api/local-file?'+html.escape(urlencode({'id':id,'path':str(v)}))+'">'+html.escape(str(v.relative_to(p)))+'</a></li>' for v in children)
-     page='<meta charset="utf-8"><title>会话引用的目录</title><h2>'+html.escape(p.name)+'</h2><p>'+html.escape(str(p))+'</p><p>仅列出这段会话明确引用的文件。</p><ul>'+links+'</ul>'
+     template=(ROOT/'designs/browser/local-directory.html').read_text()
+     page=template.replace('{{dirname}}',html.escape(p.name)).replace('{{abspath}}',html.escape(str(p))).replace('{{links}}',links)
      return self.send(200,page.encode(),'text/html; charset=utf-8')
-    if not p.is_file() or p.stat().st_size>32*1024*1024:return self.send(413,{'error':'文件过大或不是普通文件'})
+    if not p.is_file() or p.stat().st_size>32*1024*1024:return self.send(413,error_payload('errors.localFileTooLarge'))
     mime={'.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.gif':'image/gif','.avif':'image/avif','.txt':'text/plain; charset=utf-8','.md':'text/plain; charset=utf-8','.json':'text/plain; charset=utf-8','.py':'text/plain; charset=utf-8','.js':'text/plain; charset=utf-8','.html':'text/plain; charset=utf-8'}.get(p.suffix.lower(),'application/octet-stream')
     return self.send(200,p.read_bytes(),mime)
-   files={'/vendor/nouislider.min.js':('vendor/nouislider.min.js','text/javascript; charset=utf-8'),'/vendor/nouislider.min.css':('vendor/nouislider.min.css','text/css; charset=utf-8'),'/vendor/schema-viewer.js':('vendor/schema-viewer.js','text/javascript; charset=utf-8'),'/vendor/schema-viewer.css':('vendor/schema-viewer.css','text/css; charset=utf-8'),'/vendor/highlight.min.js':('vendor/highlight.min.js','text/javascript; charset=utf-8'),'/assets/microscope.png':('assets/microscope.png','image/png'),'/vendor/lucide-icons.js':('vendor/lucide-icons.js','text/javascript; charset=utf-8'),'/vendor/markdown-it.min.js':('vendor/markdown-it.min.js','text/javascript; charset=utf-8'),'/':('index.html','text/html; charset=utf-8'),'/app.js':('app.js','text/javascript; charset=utf-8'),'/token-usage.js':('token-usage.js','text/javascript; charset=utf-8'),'/style.css':('style.css','text/css; charset=utf-8')}
-   if u.path not in files:return self.send(404,{'error':'Not found'})
-   file,mime=files[u.path];return self.send(200,(ROOT/'designs/browser'/file).read_bytes(),mime)
-  except DatabaseUnavailable as e:return self.send(503,{'error':str(e)})
-  except ValueError as e:return self.send(400,{'error':str(e)})
-  except FileNotFoundError:return self.send(404,{'error':'会话记录文件不可用'})
-  except Exception as e:return self.send(500,{'error':str(e)})
+   browser=ROOT/'designs/browser'
+   files={'/vendor/nouislider.min.js':('vendor/nouislider.min.js','text/javascript; charset=utf-8'),'/vendor/nouislider.min.css':('vendor/nouislider.min.css','text/css; charset=utf-8'),'/vendor/schema-viewer.js':('vendor/schema-viewer.js','text/javascript; charset=utf-8'),'/vendor/schema-viewer.css':('vendor/schema-viewer.css','text/css; charset=utf-8'),'/vendor/highlight.min.js':('vendor/highlight.min.js','text/javascript; charset=utf-8'),'/assets/microscope.png':('assets/microscope.png','image/png'),'/vendor/lucide-icons.js':('vendor/lucide-icons.js','text/javascript; charset=utf-8'),'/vendor/markdown-it.min.js':('vendor/markdown-it.min.js','text/javascript; charset=utf-8'),'/':('index.html','text/html; charset=utf-8'),'/app.js':('app.js','text/javascript; charset=utf-8'),'/token-usage.js':('token-usage.js','text/javascript; charset=utf-8'),'/style.css':('style.css','text/css; charset=utf-8'),'/i18n.js':('i18n.js','text/javascript; charset=utf-8'),'/local-directory.js':('local-directory.js','text/javascript; charset=utf-8'),'/local-directory.css':('local-directory.css','text/css; charset=utf-8'),'/locales/manifest.json':('locales/manifest.json','application/json; charset=utf-8'),'/locales/zh-CN.json':('locales/zh-CN.json','application/json; charset=utf-8'),'/locales/en.json':('locales/en.json','application/json; charset=utf-8')}
+   if u.path not in files:return self.send(404,error_payload('errors.notFound'))
+   file,mime=files[u.path];return self.send(200,(browser/file).read_bytes(),mime)
+  except DatabaseUnavailable as e:return self.send(503,i18n_error(e))
+  except I18nError as e:return self.send(400,i18n_error(e))
+  except (ValueError,RuntimeError) as e:return self.send(400,i18n_error(e))
+  except FileNotFoundError:return self.send(404,error_payload('errors.rolloutUnavailable'))
+  except Exception as e:return self.send(500,i18n_error(e))
 if __name__=='__main__':
  a=argparse.ArgumentParser();a.add_argument('--port',type=int,default=4318);args=a.parse_args();print(f'http://localhost:{args.port}',flush=True);ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()

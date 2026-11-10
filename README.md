@@ -40,6 +40,14 @@ CODEX_HOME=/path/to/your/codex python3 server.py
 
 缓存命中率展示于范围汇总和日／小时浮层，按缓存读取 Token 除以输入总量计算。输入总量包含未缓存输入、缓存读取和缓存写入，不包含输出；跨轮先汇总再相除，无输入时显示“—”。
 
+## 界面语言
+
+支持简体中文与 English。侧栏底部可选择语言或“跟随浏览器”；切换会刷新页面，当前会话地址与已保存的显示偏好保留，临时搜索、弹框和滚动位置会重置。选择只保存在当前浏览器，不修改 Codex 设置。
+
+同一套页面和代码加载本地语言配置；会话原文、命令、输出、文件路径及原始 JSON 保持原样。界面语言不改变统计时区、金额币种或价格换算规则。Schema Viewer 的上游规范标签沿用英语，详见 [第三方界面说明](docs/i18n-third-party.md)。
+
+翻译配置位于 `designs/browser/locales/`，元数据记录每个 key 的用途与命名参数。修改译文后运行 `python3 scripts/check_locales.py`；新增语言需填写配置并通过完整度检查，再在 manifest 中启用。不要复制页面或业务脚本。
+
 ## 功能
 
 - 工具调用优先按原生操作明细展示读取文件、读取技能、搜索和修改文件；修改行数来自实际 diff。连续调用聚合一层，展开后逐项展示，点击操作行查看原始调用与输出。缺少结构化明细时沿用命令摘要兜底，思考摘要不混入工具组。
@@ -102,6 +110,7 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/local.codex-session-brow
 
 ```sh
 python3 -m unittest -v
+python3 scripts/check_locales.py
 # 可选，需要 Node.js
 node --check designs/browser/app.js
 ```
@@ -142,3 +151,11 @@ node --check designs/browser/app.js
 
 如需导出无开发历史的源码发布包，运行 `python3 scripts/export_public_source.py`。
 导出仅包含 `scripts/public-files.txt` 明确列出的文件，不包含 `.git`、内部调查文档或本地数据。
+
+多语言浏览器回归使用合成 API 数据，不读取真实会话。安装 Schema 构建工具的可选依赖并启动本地服务后，可运行：
+
+```sh
+I18N_TEST_URL=http://localhost:4318 I18N_TEST_BROWSER=/path/to/chrome node scripts/verify_i18n_ui.cjs
+```
+
+检查覆盖中英、1280px/390px、延迟加载、预览、统计、错误和本地目录页；不代表其他操作系统已完成验证。

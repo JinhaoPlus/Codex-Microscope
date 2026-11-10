@@ -10,8 +10,11 @@ class ContextOrganization(unittest.TestCase):
     def test_record_order_provenance_and_turn_field_preservation(self):
         script = r'''
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const zh=JSON.parse(fs.readFileSync('designs/browser/locales/zh-CN.json','utf8'));
+function t(key,params={}){let value=zh[key];if(value&&typeof value==='object'){const count=params.count;value=count===1&&value.one?value.one:value.other??value.one??key;}if(!value)value=key;return String(value).replace(/\{(\w+)\}/g,(_,n)=>String(params[n]??''));}
+function tp(key,count,params={}){return t(key,{...params,count});}
 const source=fs.readFileSync('designs/browser/app.js','utf8');
-const ctx={isContext:r=>r.kind==='context',effortIndicator:v=>`<span>${v}</span>`};
+const ctx={isContext:r=>r.kind==='context',effortIndicator:v=>`<span>${v}</span>`,t,tp};
 vm.createContext(ctx);
 vm.runInContext(source.slice(source.indexOf('const esc='),source.indexOf('\n',source.indexOf('const esc=')))+'\nfunction md(s){return esc(s)}\n'+source.slice(source.indexOf('function contextField('),source.indexOf('let contextRequest=')),ctx);
 const record=(text,time='2026-01-01T12:00:00Z')=>({kind:'context',role:'developer',text,time});

@@ -1,0 +1,4 @@
+body { font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; }
+h2 { margin: 0 0 0.5rem; overflow-wrap: anywhere; }
+.path { color: #555; font-size: 0.95rem; overflow-wrap: anywhere; }
+ul { padding-left: 1.25rem; overflow-wrap: anywhere; }

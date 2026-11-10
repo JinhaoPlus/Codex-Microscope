@@ -6,7 +6,14 @@ import {config,dom} from '@fortawesome/fontawesome-svg-core';
 // Font Awesome's global stylesheet cannot reach this isolated viewer.
 config.autoAddCss=false;
 
-export function mount(host,schema){
+function resolveT(options){
+ if(options?.t) return options.t;
+ if(typeof globalThis!=='undefined'&&globalThis.t) return globalThis.t;
+ return key=>key;
+}
+
+export function mount(host,schema,options={}){
+ const translate=resolveT(options);
  const shadow=host.shadowRoot||host.attachShadow({mode:'open'});
  host.replaceChildren();shadow.replaceChildren();
  const stylesheet=document.createElement('link');stylesheet.rel='stylesheet';stylesheet.href='/vendor/schema-viewer.css';
@@ -18,9 +25,9 @@ export function mount(host,schema){
  shadow.append(stylesheet,icons,shell);
  const root=createRoot(shell);
  if(typeof schema==='boolean'||schema&&typeof schema==='object'&&!Array.isArray(schema)&&!Object.keys(schema).length){
-  root.render(React.createElement('p',null,schema===false?'此 Schema 不允许任何值。':'此 Schema 允许任意值。'));
+  root.render(React.createElement('p',null,schema===false?translate('context.schema.forbidAll'):translate('context.schema.allowAny')));
  }else{
-  root.render(React.createElement(JsonSchemaViewer,{schema,defaultExpandedDepth:2,maxRefDepth:4,disableCrumbs:true,emptyText:'没有可展示的参数，请查看原始 Schema。'}));
+  root.render(React.createElement(JsonSchemaViewer,{schema,defaultExpandedDepth:2,maxRefDepth:4,disableCrumbs:true,emptyText:options.emptyText||translate('context.schema.empty')}));
  }
  return ()=>{observer.disconnect();root.unmount();shadow.replaceChildren()};
 }

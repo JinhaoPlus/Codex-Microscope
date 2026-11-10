@@ -4,7 +4,7 @@ const base=(process.env.SCHEMA_TEST_URL||'http://127.0.0.1:4318').replace(/\/$/,
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.SCHEMA_TEST_BROWSER,headless:true});
  try{for(const width of [1280,390]){
-  const page=await browser.newPage({viewport:{width,height:820},hasTouch:width===390});page.setDefaultTimeout(12000);
+  const page=await browser.newPage({viewport:{width,height:820},hasTouch:width===390,locale:'zh-CN'});page.setDefaultTimeout(12000);
   const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
   await page.goto(base+'/demo');await page.locator('#list .session').first().waitFor({state:'attached'});
   await page.evaluate(()=>{

@@ -9,9 +9,14 @@ class UsageCostChart(unittest.TestCase):
     def test_cost_scale_missing_estimates_and_partial_coverage(self):
         script = r'''
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const zh=JSON.parse(fs.readFileSync('designs/browser/locales/zh-CN.json','utf8'));
+function t(key,params={}){let value=zh[key];if(value&&typeof value==='object'){const count=params.count;value=count===1&&value.one?value.one:value.other??value.one??key;}if(!value)value=key;return String(value).replace(/\{(\w+)\}/g,(_,n)=>String(params[n]??''));}
+function tp(key,count,params={}){return t(key,{...params,count});}
 const source=fs.readFileSync('designs/browser/token-usage.js','utf8');
-const ctx={usageData:null,usageDay:'',usageCompact:String,usageNumber:String,usageExactNumber:String,tokenBreakdown:()=>'',window:{addEventListener:()=>{}},esc:s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))};vm.createContext(ctx);
-vm.runInContext(source.slice(0,source.indexOf('const usageDialog'))+'\n'+source.slice(source.indexOf('function usageBucketCost('),source.indexOf('// A calendar stays'))+'\n'+source.slice(source.indexOf('function usageCostHeading('),source.indexOf('function usageCoveragePercent(')),ctx);
+const storage={};
+function formatNumber(value,options={}){return Number(value).toLocaleString('en-US',options);}
+const ctx={usageData:null,usageDay:'',usageCompact:String,usageNumber:String,usageExactNumber:String,tokenBreakdown:()=>'',formatNumber,window:{addEventListener:()=>{}},localStorage:{getItem:k=>storage[k]??null,setItem:(k,v)=>{storage[k]=v},removeItem:k=>{delete storage[k]}},I18n:{ready:Promise.resolve()},esc:s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),t,tp};vm.createContext(ctx);
+vm.runInContext(source.slice(0,source.indexOf('let usageDialog'))+'\n'+source.slice(source.indexOf('function usageBucketCost('),source.indexOf('// A calendar stays'))+'\n'+source.slice(source.indexOf('function usageCostHeading('),source.indexOf('function usageCoveragePercent(')),ctx);
 const pricing={basis:'api',unit:'USD'};
 const bucket=(total,value,rated=total,unrated=0)=>({label:'2026-11-06',total,tokens:{input:total},cost:{value,rated_tokens:rated,unrated_tokens:unrated}});
 const render=(buckets,p=pricing)=>{ctx.usageData={buckets,pricing:p};return ctx.usageSVG()};

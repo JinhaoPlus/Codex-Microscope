@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codex-microscope.local/locales/messages.schema.json",
+  "title": "Codex Microscope UI messages",
+  "type": "object",
+  "propertyNames": {
+    "pattern": "^[a-z][a-zA-Z0-9]*(\\.[a-zA-Z0-9_-]+)+$"
+  },
+  "additionalProperties": {
+    "oneOf": [
+      {
+        "type": "string",
+        "minLength": 1
+      },
+      {
+        "type": "object",
+        "properties": {
+          "one": { "type": "string", "minLength": 1 },
+          "other": { "type": "string", "minLength": 1 }
+        },
+        "required": ["other"],
+        "additionalProperties": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    ]
+  }
+}

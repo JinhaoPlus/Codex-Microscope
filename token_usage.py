@@ -2,6 +2,7 @@
 import json
 import re
 import threading
+from message_i18n import UsageError, legacy, msg
 from pricing import Estimator, empty_cost, add_cost, cost_json
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -176,15 +177,15 @@ def report(rows, home, query, on_progress=None):
     scope = query.get('scope', ['all'])[0]
     scope_id = query.get('scope_id', [''])[0]
     if scope not in ('all', 'directory', 'session') or (scope == 'session' and not scope_id):
-        raise ValueError('无效的统计范围')
+        raise UsageError('usage.invalidScope')
     scope_thread = next((row for row in rows if row['id'] == scope_id), None) if scope == 'session' else None
     dimension = query.get('dimension', ['session'])[0]
     if dimension not in ('session', 'turn', 'directory'):
-        raise ValueError('未知统计维度')
+        raise UsageError('usage.unknownDimension')
     try:
         zone = ZoneInfo(query.get('timezone', ['Asia/Singapore'])[0])
     except (ZoneInfoNotFoundError, ValueError) as error:
-        raise ValueError('无法识别统计时区') from error
+        raise UsageError('usage.badTimezone') from error
     selected = query.get('selected', [''])[0]
     day = query.get('day', [''])[0]
     if day:
@@ -227,8 +228,12 @@ def report(rows, home, query, on_progress=None):
             key = {'session': thread['id'], 'directory': directory,
                    'turn': thread['id'] + '/' + (turn or 'unassigned')}[dimension]
             title = thread.get('name') or thread.get('title') or thread['id']
-            label = directory or '未记录目录' if dimension == 'directory' else title
-            group = groups.setdefault(key, {'id': key, 'label': label, 'thread_id': thread['id'],
+            if dimension == 'directory':
+                label = directory or legacy('usage.unrecordedDirectory')
+                label_key = None if directory else 'usage.unrecordedDirectory'
+            else:
+                label, label_key = title, None
+            group = groups.setdefault(key, {'id': key, 'label': label, 'label_key': label_key, 'thread_id': thread['id'],
                                            'turn_id': turn if dimension == 'turn' else None,
                                            'turn_number': event.get('turn_number') if dimension == 'turn' else None,
                                            'summary': event.get('summary', '') if dimension == 'turn' else '',

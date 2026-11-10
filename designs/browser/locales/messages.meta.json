@@ -1,0 +1,6943 @@
+{
+  "glossary": {
+    "cache": {
+      "en": "Cache: prompt cache reads/writes and local price cache.",
+      "zh": "缓存：Prompt 缓存读写及本地单价缓存。"
+    },
+    "credits": {
+      "en": "credits: Codex billing unit; keep brand token.",
+      "zh": "credits：Codex 计费额度单位，品牌名保留。"
+    },
+    "estimated cost": {
+      "en": "Estimated cost: converted via pricing rules; not an invoice.",
+      "zh": "估算成本：按单价规则折算，不代表账单。"
+    },
+    "orchestration": {
+      "en": "Orchestration: JavaScript exec orchestration script and its run.",
+      "zh": "编排：JavaScript exec 编排脚本及其执行。"
+    },
+    "session": {
+      "en": "Session: one Codex conversation thread; synonymous with thread.",
+      "zh": "会话：一次 Codex 对话线程；与 thread 同义。"
+    },
+    "thread": {
+      "en": "Thread: storage-layer session identifier / index concept.",
+      "zh": "线程：存储层的会话 ID / 索引概念。"
+    },
+    "tool call": {
+      "en": "Tool call: a single tool invocation and its result.",
+      "zh": "工具调用：一次工具请求及其返回。"
+    },
+    "turn": {
+      "en": "Turn: one model request–response cycle.",
+      "zh": "轮次：模型请求—回复的一轮。"
+    }
+  },
+  "keys": {
+    "accessibility.archive": {
+      "description": "归档筛选",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "accessibility.brandAlt": {
+      "description": "Codex Microscope",
+      "location": "designs/browser/index.html:1; app.js:626",
+      "params": [],
+      "plural": false
+    },
+    "accessibility.findToggle": {
+      "description": "展开/收起会话查找",
+      "location": "designs/browser/index.html:1; app.js:198",
+      "params": [],
+      "plural": false
+    },
+    "accessibility.listMode": {
+      "description": "会话组织方式",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "accessibility.searchSessions": {
+      "description": "搜索会话",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "accessibility.sourceFilter": {
+      "description": "按会话来源筛选",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "accessibility.sourceMenu": {
+      "description": "会话来源",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "accessibility.schemaSelectType": {
+      "description": "Schema 类型选择器 aria",
+      "location": "scripts/schema-viewer/mosaic.js",
+      "params": [],
+      "plural": false
+    },
+    "accessibility.theme": {
+      "description": "切换深浅色",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "common.brand": {
+      "description": "Codex Microscope",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "common.close": {
+      "description": "关闭",
+      "location": "designs/browser/app.js:1349 (and shared buttons)",
+      "params": [],
+      "plural": false
+    },
+    "common.collapse": {
+      "description": "还原",
+      "location": "designs/browser/app.js:253; token-usage.js:545",
+      "params": [],
+      "plural": false
+    },
+    "common.copied": {
+      "description": "已复制",
+      "location": "designs/browser/app.js:491,1348,1364",
+      "params": [],
+      "plural": false
+    },
+    "common.copy": {
+      "description": "复制",
+      "location": "designs/browser/app.js:488,892,1302",
+      "params": [],
+      "plural": false
+    },
+    "common.copyFailed": {
+      "description": "复制失败",
+      "location": "designs/browser/app.js:491",
+      "params": [],
+      "plural": false
+    },
+    "common.copySelectManual": {
+      "description": "已选中，请手动复制",
+      "location": "designs/browser/app.js:1349,1372",
+      "params": [],
+      "plural": false
+    },
+    "common.dateLocale": {
+      "description": "zh-CN (Intl)",
+      "location": "designs/browser/app.js:21; token-usage.js:635",
+      "params": [],
+      "plural": false
+    },
+    "common.durationMinutes": {
+      "description": "{minutes} 分",
+      "location": "designs/browser/app.js:149",
+      "params": [
+        {
+          "name": "minutes",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "common.durationMinutesSeconds": {
+      "description": "{minutes} 分 {seconds} 秒",
+      "location": "designs/browser/app.js:149",
+      "params": [
+        {
+          "name": "minutes",
+          "type": "number"
+        },
+        {
+          "name": "seconds",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "common.durationSeconds": {
+      "description": "{count} 秒",
+      "location": "designs/browser/app.js:149,898",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "common.emDash": {
+      "description": "—",
+      "location": "designs/browser/token-usage.js:360,412",
+      "params": [],
+      "plural": false
+    },
+    "common.emptyString": {
+      "description": "空字符串",
+      "location": "designs/browser/app.js:20",
+      "params": [],
+      "plural": false
+    },
+    "common.expand": {
+      "description": "展开",
+      "location": "designs/browser/app.js:253; token-usage.js:545",
+      "params": [],
+      "plural": false
+    },
+    "common.fullscreen": {
+      "description": "全屏",
+      "location": "designs/browser/app.js:248,522",
+      "params": [],
+      "plural": false
+    },
+    "common.followBrowser": {
+      "description": "语言选择：跟随浏览器",
+      "location": "designs/browser/app.js setupLocaleSelect",
+      "params": [],
+      "plural": false
+    },
+    "common.imageFallbackAlt": {
+      "description": "图片",
+      "location": "designs/browser/app.js:26; scripts/schema-viewer/markdown.js:7",
+      "params": [],
+      "plural": false
+    },
+    "common.language": {
+      "description": "界面语言标签",
+      "location": "designs/browser/index.html",
+      "params": [],
+      "plural": false
+    },
+    "common.languageReloadHint": {
+      "description": "切换语言后刷新提示",
+      "location": "designs/browser/index.html",
+      "params": [],
+      "plural": false
+    },
+    "common.loading": {
+      "description": "正在读取…",
+      "location": "designs/browser/app.js:452,1302,1338,1403",
+      "params": [],
+      "plural": false
+    },
+    "common.refresh": {
+      "description": "刷新",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "common.retry": {
+      "description": "重试",
+      "location": "designs/browser/app.js:1270; token-usage.js:138",
+      "params": [],
+      "plural": false
+    },
+    "common.themeToggle": {
+      "description": "切换深浅色",
+      "location": "designs/browser/index.html:1; app.js:621",
+      "params": [],
+      "plural": false
+    },
+    "common.unrecorded": {
+      "description": "未记录",
+      "location": "designs/browser/app.js:20,167; many",
+      "params": [],
+      "plural": false
+    },
+    "context.closeEnvAria": {
+      "description": "关闭环境与上下文",
+      "location": "designs/browser/app.js:248,448",
+      "params": [],
+      "plural": false
+    },
+    "context.closeTurnAria": {
+      "description": "关闭本轮配置",
+      "location": "designs/browser/app.js:448",
+      "params": [],
+      "plural": false
+    },
+    "context.collapseFull": {
+      "description": "收起全文",
+      "location": "designs/browser/app.js:306,479",
+      "params": [],
+      "plural": false
+    },
+    "context.customFormatNote": {
+      "description": "此工具使用自定义输入格式，记录未提供 JSON Schema。",
+      "location": "designs/browser/app.js:270",
+      "params": [],
+      "plural": false
+    },
+    "context.env.currentDate": {
+      "description": "环境日期",
+      "location": "designs/browser/app.js:344",
+      "params": [],
+      "plural": false
+    },
+    "context.env.cwd": {
+      "description": "工作目录",
+      "location": "designs/browser/app.js:344",
+      "params": [],
+      "plural": false
+    },
+    "context.env.model": {
+      "description": "模型",
+      "location": "designs/browser/app.js:344",
+      "params": [],
+      "plural": false
+    },
+    "context.env.shell": {
+      "description": "命令行",
+      "location": "designs/browser/app.js:344",
+      "params": [],
+      "plural": false
+    },
+    "context.env.timezone": {
+      "description": "时区",
+      "location": "designs/browser/app.js:344",
+      "params": [],
+      "plural": false
+    },
+    "context.envSourceRecords": {
+      "description": "环境记录 · {count} 条（原始顺序）",
+      "location": "designs/browser/app.js:346",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "context.expandFull": {
+      "description": "展开全文",
+      "location": "designs/browser/app.js:306,479",
+      "params": [],
+      "plural": false
+    },
+    "context.fullscreenAria": {
+      "description": "全屏显示环境与上下文",
+      "location": "designs/browser/app.js:248",
+      "params": [],
+      "plural": false
+    },
+    "context.fullscreenLabel": {
+      "description": "全屏",
+      "location": "designs/browser/app.js:248",
+      "params": [],
+      "plural": false
+    },
+    "context.fullscreenSideSuffix": {
+      "description": "侧栏",
+      "location": "designs/browser/app.js:setContextFullscreen",
+      "params": [],
+      "plural": false
+    },
+    "context.fullscreenToggleAria": {
+      "description": "{action}{title}{suffix}",
+      "location": "designs/browser/app.js:255",
+      "params": [
+        {
+          "name": "action",
+          "type": "string"
+        },
+        {
+          "name": "suffix",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "context.inputFormat": {
+      "description": "入参格式 format",
+      "location": "designs/browser/app.js:270",
+      "params": [],
+      "plural": false
+    },
+    "context.inputSchema": {
+      "description": "入参 Schema",
+      "location": "designs/browser/app.js:269-270",
+      "params": [],
+      "plural": false
+    },
+    "context.inputSchemaKey": {
+      "description": "入参 Schema {key}",
+      "location": "designs/browser/app.js:269",
+      "params": [
+        {
+          "name": "key",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "context.loading": {
+      "description": "正在读取…",
+      "location": "designs/browser/app.js:452",
+      "params": [],
+      "plural": false
+    },
+    "context.localFilePageNote": {
+      "backend": true,
+      "description": "仅列出这段会话明确引用的文件。",
+      "location": "server.py:627",
+      "params": [],
+      "plural": false
+    },
+    "context.localFilePageTitle": {
+      "backend": true,
+      "description": "会话引用的目录",
+      "location": "server.py:627",
+      "params": [],
+      "plural": false
+    },
+    "context.meta.originator": {
+      "description": "启动程序",
+      "location": "designs/browser/app.js:365",
+      "params": [],
+      "plural": false
+    },
+    "context.meta.sessionId": {
+      "description": "会话 ID",
+      "location": "designs/browser/app.js:365",
+      "params": [],
+      "plural": false
+    },
+    "context.meta.source": {
+      "description": "来源标记",
+      "location": "designs/browser/app.js:365",
+      "params": [],
+      "plural": false
+    },
+    "context.meta.tokens": {
+      "description": "Token 用量（会话索引）",
+      "location": "designs/browser/app.js:365",
+      "params": [],
+      "plural": false
+    },
+    "context.navAria": {
+      "description": "环境与上下文快捷导航",
+      "location": "designs/browser/app.js:248,449",
+      "params": [],
+      "plural": false
+    },
+    "context.navFallback": {
+      "description": "上下文记录",
+      "location": "designs/browser/app.js:554",
+      "params": [],
+      "plural": false
+    },
+    "context.navRaw": {
+      "description": "原始记录",
+      "location": "designs/browser/app.js:554",
+      "params": [],
+      "plural": false
+    },
+    "context.noContextRecords": {
+      "description": "没有可读取的上下文记录。",
+      "location": "designs/browser/app.js:366",
+      "params": [],
+      "plural": false
+    },
+    "context.noInputSchemaNote": {
+      "description": "记录未提供入参 Schema；不能据此判断工具没有入参。",
+      "location": "designs/browser/app.js:270",
+      "params": [],
+      "plural": false
+    },
+    "context.noToolDefs": {
+      "description": "没有工具定义",
+      "location": "designs/browser/app.js:285",
+      "params": [],
+      "plural": false
+    },
+    "context.panelSubtitle": {
+      "description": "这段会话使用的环境和指令",
+      "location": "designs/browser/app.js:248,451",
+      "params": [],
+      "plural": false
+    },
+    "context.panelTitle": {
+      "description": "环境与上下文",
+      "location": "designs/browser/app.js:248,447",
+      "params": [],
+      "plural": false
+    },
+    "context.perm.profile": {
+      "description": "权限配置",
+      "location": "designs/browser/app.js:356",
+      "params": [],
+      "plural": false
+    },
+    "context.perm.sandbox": {
+      "description": "沙箱模式",
+      "location": "designs/browser/app.js:357",
+      "params": [],
+      "plural": false
+    },
+    "context.perm.workspace": {
+      "description": "工作区范围",
+      "location": "designs/browser/app.js:358",
+      "params": [],
+      "plural": false
+    },
+    "context.rawRecords": {
+      "description": "原始记录 · {count} 条（原始顺序）",
+      "location": "designs/browser/app.js:366",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "context.record.agentsMd": {
+      "description": "项目指令 · AGENTS.md",
+      "location": "designs/browser/app.js:327",
+      "params": [],
+      "plural": false
+    },
+    "context.record.appBackground": {
+      "description": "应用背景",
+      "location": "designs/browser/app.js:325",
+      "params": [],
+      "plural": false
+    },
+    "context.record.environment": {
+      "description": "环境记录",
+      "location": "designs/browser/app.js:323",
+      "params": [],
+      "plural": false
+    },
+    "context.record.instructions": {
+      "description": "指令与背景记录",
+      "location": "designs/browser/app.js:327",
+      "params": [],
+      "plural": false
+    },
+    "context.record.mixed": {
+      "description": "混合或未分类记录",
+      "location": "designs/browser/app.js:322",
+      "params": [],
+      "plural": false
+    },
+    "context.record.openPages": {
+      "description": "当时打开的页面",
+      "location": "designs/browser/app.js:325",
+      "params": [],
+      "plural": false
+    },
+    "context.record.permissions": {
+      "description": "权限记录",
+      "location": "designs/browser/app.js:324",
+      "params": [],
+      "plural": false
+    },
+    "context.record.tools": {
+      "description": "工具定义",
+      "location": "designs/browser/app.js:317",
+      "params": [],
+      "plural": false
+    },
+    "context.restoreLabel": {
+      "description": "还原",
+      "location": "designs/browser/app.js:253",
+      "params": [],
+      "plural": false
+    },
+    "context.schemaLoadFail": {
+      "description": "Schema 查看器加载失败，请查看下方原始 Schema。",
+      "location": "designs/browser/app.js:517",
+      "params": [],
+      "plural": false
+    },
+    "context.schema.allowAny": {
+      "description": "Schema 允许任意值",
+      "location": "scripts/schema-viewer/entry.js",
+      "params": [],
+      "plural": false
+    },
+    "context.schema.empty": {
+      "description": "Schema 查看器无参数",
+      "location": "scripts/schema-viewer/entry.js",
+      "params": [],
+      "plural": false
+    },
+    "context.schema.forbidAll": {
+      "description": "Schema 不允许任何值",
+      "location": "scripts/schema-viewer/entry.js",
+      "params": [],
+      "plural": false
+    },
+    "context.schemaLoading": {
+      "description": "正在加载 Schema 查看器…",
+      "location": "designs/browser/app.js:262",
+      "params": [],
+      "plural": false
+    },
+    "context.schemaRaw": {
+      "description": "查看原始 Schema",
+      "location": "designs/browser/app.js:262",
+      "params": [],
+      "plural": false
+    },
+    "context.schemaRenderFail": {
+      "description": "Schema 无法展示，请查看下方原始 Schema。",
+      "location": "designs/browser/app.js:515",
+      "params": [],
+      "plural": false
+    },
+    "context.section.background": {
+      "description": "附加背景",
+      "location": "designs/browser/app.js:364",
+      "params": [],
+      "plural": false
+    },
+    "context.section.envOverview": {
+      "description": "环境概览",
+      "location": "designs/browser/app.js:345",
+      "params": [],
+      "plural": false
+    },
+    "context.section.envOverviewNote": {
+      "description": "各字段取最后可读记录或会话索引，可能来自不同时刻。下方按类型分区，分区内保持原始顺序。",
+      "location": "designs/browser/app.js:345",
+      "params": [],
+      "plural": false
+    },
+    "context.section.instructions": {
+      "description": "指令与背景",
+      "location": "designs/browser/app.js:362",
+      "params": [],
+      "plural": false
+    },
+    "context.section.metaRaw": {
+      "description": "记录信息与原文",
+      "location": "designs/browser/app.js:367",
+      "params": [],
+      "plural": false
+    },
+    "context.section.metaRawNote": {
+      "description": "下方保留全部上下文记录及其原始顺序，包括重复内容。",
+      "location": "designs/browser/app.js:367",
+      "params": [],
+      "plural": false
+    },
+    "context.section.permissions": {
+      "description": "权限与访问范围",
+      "location": "designs/browser/app.js:361",
+      "params": [],
+      "plural": false
+    },
+    "context.section.permissionsNote": {
+      "description": "字段可能来自不同记录；完整环境记录和混合记录仍在原所属分区保留。",
+      "location": "designs/browser/app.js:361",
+      "params": [],
+      "plural": false
+    },
+    "context.section.tools": {
+      "description": "工具定义",
+      "location": "designs/browser/app.js:363",
+      "params": [],
+      "plural": false
+    },
+    "context.sourceFromEnv": {
+      "description": "环境记录 · {time}",
+      "location": "designs/browser/app.js:339",
+      "params": [
+        {
+          "name": "time",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "context.sourceFromPerm": {
+      "description": "权限记录 · {time}",
+      "location": "designs/browser/app.js:352",
+      "params": [
+        {
+          "name": "time",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "context.sourceThreadIndex": {
+      "description": "会话索引",
+      "location": "designs/browser/app.js:344",
+      "params": [],
+      "plural": false
+    },
+    "context.timeUnrecorded": {
+      "description": "时间未记录",
+      "location": "designs/browser/app.js:303,339,352",
+      "params": [],
+      "plural": false
+    },
+    "context.toolDefCloseAria": {
+      "description": "关闭工具详情",
+      "location": "designs/browser/app.js:500",
+      "params": [],
+      "plural": false
+    },
+    "context.toolDefExpandAria": {
+      "description": "全屏显示工具详情",
+      "location": "designs/browser/app.js:522",
+      "params": [],
+      "plural": false
+    },
+    "context.toolDefPopoverAria": {
+      "description": "工具定义详情",
+      "location": "designs/browser/app.js:499-500",
+      "params": [],
+      "plural": false
+    },
+    "context.toolDefRestoreAria": {
+      "description": "还原工具详情浮层",
+      "location": "designs/browser/app.js:500",
+      "params": [],
+      "plural": false
+    },
+    "context.toolDefTitle": {
+      "description": "工具定义详情",
+      "location": "designs/browser/app.js:500",
+      "params": [],
+      "plural": false
+    },
+    "context.toolJsonButtonAria": {
+      "description": "查看工具定义的原始 JSON",
+      "location": "designs/browser/app.js:481",
+      "params": [],
+      "plural": false
+    },
+    "context.toolJsonButtonTitle": {
+      "description": "查看原始 JSON",
+      "location": "designs/browser/app.js:481",
+      "params": [],
+      "plural": false
+    },
+    "context.toolJsonCloseAria": {
+      "description": "关闭原始 JSON",
+      "location": "designs/browser/app.js:488",
+      "params": [],
+      "plural": false
+    },
+    "context.toolJsonDialog": {
+      "description": "工具定义 · 原始 JSON",
+      "location": "designs/browser/app.js:487-488",
+      "params": [],
+      "plural": false
+    },
+    "context.toolsColDesc": {
+      "description": "说明",
+      "location": "designs/browser/app.js:286",
+      "params": [],
+      "plural": false
+    },
+    "context.toolsColTool": {
+      "description": "工具",
+      "location": "designs/browser/app.js:286",
+      "params": [],
+      "plural": false
+    },
+    "context.toolsColType": {
+      "description": "类型",
+      "location": "designs/browser/app.js:286",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.collab.effort": {
+      "description": "协作强度",
+      "location": "designs/browser/app.js:402",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.collab.mode": {
+      "description": "协作模式",
+      "location": "designs/browser/app.js:402",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.collab.model": {
+      "description": "协作模型",
+      "location": "designs/browser/app.js:402",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.collabInstructions": {
+      "description": "协作模式附加指令",
+      "location": "designs/browser/app.js:418",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.collabOther": {
+      "description": "协作模式其他字段",
+      "location": "designs/browser/app.js:424",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.earlierNote": {
+      "description": "按原始记录顺序排列，未按时间重新排序。",
+      "location": "designs/browser/app.js:434",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.earlierSnapshots": {
+      "description": "更早的快照",
+      "location": "designs/browser/app.js:434",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.activePermissionProfile": {
+      "description": "当前权限配置",
+      "location": "designs/browser/app.js:372",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.approvalPolicy": {
+      "description": "审批策略",
+      "location": "designs/browser/app.js:372",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.approvalsReviewer": {
+      "description": "审批方",
+      "location": "designs/browser/app.js:372",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.collaboration": {
+      "description": "协作模式",
+      "location": "designs/browser/app.js:371",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.cwd": {
+      "description": "工作目录",
+      "location": "designs/browser/app.js:371",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.date": {
+      "description": "日期",
+      "location": "designs/browser/app.js:371",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.developerInstructions": {
+      "description": "开发者指令",
+      "location": "designs/browser/app.js:373",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.disabledPlugins": {
+      "description": "禁用插件",
+      "location": "designs/browser/app.js:374",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.effort": {
+      "description": "强度",
+      "location": "designs/browser/app.js:371",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.fsSandbox": {
+      "description": "文件系统沙箱",
+      "location": "designs/browser/app.js:372",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.model": {
+      "description": "模型",
+      "location": "designs/browser/app.js:371",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.multiAgentMode": {
+      "description": "多代理模式",
+      "location": "designs/browser/app.js:374",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.multiAgentVersion": {
+      "description": "多代理版本",
+      "location": "designs/browser/app.js:374",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.permissionProfile": {
+      "description": "权限配置",
+      "location": "designs/browser/app.js:372",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.personality": {
+      "description": "个性设置",
+      "location": "designs/browser/app.js:374",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.realtime": {
+      "description": "实时模式",
+      "location": "designs/browser/app.js:374",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.sandboxPolicy": {
+      "description": "沙箱策略",
+      "location": "designs/browser/app.js:372",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.summary": {
+      "description": "摘要设置",
+      "location": "designs/browser/app.js:374",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.timezone": {
+      "description": "时区",
+      "location": "designs/browser/app.js:371",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.userInstructions": {
+      "description": "用户指令",
+      "location": "designs/browser/app.js:373",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.field.workspaceRoots": {
+      "description": "工作区根目录",
+      "location": "designs/browser/app.js:372",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.latestStamp": {
+      "description": "本轮最后一份记录",
+      "location": "designs/browser/app.js:433",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.notFound": {
+      "description": "未找到本轮配置记录。",
+      "location": "designs/browser/app.js:431",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.rawSnapshots": {
+      "description": "原始记录 · {count} 份快照（原始顺序）",
+      "location": "designs/browser/app.js:435",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "context.turn.rootTurnId": {
+      "description": "根轮次 ID",
+      "location": "designs/browser/app.js:434",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.section.instructions": {
+      "description": "本轮附加指令",
+      "location": "designs/browser/app.js:373",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.section.other": {
+      "description": "其他设置",
+      "location": "designs/browser/app.js:374",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.section.overview": {
+      "description": "本轮概览",
+      "location": "designs/browser/app.js:371",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.section.permissions": {
+      "description": "权限与访问范围",
+      "location": "designs/browser/app.js:372",
+      "params": [],
+      "plural": false
+    },
+    "context.turn.turnId": {
+      "description": "轮次 ID",
+      "location": "designs/browser/app.js:434",
+      "params": [],
+      "plural": false
+    },
+    "context.turnNavAria": {
+      "description": "本轮配置快捷导航",
+      "location": "designs/browser/app.js:449",
+      "params": [],
+      "plural": false
+    },
+    "context.turnSubtitle": {
+      "description": "当前这一轮记录的配置快照",
+      "location": "designs/browser/app.js:451",
+      "params": [],
+      "plural": false
+    },
+    "context.turnTitle": {
+      "description": "本轮配置",
+      "location": "designs/browser/app.js:447",
+      "params": [],
+      "plural": false
+    },
+    "context.unnamedTool": {
+      "description": "未命名",
+      "location": "designs/browser/app.js:283",
+      "params": [],
+      "plural": false
+    },
+    "context.viewToolDefAria": {
+      "description": "查看 {name} 的定义",
+      "location": "designs/browser/app.js:286",
+      "params": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "demo.back": {
+      "description": "案例",
+      "location": "designs/browser/app.js:118",
+      "params": [],
+      "plural": false
+    },
+    "demo.brand": {
+      "description": "工具案例库",
+      "location": "designs/browser/app.js:116",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.aborted.guide": {
+      "backend": true,
+      "description": "查看实际中断文字；不能由此推断被调用的命令已退出。",
+      "location": "demo_cases.py:179",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.aborted.title": {
+      "backend": true,
+      "description": "请求被中断",
+      "location": "demo_cases.py:179",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.agents-errors.guide": {
+      "backend": true,
+      "description": "一条是容量错误，一条是目标错误；均不能当作已送达。",
+      "location": "demo_cases.py:266",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.agents-errors.title": {
+      "backend": true,
+      "description": "代理派发受限、目标不存在",
+      "location": "demo_cases.py:266",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.agents.guide": {
+      "backend": true,
+      "description": "按顺序翻看六种操作，等待超时和中断回执各自独立。",
+      "location": "demo_cases.py:232",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.agents.title": {
+      "backend": true,
+      "description": "子代理：派发、通信、查看、等待和中断",
+      "location": "demo_cases.py:232",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.ambiguous-late-command.guide": {
+      "backend": true,
+      "description": "同一轮有两次相同命令。晚到事件没有外层调用 ID，保持独立；不能因为第二次更近就合并。",
+      "location": "demo_cases.py:154",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.ambiguous-late-command.title": {
+      "backend": true,
+      "description": "重复命令，晚到事件不猜归属",
+      "location": "demo_cases.py:154",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.ambiguous.guide": {
+      "backend": true,
+      "description": "即使调用数和返回数一样，也不能把共享输出强行分配到操作。",
+      "location": "demo_cases.py:246",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.ambiguous.title": {
+      "backend": true,
+      "description": "重排结果或部分 Promise 被拒绝",
+      "location": "demo_cases.py:246",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-image.guide": {
+      "backend": true,
+      "description": "从等待行跳回发起行，再查看实际返回的图片；中间的进度不覆盖先前回包。",
+      "location": "demo_cases.py:183",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-image.title": {
+      "backend": true,
+      "description": "跨 cell 等待图片",
+      "location": "demo_cases.py:183",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-reuse.guide": {
+      "backend": true,
+      "description": "第一个 cell 32 已完成。后面两个发起调用同时占用编号 32，最后的等待没有唯一来源。",
+      "location": "demo_cases.py:329",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-reuse.title": {
+      "backend": true,
+      "description": "运行单元编号再次出现",
+      "location": "demo_cases.py:329",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-stop.guide": {
+      "backend": true,
+      "description": "展开 wait：请求含 terminate，返回头却是 Script completed。两处分别记录请求和结果。",
+      "location": "demo_cases.py:185",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-stop.title": {
+      "backend": true,
+      "description": "请求终止，实际收到完成回包",
+      "location": "demo_cases.py:185",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-terminated.guide": {
+      "backend": true,
+      "description": "Script terminated 确认编排结束；终止前的输出仍保留在等待行。",
+      "location": "demo_cases.py:322",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-terminated.title": {
+      "backend": true,
+      "description": "终止请求收到已终止回包",
+      "location": "demo_cases.py:322",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-unresolved.guide": {
+      "backend": true,
+      "description": "cell 32 未收到最终结果；另一个 cell 的回包不能补给它。",
+      "location": "demo_cases.py:285",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.cell-unresolved.title": {
+      "backend": true,
+      "description": "仍在运行和来源不明的等待",
+      "location": "demo_cases.py:285",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.clock.guide": {
+      "backend": true,
+      "description": "比较请求时长和真实经过的时长（此处数值为合成）。",
+      "location": "demo_cases.py:229",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.clock.title": {
+      "backend": true,
+      "description": "读取时间、等待完成、等待被打断",
+      "location": "demo_cases.py:229",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.conditional.guide": {
+      "backend": true,
+      "description": "编排里写到了两个工具，只有一份返回；不能断言两个分支都执行了。",
+      "location": "demo_cases.py:289",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.conditional.title": {
+      "backend": true,
+      "description": "条件分支中的两个工具",
+      "location": "demo_cases.py:289",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.database-actions.guide": {
+      "backend": true,
+      "description": "一条命令记录含 read 和 listFiles 两个动作。展开看共同输出，点 JSON → 日志原文，核对数据库字段。",
+      "location": "demo_cases.py:377",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.database-actions.title": {
+      "backend": true,
+      "description": "数据库回放：读取与列目录共用输出",
+      "location": "demo_cases.py:377",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.desktop-mcp.guide": {
+      "backend": true,
+      "description": "queued 仅表示已请求打开。第二条展示工作区依赖，不需要访问本机文件。",
+      "location": "demo_cases.py:277",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.desktop-mcp.title": {
+      "backend": true,
+      "description": "桌面服务：排队与结构化依赖",
+      "location": "demo_cases.py:277",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.direct-cua.guide": {
+      "backend": true,
+      "description": "两次都是直接 MCP 请求；完成摘要和重置回执有不同含义。",
+      "location": "demo_cases.py:273",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.direct-cua.title": {
+      "backend": true,
+      "description": "计算机操作：完成摘要与环境重置",
+      "location": "demo_cases.py:273",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.direct-patch.guide": {
+      "backend": true,
+      "description": "自由格式请求里是一份补丁，原生事件中才有可核对的文件变更。",
+      "location": "demo_cases.py:260",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.direct-patch.title": {
+      "backend": true,
+      "description": "直接提交补丁",
+      "location": "demo_cases.py:260",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.direct-shell.guide": {
+      "backend": true,
+      "description": "观察没有 JS 外层的命令与续接。保留返回中的替代字符，不尝试修复未知文字。",
+      "location": "demo_cases.py:256",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.direct-shell.title": {
+      "backend": true,
+      "description": "直接终端调用：启动与取回",
+      "location": "demo_cases.py:256",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.directory.guide": {
+      "backend": true,
+      "description": "输出是候选工具名，名字出现在目录里不代表调用发生。",
+      "location": "demo_cases.py:175",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.directory.title": {
+      "backend": true,
+      "description": "查询工具目录",
+      "location": "demo_cases.py:175",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.empty-exit.guide": {
+      "backend": true,
+      "description": "这次明确记录了退出码 0；空 stdout 是有效的结果。",
+      "location": "demo_cases.py:283",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.empty-exit.title": {
+      "backend": true,
+      "description": "终端成功退出但没有输出",
+      "location": "demo_cases.py:283",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.exec-audio.guide": {
+      "backend": true,
+      "description": "音频占位保留返回顺序和媒体格式。",
+      "location": "demo_cases.py:389",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.exec-audio.title": {
+      "backend": true,
+      "description": "编排依次返回文字、音频、文字",
+      "location": "demo_cases.py:389",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.generation-error.guide": {
+      "backend": true,
+      "description": "查看参考图参数；失败没有具体原因时，不为它补写原因。",
+      "location": "demo_cases.py:220",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.generation-error.title": {
+      "backend": true,
+      "description": "参考图编辑失败",
+      "location": "demo_cases.py:220",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.goal-direct.guide": {
+      "backend": true,
+      "description": "检查预算字段；完成操作与实际交付是两条不同的证据。",
+      "location": "demo_cases.py:264",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.goal-direct.title": {
+      "backend": true,
+      "description": "直接更新目标",
+      "location": "demo_cases.py:264",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.goal.guide": {
+      "backend": true,
+      "description": "先看已有目标造成的创建冲突，再看查询快照和更新回执。",
+      "location": "demo_cases.py:224",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.goal.title": {
+      "backend": true,
+      "description": "目标：创建、查看、标记完成",
+      "location": "demo_cases.py:224",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.invalid-name.guide": {
+      "backend": true,
+      "description": "源码保留历史拼写；TypeError 是编排错误，不是补丁已经应用。",
+      "location": "demo_cases.py:287",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.invalid-name.title": {
+      "backend": true,
+      "description": "尝试调用不存在的工具",
+      "location": "demo_cases.py:287",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.late-command.guide": {
+      "backend": true,
+      "description": "先记录 exec 请求和回包，再记录 CommandExecution。页面合并成同一次调用；JSON 日志原文保留三条记录的顺序。",
+      "location": "demo_cases.py:147",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.late-command.title": {
+      "backend": true,
+      "description": "命令事件晚于 exec 回包",
+      "location": "demo_cases.py:147",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.list-files.guide": {
+      "backend": true,
+      "description": "文件名来自 ls 的实际返回。",
+      "location": "demo_cases.py:193",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.list-files.title": {
+      "backend": true,
+      "description": "列出目录",
+      "location": "demo_cases.py:193",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.long-read.guide": {
+      "backend": true,
+      "description": "查看请求行号以及 24 行之后的内容。文本和行数均为合成。",
+      "location": "demo_cases.py:189",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.long-read.title": {
+      "backend": true,
+      "description": "读取指定行，继续展开",
+      "location": "demo_cases.py:189",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.long-script.guide": {
+      "backend": true,
+      "description": "编排源码仍在最前。标题统一为运行命令；命令源码默认折叠，可复制全文。短输出只展示一次，附加的原始回包字段折叠保留。",
+      "location": "demo_cases.py:138",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.long-script.title": {
+      "backend": true,
+      "description": "长脚本与短输出",
+      "location": "demo_cases.py:138",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-blocks.guide": {
+      "backend": true,
+      "description": "按原序查看内容。第一张是有效色卡，第二张损坏。资源 URI 只显示文字。",
+      "location": "demo_cases.py:299",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-blocks.title": {
+      "backend": true,
+      "description": "MCP 内容块：图片、音频、资源和未知类型",
+      "location": "demo_cases.py:299",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-empty.guide": {
+      "backend": true,
+      "description": "三条样例只改变结果形态；不能把缺失的回包渲染成“没有数据”。",
+      "location": "demo_cases.py:244",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-empty.title": {
+      "backend": true,
+      "description": "空数组、空返回和缺失回包",
+      "location": "demo_cases.py:244",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-forbidden.guide": {
+      "backend": true,
+      "description": "打开 GitHub 操作，对照脚本状态和服务错误；没有创建真实 PR。",
+      "location": "demo_cases.py:238",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-forbidden.title": {
+      "backend": true,
+      "description": "外层脚本完成，服务返回 403",
+      "location": "demo_cases.py:238",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-image.guide": {
+      "backend": true,
+      "description": "打开图文混合的回包；色卡替代真实截图。",
+      "location": "demo_cases.py:242",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-image.title": {
+      "backend": true,
+      "description": "外部工具返回文字和截图",
+      "location": "demo_cases.py:242",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-pending.guide": {
+      "backend": true,
+      "description": "原生 MCP 事件与服务的业务状态分属两层。",
+      "location": "demo_cases.py:240",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-pending.title": {
+      "backend": true,
+      "description": "调用完成，服务仍为 pending",
+      "location": "demo_cases.py:240",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-protected.guide": {
+      "backend": true,
+      "description": "展开结果及 JSON：状态和仓库名可读，凭据字段及其回显统一遮盖。",
+      "location": "demo_cases.py:310",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-protected.title": {
+      "backend": true,
+      "description": "MCP 结构化字段：凭据遮盖",
+      "location": "demo_cases.py:310",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-status.guide": {
+      "backend": true,
+      "description": "三个状态均没有结果内容；用上一次记录时的状态分别表达。",
+      "location": "demo_cases.py:314",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mcp-status.title": {
+      "backend": true,
+      "description": "MCP 快照：进行中、完成无结果、失败无详情",
+      "location": "demo_cases.py:314",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.missing.guide": {
+      "backend": true,
+      "description": "缺失结果不代表仍在运行，也不代表失败。",
+      "location": "demo_cases.py:178",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.missing.title": {
+      "backend": true,
+      "description": "只有请求，没有回包",
+      "location": "demo_cases.py:178",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mixed-terminal.guide": {
+      "backend": true,
+      "description": "对照三个会话和一条新命令；其中一项没有可继续读取的会话。",
+      "location": "demo_cases.py:212",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.mixed-terminal.title": {
+      "backend": true,
+      "description": "轮询三个终端并运行诊断",
+      "location": "demo_cases.py:212",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-agents.guide": {
+      "backend": true,
+      "description": "启动和等待事件使用各自请求的 ID；稍后的完成活动独立显示。等待工具的快照与子任务最终状态分开。",
+      "location": "demo_cases.py:357",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-agents.title": {
+      "backend": true,
+      "description": "代理请求、活动与等待快照",
+      "location": "demo_cases.py:357",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-dynamic.guide": {
+      "backend": true,
+      "description": "工具身份和参数匹配后，动态失败与随后成功的命令归到各自操作。外层只打印共享文字。",
+      "location": "demo_cases.py:343",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-dynamic.title": {
+      "backend": true,
+      "description": "动态工具失败，另一条命令有输出",
+      "location": "demo_cases.py:343",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-generation.guide": {
+      "backend": true,
+      "description": "展开 wait 查看图片、修订提示词和保存路径。唯一相同的返回图块把原生事件关联到等待调用。",
+      "location": "demo_cases.py:352",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-generation.title": {
+      "backend": true,
+      "description": "生图原生事件在 wait 中返回",
+      "location": "demo_cases.py:352",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-image.guide": {
+      "backend": true,
+      "description": "只有路径，没有图块；不应显示一张猜测的图片。",
+      "location": "demo_cases.py:295",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-image.title": {
+      "backend": true,
+      "description": "只有原生图片路径",
+      "location": "demo_cases.py:295",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-web-legacy.guide": {
+      "backend": true,
+      "description": "打开调用可看到原生 WebSearch 返回的来源，页内查找缺少 URL 时只显示关键词。",
+      "location": "demo_cases.py:337",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-web-legacy.title": {
+      "backend": true,
+      "description": "旧式网页事件：来源与页内查找",
+      "location": "demo_cases.py:337",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-web.guide": {
+      "backend": true,
+      "description": "点开查看来源标题、地址和摘录；这些字段来自网页事件。",
+      "location": "demo_cases.py:291",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.native-web.title": {
+      "backend": true,
+      "description": "原生网页事件提供来源",
+      "location": "demo_cases.py:291",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.orphan.guide": {
+      "backend": true,
+      "description": "原始记录只有结果，不根据相邻动作补造请求。",
+      "location": "demo_cases.py:281",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.orphan.title": {
+      "backend": true,
+      "description": "单独出现的工具返回",
+      "location": "demo_cases.py:281",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.output-only.guide": {
+      "backend": true,
+      "description": "看到文本，但没有记录退出码。",
+      "location": "demo_cases.py:180",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.output-only.title": {
+      "backend": true,
+      "description": "脚本只打印 stdout",
+      "location": "demo_cases.py:180",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.paged-cell.guide": {
+      "backend": true,
+      "description": "等待行在默认的最近八轮。点击来源可加载较早一页，返回后仍能查看图片。",
+      "location": "demo_cases.py:251",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.paged-cell.title": {
+      "backend": true,
+      "description": "等待与发起行分属两页",
+      "location": "demo_cases.py:251",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.parallel-image.guide": {
+      "backend": true,
+      "description": "展开四个动作：前三项返回文本，最后一项返回色卡。第三条命令读取两个文件，只产生一份输出。",
+      "location": "demo_cases.py:96",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.parallel-image.title": {
+      "backend": true,
+      "description": "三次读取和一张图片",
+      "location": "demo_cases.py:96",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.partial-arguments.guide": {
+      "backend": true,
+      "description": "workdir 来自 load，仍保留固定 cmd。原生事件在回包之前，归入原调用；页面注明未静态解析的字段，不编造工作目录。",
+      "location": "demo_cases.py:158",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.partial-arguments.title": {
+      "backend": true,
+      "description": "动态工作目录与固定命令",
+      "location": "demo_cases.py:158",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.patch-error.guide": {
+      "backend": true,
+      "description": "有尝试写入的 diff，也有失败原因，没有文件已修改的证据。",
+      "location": "demo_cases.py:205",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.patch-error.title": {
+      "backend": true,
+      "description": "补丁未能应用",
+      "location": "demo_cases.py:205",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.patch.guide": {
+      "backend": true,
+      "description": "逐文件展开 diff；实际变更来自 FileChange，即使外层回包只有空对象。",
+      "location": "demo_cases.py:201",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.patch.title": {
+      "backend": true,
+      "description": "同一补丁：新增、修改并移动、删除",
+      "location": "demo_cases.py:201",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.plan.guide": {
+      "backend": true,
+      "description": "同一个步骤从进行中变为完成；每次工具详情保留当时的清单。",
+      "location": "demo_cases.py:222",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.plan.title": {
+      "backend": true,
+      "description": "更新计划的前后两次记录",
+      "location": "demo_cases.py:222",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.process-origin.guide": {
+      "backend": true,
+      "description": "第一项命令参数含模板插值，保持未知。启动回包的 session_id 与晚到事件的 process_id 相同，归入第一项；第二项不会被并入第一项，启动回包仍可查。",
+      "location": "demo_cases.py:163",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.process-origin.title": {
+      "backend": true,
+      "description": "进程编号补足动态命令归属",
+      "location": "demo_cases.py:163",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.process-reused.guide": {
+      "backend": true,
+      "description": "两条启动回包记录相同的 session_id。即使事件带相同 process_id，也不能按最近调用合并。",
+      "location": "demo_cases.py:171",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.process-reused.title": {
+      "backend": true,
+      "description": "进程编号复用，不猜归属",
+      "location": "demo_cases.py:171",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.questions.guide": {
+      "backend": true,
+      "description": "对照选项、回答和 accepted；后者不代表用户选过某个答案。",
+      "location": "demo_cases.py:226",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.questions.title": {
+      "backend": true,
+      "description": "同步已回答，异步只确认提交",
+      "location": "demo_cases.py:226",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.quiet-poll.guide": {
+      "backend": true,
+      "description": "第一次还带会话号，第二次带退出码 0。静默轮询仍可查看原始记录。",
+      "location": "demo_cases.py:333",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.quiet-poll.title": {
+      "backend": true,
+      "description": "两次轮询都没有新输出",
+      "location": "demo_cases.py:333",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.script-error.guide": {
+      "backend": true,
+      "description": "先看语法错误，再打开编排源码。没有终端进程退出码。",
+      "location": "demo_cases.py:177",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.script-error.title": {
+      "backend": true,
+      "description": "编排脚本报错",
+      "location": "demo_cases.py:177",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.script-languages.guide": {
+      "backend": true,
+      "description": "Python、JavaScript 和 Shell 多行命令、python3 check.py 与 git status 都显示运行命令，仅源码预览方式不同。最后一条脚本显示实际非零退出码。",
+      "location": "demo_cases.py:141",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.script-languages.title": {
+      "backend": true,
+      "description": "不同语言的脚本与短命令",
+      "location": "demo_cases.py:141",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.search-empty.guide": {
+      "backend": true,
+      "description": "比较匹配行、空输出和错误；rg 的退出码 1 和 2 含义不同。",
+      "location": "demo_cases.py:196",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.search-empty.title": {
+      "backend": true,
+      "description": "搜索无匹配",
+      "location": "demo_cases.py:196",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.search-error.guide": {
+      "backend": true,
+      "description": "比较匹配行、空输出和错误；rg 的退出码 1 和 2 含义不同。",
+      "location": "demo_cases.py:197",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.search-error.title": {
+      "backend": true,
+      "description": "搜索失败：目录不存在",
+      "location": "demo_cases.py:197",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.search-hits.guide": {
+      "backend": true,
+      "description": "比较匹配行、空输出和错误；rg 的退出码 1 和 2 含义不同。",
+      "location": "demo_cases.py:195",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.search-hits.title": {
+      "backend": true,
+      "description": "搜索命中：文件和行号",
+      "location": "demo_cases.py:195",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.sequential.guide": {
+      "backend": true,
+      "description": "第二步的目录来自第一步。只有打包结果被打印，不能据此给第一步填退出码。",
+      "location": "demo_cases.py:98",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.sequential.title": {
+      "backend": true,
+      "description": "两条串行命令，只打印第二个结果",
+      "location": "demo_cases.py:98",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.shared-read.guide": {
+      "backend": true,
+      "description": "分别打开两个读取操作，核对两处均说明输出是合并的。",
+      "location": "demo_cases.py:191",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.shared-read.title": {
+      "backend": true,
+      "description": "一次命令读取多个文件",
+      "location": "demo_cases.py:191",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.shell-forms.guide": {
+      "backend": true,
+      "description": "对照尾部读取、列文件和含未知程序的管道。只有能确认的命令形态会得到专用标题。",
+      "location": "demo_cases.py:368",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.shell-forms.title": {
+      "backend": true,
+      "description": "只有命令文本：读取、列目录与未知管道",
+      "location": "demo_cases.py:368",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.terminal.guide": {
+      "backend": true,
+      "description": "依次查看 session 17 的空输入、yes 和 Ctrl-C；退出码只在最后一次返回中出现。",
+      "location": "demo_cases.py:207",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.terminal.title": {
+      "backend": true,
+      "description": "终端会话：轮询、输入、中断",
+      "location": "demo_cases.py:207",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.unicode-command.guide": {
+      "backend": true,
+      "description": "源码里的 Unicode 转义按字符串规则解码，和晚到的实际命令逐字符匹配，不执行源码。",
+      "location": "demo_cases.py:167",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.unicode-command.title": {
+      "backend": true,
+      "description": "Unicode 转义命令",
+      "location": "demo_cases.py:167",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.unknown.guide": {
+      "backend": true,
+      "description": "两种没有固定工具名的脚本；只有明确的输出可作证。",
+      "location": "demo_cases.py:249",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.unknown.title": {
+      "backend": true,
+      "description": "动态工具名与纯计算",
+      "location": "demo_cases.py:249",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.unlinked-command.guide": {
+      "backend": true,
+      "description": "前面的调用执行另一条命令。独立事件保留实际输出，注明未找到关联调用；不把事件类型当作工具名。",
+      "location": "demo_cases.py:151",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.unlinked-command.title": {
+      "backend": true,
+      "description": "无法关联的独立执行记录",
+      "location": "demo_cases.py:151",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.view-error.guide": {
+      "backend": true,
+      "description": "路径保留，错误保留，不展示替代图片。",
+      "location": "demo_cases.py:219",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.view-error.title": {
+      "backend": true,
+      "description": "图片路径不可读",
+      "location": "demo_cases.py:219",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.wait-interrupted.guide": {
+      "backend": true,
+      "description": "打开等待回包，区分用户中断等待和终止后台运行单元。",
+      "location": "demo_cases.py:326",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.wait-interrupted.title": {
+      "backend": true,
+      "description": "用户中断这一次等待",
+      "location": "demo_cases.py:326",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.web-media.guide": {
+      "backend": true,
+      "description": "搜索结果保留来源；PDF 请求保留页号，示例页图来自合成色卡。",
+      "location": "demo_cases.py:269",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.web-media.title": {
+      "backend": true,
+      "description": "网页图片查询与 PDF 截页",
+      "location": "demo_cases.py:269",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.web.guide": {
+      "backend": true,
+      "description": "复合查询使用示例域名；未能逐项归属的内容保留为共享结果。",
+      "location": "demo_cases.py:215",
+      "params": [],
+      "plural": false
+    },
+    "demo.case.web.title": {
+      "backend": true,
+      "description": "网页：搜索、打开、查找和点击",
+      "location": "demo_cases.py:215",
+      "params": [],
+      "plural": false
+    },
+    "demo.docTitle": {
+      "description": "工具案例库 · Codex Microscope",
+      "location": "designs/browser/app.js:115",
+      "params": [],
+      "plural": false
+    },
+    "demo.evidence.db351": {
+      "backend": true,
+      "description": "主历史库 #351",
+      "location": "demo_cases.py:380",
+      "params": [],
+      "plural": false
+    },
+    "demo.evidence.lateCmd": {
+      "backend": true,
+      "description": "本轮关联排查：回包先于原生命令事件（合成重建）",
+      "location": "demo_cases.py:148",
+      "params": [],
+      "plural": false
+    },
+    "demo.evidence.longCmd": {
+      "backend": true,
+      "description": "合成长命令与短输出案例",
+      "location": "demo_cases.py:139",
+      "params": [],
+      "plural": false
+    },
+    "demo.evidence.protocol": {
+      "backend": true,
+      "description": "合成协议案例",
+      "location": "demo_cases.py (many)",
+      "params": [],
+      "plural": false
+    },
+    "demo.group.builtin": {
+      "backend": true,
+      "description": "其他内建工具",
+      "location": "demo_cases.py:94",
+      "params": [],
+      "plural": false
+    },
+    "demo.group.edge": {
+      "backend": true,
+      "description": "补充边界",
+      "location": "demo_cases.py:94",
+      "params": [],
+      "plural": false
+    },
+    "demo.group.exec": {
+      "backend": true,
+      "description": "exec · 编排与结果",
+      "location": "demo_cases.py:94",
+      "params": [],
+      "plural": false
+    },
+    "demo.group.files": {
+      "backend": true,
+      "description": "命令、文件与终端",
+      "location": "demo_cases.py:94",
+      "params": [],
+      "plural": false
+    },
+    "demo.group.mcp": {
+      "backend": true,
+      "description": "外部 MCP · 通用展示",
+      "location": "demo_cases.py:94",
+      "params": [],
+      "plural": false
+    },
+    "demo.indexMeta": {
+      "description": "{count} 个合成案例 · 不执行工具",
+      "location": "designs/browser/app.js:111",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "demo.noMatch": {
+      "description": "没有匹配的案例",
+      "location": "designs/browser/app.js:112",
+      "params": [],
+      "plural": false
+    },
+    "demo.note.boundary": {
+      "description": "合成边界测试",
+      "location": "designs/browser/app.js:126",
+      "params": [],
+      "plural": false
+    },
+    "demo.note.source": {
+      "description": "案例来源：{evidence}",
+      "location": "designs/browser/app.js:126",
+      "params": [
+        {
+          "name": "evidence",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "demo.note.synthetic": {
+      "description": "{group} · 合成演示",
+      "location": "designs/browser/app.js:126",
+      "params": [
+        {
+          "name": "group",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "demo.pageTitle": {
+      "description": "Codex 工具调用案例库",
+      "location": "designs/browser/app.js:116",
+      "params": [],
+      "plural": false
+    },
+    "demo.returnBrowser": {
+      "description": "返回会话浏览器",
+      "location": "designs/browser/app.js:118",
+      "params": [],
+      "plural": false
+    },
+    "demo.searchAria": {
+      "description": "搜索案例",
+      "location": "designs/browser/app.js:117",
+      "params": [],
+      "plural": false
+    },
+    "demo.searchPlaceholder": {
+      "description": "搜索案例、工具或案例来源",
+      "location": "designs/browser/app.js:117",
+      "params": [],
+      "plural": false
+    },
+    "demo.startLink": {
+      "description": "先看：三次读取和一张图片 →",
+      "location": "designs/browser/app.js:121",
+      "params": [],
+      "plural": false
+    },
+    "demo.welcomeBody": {
+      "description": "按真实日志形态重建，使用合成内容。选一个案例，查看它在会话时间线上的实际效果。",
+      "location": "designs/browser/app.js:120",
+      "params": [],
+      "plural": false
+    },
+    "demo.welcomeHeading": {
+      "description": "工具调用怎样展示？",
+      "location": "designs/browser/app.js:119",
+      "params": [],
+      "plural": false
+    },
+    "errors.badSize": {
+      "backend": true,
+      "description": "请求大小不合法",
+      "location": "server.py:570",
+      "params": [],
+      "plural": false
+    },
+    "errors.csrf": {
+      "backend": true,
+      "description": "拒绝跨站设置请求",
+      "location": "server.py:566",
+      "params": [],
+      "plural": false
+    },
+    "errors.dbBusy": {
+      "backend": true,
+      "description": "暂时无法读取 {name}，正在等待恢复。请确认 Codex 数据目录可访问。",
+      "location": "server.py:30",
+      "params": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "errors.demoMissing": {
+      "backend": true,
+      "description": "示例不存在",
+      "location": "server.py:516",
+      "params": [],
+      "plural": false
+    },
+    "errors.demoUnknown": {
+      "backend": true,
+      "description": "未知演示接口",
+      "location": "server.py:518",
+      "params": [],
+      "plural": false
+    },
+    "errors.execMissing": {
+      "backend": true,
+      "description": "执行记录不存在",
+      "location": "server.py:432",
+      "params": [],
+      "plural": false
+    },
+    "errors.historyDbBusy": {
+      "backend": true,
+      "description": "备用正文数据库暂不可用，请稍后重试。",
+      "location": "server.py:46,53",
+      "params": [],
+      "plural": false
+    },
+    "errors.historyUnavailable": {
+      "backend": true,
+      "description": "状态与耗时数据库暂不可用，已保留可读取的会话内容。",
+      "location": "server.py:38",
+      "params": [],
+      "plural": false
+    },
+    "errors.localFileDenied": {
+      "backend": true,
+      "description": "仅允许访问此会话明确引用的文件",
+      "location": "server.py:622",
+      "params": [],
+      "plural": false
+    },
+    "errors.localFileGone": {
+      "backend": true,
+      "description": "原文件已移动或不存在",
+      "location": "server.py:623",
+      "params": [],
+      "plural": false
+    },
+    "errors.localFileTooLarge": {
+      "backend": true,
+      "description": "文件过大或不是普通文件",
+      "location": "server.py:629",
+      "params": [],
+      "plural": false
+    },
+    "errors.localhostOnly": {
+      "backend": true,
+      "description": "仅允许 localhost 访问",
+      "location": "server.py:564,578",
+      "params": [],
+      "plural": false
+    },
+    "errors.needJson": {
+      "backend": true,
+      "description": "需要 JSON 请求",
+      "location": "server.py:567",
+      "params": [],
+      "plural": false
+    },
+    "errors.noContent": {
+      "backend": true,
+      "description": "没有可读取的会话内容",
+      "location": "server.py:605",
+      "params": [],
+      "plural": false
+    },
+    "errors.noIndex": {
+      "backend": true,
+      "description": "未找到 Codex 会话索引，请确认 CODEX_HOME 指向已有的数据目录。",
+      "location": "server.py:82",
+      "params": [],
+      "plural": false
+    },
+    "errors.notFound": {
+      "backend": true,
+      "description": "Not found",
+      "location": "server.py:633",
+      "params": [],
+      "plural": false
+    },
+    "errors.outsideHome": {
+      "backend": true,
+      "description": "记录位于数据目录之外",
+      "location": "server.py:599,618",
+      "params": [],
+      "plural": false
+    },
+    "errors.rolloutUnavailable": {
+      "backend": true,
+      "description": "会话记录文件不可用",
+      "location": "server.py:637",
+      "params": [],
+      "plural": false
+    },
+    "errors.settingsMissing": {
+      "backend": true,
+      "description": "未找到设置",
+      "location": "server.py:574",
+      "params": [],
+      "plural": false
+    },
+    "errors.syncFailed": {
+      "backend": true,
+      "description": "同步失败，已有缓存已保留：{detail}",
+      "location": "server.py:576",
+      "params": [
+        {
+          "name": "detail",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "errors.threadMissing": {
+      "backend": true,
+      "description": "会话不存在",
+      "location": "server.py:597,616",
+      "params": [],
+      "plural": false
+    },
+    "errors.toolMissing": {
+      "backend": true,
+      "description": "工具记录不存在",
+      "location": "server.py:528,609",
+      "params": [],
+      "plural": false
+    },
+    "errors.zstdCorrupt": {
+      "backend": true,
+      "description": "zstd 会话解压失败，文件可能损坏。",
+      "location": "session_io.py:39,56",
+      "params": [],
+      "plural": false
+    },
+    "errors.zstdNeed": {
+      "backend": true,
+      "description": "该会话已压缩：需要 Python 3.14+ 或安装 zstd 后重试。",
+      "location": "session_io.py:46",
+      "params": [],
+      "plural": false
+    },
+    "navigation.archive.active": {
+      "description": "未归档",
+      "location": "designs/browser/app.js:132",
+      "params": [],
+      "plural": false
+    },
+    "navigation.archive.all": {
+      "description": "全部",
+      "location": "designs/browser/index.html:1; app.js:132",
+      "params": [],
+      "plural": false
+    },
+    "navigation.archive.archived": {
+      "description": "已归档",
+      "location": "designs/browser/app.js:132",
+      "params": [],
+      "plural": false
+    },
+    "navigation.archiveFilterAria": {
+      "description": "归档筛选：{mode}；点击切换",
+      "location": "designs/browser/app.js:132",
+      "params": [
+        {
+          "name": "mode",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "navigation.archiveFilterButtonAria": {
+      "description": "归档筛选",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.backSessions": {
+      "description": "会话",
+      "location": "designs/browser/index.html:1; app.js:621",
+      "params": [],
+      "plural": false
+    },
+    "navigation.badge.archived": {
+      "description": "已归档",
+      "location": "designs/browser/app.js:104",
+      "params": [],
+      "plural": false
+    },
+    "navigation.badge.missingFile": {
+      "description": "文件缺失",
+      "location": "designs/browser/app.js:104",
+      "params": [],
+      "plural": false
+    },
+    "navigation.directoryCollapse": {
+      "description": "收起",
+      "location": "designs/browser/app.js:144",
+      "params": [],
+      "plural": false
+    },
+    "navigation.directoryExpand": {
+      "description": "展开显示 · {count} 条",
+      "location": "designs/browser/app.js:144",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "navigation.directoryUsageAria": {
+      "description": "查看 {name} 的用量与成本",
+      "location": "designs/browser/app.js:144",
+      "params": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "navigation.directoryUsageTitle": {
+      "description": "用量与成本 · {name}",
+      "location": "designs/browser/app.js:144",
+      "params": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "navigation.heroTitle": {
+      "description": "你的工作，都在这里。",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.listMode.directory": {
+      "description": "按目录",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.listMode.time": {
+      "description": "按时间",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.listModeAria": {
+      "description": "会话组织方式",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.noMatchingSessions": {
+      "description": "没有匹配的会话",
+      "location": "designs/browser/app.js:137,145",
+      "params": [],
+      "plural": false
+    },
+    "navigation.originatorPrefix": {
+      "description": "originator: {value}",
+      "location": "designs/browser/app.js:104",
+      "params": [
+        {
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "navigation.refreshSessionsAria": {
+      "description": "刷新会话",
+      "location": "designs/browser/app.js:620",
+      "params": [],
+      "plural": false
+    },
+    "navigation.relatedChild": {
+      "description": "子代理",
+      "location": "designs/browser/app.js:632",
+      "params": [],
+      "plural": false
+    },
+    "navigation.relatedLink": {
+      "description": "{kind} · {title}",
+      "location": "designs/browser/app.js:632",
+      "params": [
+        {
+          "name": "kind",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "navigation.relatedParent": {
+      "description": "主会话",
+      "location": "designs/browser/app.js:632",
+      "params": [],
+      "plural": false
+    },
+    "navigation.relatedSessionsAria": {
+      "description": "关联会话",
+      "location": "designs/browser/app.js:632",
+      "params": [],
+      "plural": false
+    },
+    "navigation.searchAria": {
+      "description": "搜索会话",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.searchPlaceholder": {
+      "description": "搜索标题、项目、来源或 ID",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.sessionNavAria": {
+      "description": "会话快捷导航",
+      "location": "designs/browser/app.js:568",
+      "params": [],
+      "plural": false
+    },
+    "navigation.sessionNavFallback": {
+      "description": "会话记录",
+      "location": "designs/browser/app.js:575",
+      "params": [],
+      "plural": false
+    },
+    "navigation.sidebarResizeAria": {
+      "description": "调整会话列表宽度",
+      "location": "designs/browser/app.js:603",
+      "params": [],
+      "plural": false
+    },
+    "navigation.sidebarResizeTitle": {
+      "description": "拖拽调整宽度，双击还原；方向键微调",
+      "location": "designs/browser/app.js:603",
+      "params": [],
+      "plural": false
+    },
+    "navigation.source.agent": {
+      "description": "子代理",
+      "location": "designs/browser/app.js:2",
+      "params": [],
+      "plural": false
+    },
+    "navigation.source.all": {
+      "description": "全部",
+      "location": "designs/browser/app.js:2",
+      "params": [],
+      "plural": false
+    },
+    "navigation.source.app": {
+      "description": "Codex app",
+      "location": "designs/browser/app.js:2",
+      "params": [],
+      "plural": false
+    },
+    "navigation.source.cli": {
+      "description": "Codex CLI",
+      "location": "designs/browser/app.js:2",
+      "params": [],
+      "plural": false
+    },
+    "navigation.source.exec": {
+      "description": "非交互模式",
+      "location": "designs/browser/app.js:2",
+      "params": [],
+      "plural": false
+    },
+    "navigation.source.ide": {
+      "description": "vscode",
+      "location": "designs/browser/app.js:2",
+      "params": [],
+      "plural": false
+    },
+    "navigation.source.other": {
+      "description": "未知来源",
+      "location": "designs/browser/app.js:2",
+      "params": [],
+      "plural": false
+    },
+    "navigation.sourceAll": {
+      "description": "全部来源",
+      "location": "designs/browser/index.html:1; app.js:134",
+      "params": [],
+      "plural": false
+    },
+    "navigation.sourceAllWithCount": {
+      "description": "全部来源 · {count}",
+      "location": "designs/browser/app.js:134",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "navigation.sourceCaption": {
+      "description": "来源",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.sourceFilterAria": {
+      "description": "按会话来源筛选",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.sourceMenuAria": {
+      "description": "会话来源",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.sourceWithCount": {
+      "description": "{label} · {count}",
+      "location": "designs/browser/app.js:134",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        },
+        {
+          "name": "label",
+          "type": "string"
+        }
+      ],
+      "plural": true
+    },
+    "navigation.status.failed": {
+      "description": "失败（最新一轮）",
+      "location": "designs/browser/app.js:103",
+      "params": [],
+      "plural": false
+    },
+    "navigation.status.inProgress": {
+      "description": "运行中（本地记录）",
+      "location": "designs/browser/app.js:103",
+      "params": [],
+      "plural": false
+    },
+    "navigation.unnamedDirectory": {
+      "backend": true,
+      "description": "未记录目录",
+      "location": "designs/browser/app.js:141; token-usage.js:380; token_usage.py:230",
+      "params": [],
+      "plural": false
+    },
+    "navigation.welcomeBody": {
+      "description": "从左侧选择会话，查看对话与执行过程。包括 App 列表中隐藏的 exec 会话。",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "navigation.welcomeHeading": {
+      "description": "回到任意一次思考",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "pricing.basis.api": {
+      "description": "API 等价成本 · USD",
+      "location": "designs/browser/token-usage.js:579",
+      "params": [],
+      "plural": false
+    },
+    "pricing.basis.purchase": {
+      "description": "credits 消耗 · 折算成本",
+      "location": "designs/browser/token-usage.js:579",
+      "params": [],
+      "plural": false
+    },
+    "pricing.basisTitle": {
+      "description": "估算口径",
+      "location": "designs/browser/token-usage.js:579",
+      "params": [],
+      "plural": false
+    },
+    "pricing.cache.never": {
+      "description": "尚未缓存",
+      "location": "designs/browser/token-usage.js:585",
+      "params": [],
+      "plural": false
+    },
+    "pricing.cache.refresh": {
+      "description": "刷新缓存",
+      "location": "designs/browser/token-usage.js:585",
+      "params": [],
+      "plural": false
+    },
+    "pricing.cache.shaTitle": {
+      "description": "单价快照 SHA-256",
+      "location": "designs/browser/token-usage.js:585",
+      "params": [],
+      "plural": false
+    },
+    "pricing.cache.syncedAt": {
+      "description": "同步于 {time}",
+      "location": "designs/browser/token-usage.js:585",
+      "params": [
+        {
+          "name": "time",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.cache.viewSource": {
+      "description": "查看源数据",
+      "location": "designs/browser/token-usage.js:585",
+      "params": [],
+      "plural": false
+    },
+    "pricing.cacheNote": {
+      "description": "主动刷新后生效，网络失败时继续保留已有缓存。",
+      "location": "designs/browser/token-usage.js:584",
+      "params": [],
+      "plural": false
+    },
+    "pricing.cacheTitle": {
+      "description": "本地单价缓存",
+      "location": "designs/browser/token-usage.js:584",
+      "params": [],
+      "plural": false
+    },
+    "pricing.cacheUpdated": {
+      "description": "缓存已更新",
+      "location": "designs/browser/token-usage.js:624",
+      "params": [],
+      "plural": false
+    },
+    "pricing.closeAria": {
+      "description": "关闭成本设置",
+      "location": "designs/browser/token-usage.js:531",
+      "params": [],
+      "plural": false
+    },
+    "pricing.creditAmount": {
+      "description": "支付金额（USD）",
+      "location": "designs/browser/token-usage.js:572",
+      "params": [],
+      "plural": false
+    },
+    "pricing.creditAmountPh": {
+      "description": "实际支付金额",
+      "location": "designs/browser/token-usage.js:572",
+      "params": [],
+      "plural": false
+    },
+    "pricing.creditCredits": {
+      "description": "获得 credits",
+      "location": "designs/browser/token-usage.js:572",
+      "params": [],
+      "plural": false
+    },
+    "pricing.creditCreditsPh": {
+      "description": "到账 credits 数量",
+      "location": "designs/browser/token-usage.js:572",
+      "params": [],
+      "plural": false
+    },
+    "pricing.creditNote": {
+      "description": "按你的实际购买记录填写。等价金额 = 预估 credits × 支付金额 ÷ 获得 credits。此规则统一应用到所有统计范围和历史用量。",
+      "location": "designs/browser/token-usage.js:571",
+      "params": [],
+      "plural": false
+    },
+    "pricing.creditSave": {
+      "description": "保存并应用",
+      "location": "designs/browser/token-usage.js:572",
+      "params": [],
+      "plural": false
+    },
+    "pricing.creditTitle": {
+      "description": "credits 金额换算",
+      "location": "designs/browser/token-usage.js:571",
+      "params": [],
+      "plural": false
+    },
+    "pricing.downloading": {
+      "description": "正在下载并校验单价数据…",
+      "location": "designs/browser/token-usage.js:591",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.creditsFormat": {
+      "backend": true,
+      "description": "官方 credits 页面格式发生变化，保留已有缓存",
+      "location": "pricing.py:158",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.creditsNoModels": {
+      "backend": true,
+      "description": "官方 credits 表未解析到模型，保留已有缓存",
+      "location": "pricing.py:150",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.download": {
+      "backend": true,
+      "description": "价格下载失败（curl {code}）：{detail}",
+      "location": "pricing.py:196",
+      "params": [
+        {
+          "name": "code",
+          "type": "number"
+        },
+        {
+          "name": "detail",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.err.invalidSettings": {
+      "backend": true,
+      "description": "无效的价格设置",
+      "location": "pricing.py:66,68",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.needCurl": {
+      "backend": true,
+      "description": "更新价格需要系统 curl，请安装 curl 后重试；已有缓存已保留",
+      "location": "pricing.py:177",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.noOpenAIModels": {
+      "backend": true,
+      "description": "接口未返回 OpenAI 模型，保留已有缓存",
+      "location": "pricing.py:167",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.noOpenAIPrices": {
+      "backend": true,
+      "description": "接口未返回 OpenAI 单价，保留已有缓存",
+      "location": "pricing.py:165",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.positive": {
+      "backend": true,
+      "description": "金额和 credits 应为正数",
+      "location": "pricing.py:91,95",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.positiveRange": {
+      "backend": true,
+      "description": "金额和 credits 应为正数，最多 12 位小数且不超过 1 万亿",
+      "location": "pricing.py:97",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.ruleFields": {
+      "backend": true,
+      "description": "换算规则只需支付金额和获得 credits",
+      "location": "pricing.py:84",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.timeout": {
+      "backend": true,
+      "description": "价格下载超时，已有缓存已保留",
+      "location": "pricing.py:189",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.tls": {
+      "backend": true,
+      "description": "系统 curl 无法验证价格源的 HTTPS 证书，请检查系统证书配置；已有缓存已保留",
+      "location": "pricing.py:192",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.tooLarge": {
+      "backend": true,
+      "description": "价格响应超出大小限制",
+      "location": "pricing.py:194,200",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.unknownSource": {
+      "backend": true,
+      "description": "未知价格源",
+      "location": "pricing.py:206",
+      "params": [],
+      "plural": false
+    },
+    "pricing.err.usdOnly": {
+      "backend": true,
+      "description": "换算金额仅使用 USD",
+      "location": "pricing.py:86",
+      "params": [],
+      "plural": false
+    },
+    "pricing.fullscreenAria": {
+      "description": "全屏显示{label} / 还原{label}窗口",
+      "location": "designs/browser/token-usage.js:547",
+      "params": [
+        {
+          "name": "label",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.heading.cost": {
+      "description": "估算成本",
+      "location": "designs/browser/token-usage.js:628",
+      "params": [],
+      "plural": false
+    },
+    "pricing.heading.costUnit": {
+      "description": "估算成本（{unit}）",
+      "location": "designs/browser/token-usage.js:628",
+      "params": [
+        {
+          "name": "unit",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.heading.costUsd": {
+      "description": "估算成本（USD）",
+      "location": "designs/browser/token-usage.js:628",
+      "params": [],
+      "plural": false
+    },
+    "pricing.heading.credits": {
+      "description": "估算消耗（credits）",
+      "location": "designs/browser/token-usage.js:627",
+      "params": [],
+      "plural": false
+    },
+    "pricing.loadingSettings": {
+      "description": "正在读取成本设置…",
+      "location": "designs/browser/token-usage.js:600",
+      "params": [],
+      "plural": false
+    },
+    "pricing.missingTier.standard": {
+      "description": "按 Standard 单价折算",
+      "location": "designs/browser/token-usage.js:583",
+      "params": [],
+      "plural": false
+    },
+    "pricing.missingTier.unrated": {
+      "description": "标记为未估算",
+      "location": "designs/browser/token-usage.js:583",
+      "params": [],
+      "plural": false
+    },
+    "pricing.missingTierTitle": {
+      "description": "日志未记录速度档位时",
+      "location": "designs/browser/token-usage.js:583",
+      "params": [],
+      "plural": false
+    },
+    "pricing.needRule": {
+      "description": "待设置换算规则",
+      "location": "designs/browser/token-usage.js:631",
+      "params": [],
+      "plural": false
+    },
+    "pricing.note.api": {
+      "description": "按所选 API 单价源的缓存单价折算历史用量。",
+      "location": "designs/browser/token-usage.js:577",
+      "params": [],
+      "plural": false
+    },
+    "pricing.note.credits": {
+      "description": "按官方缓存费率估算 credits 消耗。",
+      "location": "designs/browser/token-usage.js:577",
+      "params": [],
+      "plural": false
+    },
+    "pricing.note.purchase": {
+      "description": "credits 费率来自官方缓存；加购换算单价由你设置。",
+      "location": "designs/browser/token-usage.js:577",
+      "params": [],
+      "plural": false
+    },
+    "pricing.partialSuffix": {
+      "description": "（部分）",
+      "location": "designs/browser/token-usage.js:636",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.cacheWrite": {
+      "backend": true,
+      "description": "缓存写入时长未记录",
+      "location": "pricing.py:279,295",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.creditsModel": {
+      "backend": true,
+      "description": "credits 模型价格未收录",
+      "location": "pricing.py:253",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.creditsTier": {
+      "backend": true,
+      "description": "credits 档位价格未收录",
+      "location": "pricing.py:259",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.inputLen": {
+      "backend": true,
+      "description": "调用输入长度未记录",
+      "location": "pricing.py:265",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.modelMissing": {
+      "backend": true,
+      "description": "模型未记录",
+      "location": "pricing.py:241",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.notCached": {
+      "backend": true,
+      "description": "价格尚未缓存",
+      "location": "pricing.py:238",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.openaiModel": {
+      "backend": true,
+      "description": "OpenAI 模型价格未收录",
+      "location": "pricing.py:270,290",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.tierMissing": {
+      "backend": true,
+      "description": "速度档位未记录",
+      "location": "pricing.py:247",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.tierPrice": {
+      "backend": true,
+      "description": "档位价格未收录",
+      "location": "pricing.py:274",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.tierUnavailable": {
+      "backend": true,
+      "description": "此价格源未提供该档位",
+      "location": "pricing.py:287",
+      "params": [],
+      "plural": false
+    },
+    "pricing.reason.unitMissing": {
+      "backend": true,
+      "description": "所需单价缺失",
+      "location": "pricing.py:309",
+      "params": [],
+      "plural": false
+    },
+    "pricing.ruleSaved": {
+      "description": "换算规则已保存并应用",
+      "location": "designs/browser/token-usage.js:617-618",
+      "params": [],
+      "plural": false
+    },
+    "pricing.saved": {
+      "description": "设置已保存",
+      "location": "designs/browser/token-usage.js:589,624",
+      "params": [],
+      "plural": false
+    },
+    "pricing.saving": {
+      "description": "正在保存…",
+      "location": "designs/browser/token-usage.js:591",
+      "params": [],
+      "plural": false
+    },
+    "pricing.settingsTitle": {
+      "description": "成本设置",
+      "location": "designs/browser/token-usage.js:531,534",
+      "params": [],
+      "plural": false
+    },
+    "pricing.source.credits": {
+      "description": "OpenAI Codex credits",
+      "location": "designs/browser/token-usage.js:585",
+      "params": [],
+      "plural": false
+    },
+    "pricing.source.litellm": {
+      "description": "LiteLLM",
+      "location": "designs/browser/token-usage.js:585",
+      "params": [],
+      "plural": false
+    },
+    "pricing.source.modelsdev": {
+      "description": "models.dev",
+      "location": "designs/browser/token-usage.js:585",
+      "params": [],
+      "plural": false
+    },
+    "pricing.sourceTitle": {
+      "description": "API 单价源",
+      "location": "designs/browser/token-usage.js:582",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.api": {
+      "description": "API 等价成本（估算）",
+      "location": "designs/browser/token-usage.js:651",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.basisNote": {
+      "description": "按所选口径折算历史用量，不代表实际账单。",
+      "location": "designs/browser/token-usage.js:655",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.cachedAt": {
+      "description": "· 缓存于 {time}",
+      "location": "designs/browser/token-usage.js:653",
+      "params": [
+        {
+          "name": "time",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.summary.credits": {
+      "description": "credits 消耗（估算）",
+      "location": "designs/browser/token-usage.js:651",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.expectedCredits": {
+      "description": "预计消耗 {credits} credits",
+      "location": "designs/browser/token-usage.js:649",
+      "params": [
+        {
+          "name": "credits",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.summary.metered": {
+      "description": "credits 已计量 {pct}",
+      "location": "designs/browser/token-usage.js:652",
+      "params": [
+        {
+          "name": "pct",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.summary.purchase": {
+      "description": "credits 折算成本（估算）",
+      "location": "designs/browser/token-usage.js:651",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.rated": {
+      "description": "已估算 {pct}",
+      "location": "designs/browser/token-usage.js:652",
+      "params": [
+        {
+          "name": "pct",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.summary.reasons": {
+      "description": "未估算原因",
+      "location": "designs/browser/token-usage.js:655",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.refreshHint": {
+      "description": "· 请先在成本设置中刷新缓存",
+      "location": "designs/browser/token-usage.js:653",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.rule": {
+      "description": "换算规则：{amount} {currency} / {credits} credits · 统一折算历史用量",
+      "location": "designs/browser/token-usage.js:649",
+      "params": [
+        {
+          "name": "amount",
+          "type": "string"
+        },
+        {
+          "name": "credits",
+          "type": "number"
+        },
+        {
+          "name": "currency",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.summary.setRule": {
+      "description": "先设置支付金额和获得的 credits，保存后即可显示等价金额。",
+      "location": "designs/browser/token-usage.js:649",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.setRuleBtn": {
+      "description": "设置换算规则",
+      "location": "designs/browser/token-usage.js:649",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.standardFallback": {
+      "description": "· 档位缺失时按 Standard 折算",
+      "location": "designs/browser/token-usage.js:654",
+      "params": [],
+      "plural": false
+    },
+    "pricing.summary.unratedShare": {
+      "description": "· 未估算 {pct}（{tokens} token）",
+      "location": "designs/browser/token-usage.js:652",
+      "params": [
+        {
+          "name": "pct",
+          "type": "number"
+        },
+        {
+          "name": "tokens",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "pricing.unrated": {
+      "description": "未估算",
+      "location": "designs/browser/token-usage.js:632",
+      "params": [],
+      "plural": false
+    },
+    "session.closeImageAria": {
+      "description": "关闭图片",
+      "location": "designs/browser/app.js:243",
+      "params": [],
+      "plural": false
+    },
+    "session.contextButton": {
+      "description": "上下文",
+      "location": "designs/browser/app.js:622",
+      "params": [],
+      "plural": false
+    },
+    "session.contextTitle": {
+      "description": "环境与上下文",
+      "location": "designs/browser/app.js:623-624",
+      "params": [],
+      "plural": false
+    },
+    "session.emptyMessages": {
+      "description": "没有匹配的消息",
+      "location": "designs/browser/app.js:195",
+      "params": [],
+      "plural": false
+    },
+    "session.enlargeImageAria": {
+      "description": "放大图片：{alt}",
+      "location": "designs/browser/app.js:26,63",
+      "params": [
+        {
+          "name": "alt",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.findCloseAria": {
+      "description": "收起会话查找",
+      "location": "designs/browser/index.html:1; app.js:198",
+      "params": [],
+      "plural": false
+    },
+    "session.findCloseTitle": {
+      "description": "收起查找",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "session.findNextAria": {
+      "description": "下一处匹配",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "session.findNextTitle": {
+      "description": "下一处（Enter）",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "session.findNoMatch": {
+      "description": "无匹配",
+      "location": "designs/browser/app.js:206",
+      "params": [],
+      "plural": false
+    },
+    "session.findOpenAria": {
+      "description": "展开会话查找",
+      "location": "designs/browser/index.html:1; app.js:198",
+      "params": [],
+      "plural": false
+    },
+    "session.findPlaceholder": {
+      "description": "在当前会话中查找",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "session.findPrevAria": {
+      "description": "上一处匹配",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "session.findPrevTitle": {
+      "description": "上一处（Shift + Enter）",
+      "location": "designs/browser/index.html:1",
+      "params": [],
+      "plural": false
+    },
+    "session.findSearching": {
+      "description": "正在查找…",
+      "location": "designs/browser/app.js:1408",
+      "params": [],
+      "plural": false
+    },
+    "session.findStatus": {
+      "description": "{current} / {total}",
+      "location": "designs/browser/app.js:206",
+      "params": [
+        {
+          "name": "current",
+          "type": "string"
+        },
+        {
+          "name": "total",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "session.imageUnavailable": {
+      "description": "图片无法读取 · {alt}",
+      "location": "designs/browser/app.js:241",
+      "params": [
+        {
+          "name": "alt",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.jumpFailed": {
+      "description": "跳转失败 · {message}",
+      "location": "designs/browser/app.js:1289",
+      "params": [
+        {
+          "name": "message",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.loadOlder": {
+      "description": "加载更早的对话",
+      "location": "designs/browser/app.js:195,1404",
+      "params": [],
+      "plural": false
+    },
+    "session.loadOlderBusy": {
+      "description": "正在读取…",
+      "location": "designs/browser/app.js:1403",
+      "params": [],
+      "plural": false
+    },
+    "session.loading": {
+      "description": "正在读取会话…",
+      "location": "designs/browser/app.js:230",
+      "params": [],
+      "plural": false
+    },
+    "session.multimodal.audio": {
+      "backend": true,
+      "description": "[音频]",
+      "location": "server.py:104",
+      "params": [],
+      "plural": false
+    },
+    "session.multimodal.image": {
+      "backend": true,
+      "description": "[图片]",
+      "location": "server.py:105",
+      "params": [],
+      "plural": false
+    },
+    "session.newMessages": {
+      "description": "有新消息 · 跳到最新",
+      "location": "designs/browser/app.js:631",
+      "params": [],
+      "plural": false
+    },
+    "session.orphanToolName": {
+      "backend": true,
+      "description": "工具结果",
+      "location": "server.py:338",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.assistant": {
+      "description": "Codex",
+      "location": "designs/browser/app.js:1468",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.child": {
+      "description": "子代理概况",
+      "location": "designs/browser/app.js:1477",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.closeAria": {
+      "description": "关闭会话预览",
+      "location": "designs/browser/app.js:1454",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.details": {
+      "description": "详情",
+      "location": "designs/browser/app.js:1464",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.directory": {
+      "description": "目录",
+      "location": "designs/browser/app.js:1462",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.error": {
+      "description": "暂时无法读取预览：{message}",
+      "location": "designs/browser/app.js:1482",
+      "params": [
+        {
+          "name": "message",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.preview.excerptNote": {
+      "description": "以上为最近消息摘录，打开完整会话可浏览全部记录。",
+      "location": "designs/browser/app.js:1472",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.footerHint": {
+      "description": "关闭预览即可继续当前阅读",
+      "location": "designs/browser/app.js:1454",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.kind": {
+      "description": "关联会话",
+      "location": "designs/browser/app.js:1454",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.lastModel": {
+      "description": "最近模型",
+      "location": "designs/browser/app.js:1462",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.loading": {
+      "description": "正在读取会话概况…",
+      "location": "designs/browser/app.js:1479",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.noDialog": {
+      "description": "最近记录中暂无可展示的对话。",
+      "location": "designs/browser/app.js:1472",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.openFull": {
+      "description": "打开完整会话",
+      "location": "designs/browser/app.js:1454",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.parent": {
+      "description": "主会话概况",
+      "location": "designs/browser/app.js:1477",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.recentActions": {
+      "description": "最近执行",
+      "location": "designs/browser/app.js:1471",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.status": {
+      "description": "状态",
+      "location": "designs/browser/app.js:1462",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.status.completed": {
+      "description": "已完成",
+      "location": "designs/browser/app.js:1461",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.status.failed": {
+      "description": "失败",
+      "location": "designs/browser/app.js:1461",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.status.inProgress": {
+      "description": "运行中",
+      "location": "designs/browser/app.js:1461",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.status.interrupted": {
+      "description": "已中断",
+      "location": "designs/browser/app.js:1461",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.title": {
+      "description": "会话预览",
+      "location": "designs/browser/app.js:1454,1478",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.truncated": {
+      "description": "内容较长，打开完整会话可继续查看。",
+      "location": "designs/browser/app.js:1468",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.updated": {
+      "description": "最近更新",
+      "location": "designs/browser/app.js:1462",
+      "params": [],
+      "plural": false
+    },
+    "session.preview.userRequest": {
+      "description": "用户请求",
+      "location": "designs/browser/app.js:1468",
+      "params": [],
+      "plural": false
+    },
+    "session.shownCount": {
+      "description": "已显示 {shown} 条记录",
+      "location": "designs/browser/app.js:195",
+      "params": [
+        {
+          "name": "shown",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "session.skippedLines": {
+      "description": "{skipped} 行尚未完整写入或无法解析",
+      "location": "designs/browser/app.js:195",
+      "params": [
+        {
+          "name": "skipped",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "session.turn.configFallback": {
+      "description": "本轮配置",
+      "location": "designs/browser/app.js:165",
+      "params": [],
+      "plural": false
+    },
+    "session.turn.duration": {
+      "description": "用时 {duration}",
+      "location": "designs/browser/app.js:167",
+      "params": [
+        {
+          "name": "duration",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.turn.effortTitle": {
+      "description": "本轮强度",
+      "location": "designs/browser/app.js:158",
+      "params": [],
+      "plural": false
+    },
+    "session.turn.ended": {
+      "description": "结束：{time}",
+      "location": "designs/browser/app.js:167",
+      "params": [
+        {
+          "name": "time",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.turn.modelTitle": {
+      "description": "本轮模型",
+      "location": "designs/browser/app.js:164",
+      "params": [],
+      "plural": false
+    },
+    "session.turn.recordStatus": {
+      "description": "记录状态：{status}",
+      "location": "designs/browser/app.js:167",
+      "params": [
+        {
+          "name": "status",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.turn.started": {
+      "description": "开始：{time}",
+      "location": "designs/browser/app.js:167",
+      "params": [
+        {
+          "name": "time",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.turn.usageAria": {
+      "description": "查看本轮用量与成本",
+      "location": "designs/browser/app.js:168",
+      "params": [],
+      "plural": false
+    },
+    "session.turn.usageTitle": {
+      "description": "本轮用量与成本",
+      "location": "designs/browser/app.js:168",
+      "params": [],
+      "plural": false
+    },
+    "session.turn.viewConfig": {
+      "description": "查看本轮配置",
+      "location": "designs/browser/app.js:164-165",
+      "params": [],
+      "plural": false
+    },
+    "session.turn.viewConfigAria": {
+      "description": "查看本轮配置：{details}",
+      "location": "designs/browser/app.js:165",
+      "params": [
+        {
+          "name": "details",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.unnamed": {
+      "description": "未命名会话 · {idSuffix}",
+      "location": "designs/browser/app.js:18",
+      "params": [
+        {
+          "name": "idSuffix",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.updateFailed": {
+      "description": "更新失败，稍后会重试：{message}",
+      "location": "designs/browser/app.js:1425",
+      "params": [
+        {
+          "name": "message",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "session.usageEntry": {
+      "description": "用量与成本",
+      "location": "designs/browser/app.js:14",
+      "params": [],
+      "plural": false
+    },
+    "session.viewFullRequest": {
+      "description": "查看完整请求",
+      "location": "designs/browser/app.js:191",
+      "params": [],
+      "plural": false
+    },
+    "session.viewImageLink": {
+      "description": "查看图片：{alt}",
+      "location": "designs/browser/app.js:26",
+      "params": [
+        {
+          "name": "alt",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.agentActivity": {
+      "backend": true,
+      "description": "子任务活动",
+      "location": "tool_operations.py:377",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.agentTool": {
+      "backend": true,
+      "description": "子代理工具",
+      "location": "tool_operations.py:245",
+      "params": [
+        {
+          "name": "tool",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.agentToolFallback": {
+      "backend": true,
+      "description": "代理工具 {tool}",
+      "location": "tool_operations.py:382",
+      "params": [
+        {
+          "name": "tool",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.computer": {
+      "backend": true,
+      "description": "电脑操作",
+      "location": "tool_operations.py:238",
+      "params": [
+        {
+          "name": "title",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.createGoal": {
+      "backend": true,
+      "description": "创建目标",
+      "location": "tool_operations.py:227",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.dynamicTool": {
+      "backend": true,
+      "description": "动态工具",
+      "location": "tool_operations.py:366",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.editFile": {
+      "backend": true,
+      "description": "修改文件",
+      "location": "tool_operations.py:236,240; exec_presentation.py:12,294,420",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.execResult": {
+      "backend": true,
+      "description": "执行结果",
+      "location": "tool_operations.py:416",
+      "params": [
+        {
+          "name": "command",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.failedSuffix": {
+      "backend": true,
+      "description": "· 失败",
+      "location": "tool_operations.py:351",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.findInPage": {
+      "backend": true,
+      "description": "页内查找",
+      "location": "tool_operations.py:358",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.generateImage": {
+      "backend": true,
+      "description": "生成图片",
+      "location": "tool_operations.py:373",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.getGoal": {
+      "backend": true,
+      "description": "查看目标",
+      "location": "tool_operations.py:226",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.imageGen": {
+      "backend": true,
+      "description": "生成或编辑图片",
+      "location": "tool_operations.py:224",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.listResourceTemplates": {
+      "backend": true,
+      "description": "列出资源模板",
+      "location": "tool_operations.py:225",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.listResources": {
+      "backend": true,
+      "description": "列出资源",
+      "location": "tool_operations.py:225",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.noNewOutput": {
+      "backend": true,
+      "description": "· 无新增输出",
+      "location": "tool_operations.py:297; exec_presentation.py:497",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.openPage": {
+      "backend": true,
+      "description": "打开网页",
+      "location": "tool_operations.py:358",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.orchestration": {
+      "backend": true,
+      "description": "编排脚本",
+      "location": "tool_operations.py:435",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.readFile": {
+      "backend": true,
+      "description": "读取文件",
+      "location": "tool_operations.py:239",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.readResource": {
+      "backend": true,
+      "description": "读取资源",
+      "location": "tool_operations.py:226",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.readTime": {
+      "backend": true,
+      "description": "读取时间",
+      "location": "tool_operations.py:224",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.runCommand": {
+      "backend": true,
+      "description": "运行命令",
+      "location": "tool_operations.py:212; exec_presentation.py:305,414",
+      "params": [
+        {
+          "name": "cmd",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.searchContent": {
+      "backend": true,
+      "description": "搜索内容",
+      "location": "tool_operations.py:433",
+      "params": [
+        {
+          "name": "query",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "path",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.sessionInput": {
+      "backend": true,
+      "description": "向后台终端输入",
+      "location": "tool_operations.py:218",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.sessionInteract": {
+      "backend": true,
+      "description": "后台终端交互",
+      "location": "tool_operations.py:216; exec_presentation.py:424",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.sessionInterrupt": {
+      "backend": true,
+      "description": "请求中断后台终端",
+      "location": "tool_operations.py:218",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.sessionSuffix": {
+      "backend": true,
+      "description": "· 会话 {sessionId}",
+      "location": "tool_operations.py:219",
+      "params": [
+        {
+          "name": "sessionId",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.sessionWait": {
+      "backend": true,
+      "description": "等待后台终端",
+      "location": "tool_operations.py:218",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.status.completed": {
+      "backend": true,
+      "description": "已完成",
+      "location": "tool_operations.py:374",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.status.failed": {
+      "backend": true,
+      "description": "失败",
+      "location": "tool_operations.py:374",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.status.inProgress": {
+      "backend": true,
+      "description": "处理中",
+      "location": "tool_operations.py:374",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.subjectFailed": {
+      "backend": true,
+      "description": "失败",
+      "location": "tool_operations.py:367",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.targetsCount": {
+      "backend": true,
+      "description": "{count} 个目标",
+      "location": "tool_operations.py:384",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.action.unknownType": {
+      "backend": true,
+      "description": "工具类型未确认",
+      "location": "tool_operations.py:251",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.updateGoal": {
+      "backend": true,
+      "description": "更新目标",
+      "location": "tool_operations.py:227",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.viewImage": {
+      "backend": true,
+      "description": "查看图片",
+      "location": "tool_operations.py:223",
+      "params": [
+        {
+          "name": "filename",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.waitClock": {
+      "backend": true,
+      "description": "等待时钟",
+      "location": "tool_operations.py:369",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.wasRunningSuffix": {
+      "backend": true,
+      "description": "· 上次记录时仍在运行",
+      "location": "tool_operations.py:353",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.webOp": {
+      "backend": true,
+      "description": "网页操作",
+      "location": "tool_operations.py:358",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.webSearch": {
+      "backend": true,
+      "description": "网页搜索",
+      "location": "tool_operations.py:233,358",
+      "params": [],
+      "plural": false
+    },
+    "tools.action.webSearchQueries": {
+      "backend": true,
+      "description": "{count} 条查询",
+      "location": "tool_operations.py:233",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.action.webTool": {
+      "backend": true,
+      "description": "网页工具",
+      "location": "tool_operations.py:234",
+      "params": [
+        {
+          "name": "keys",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.action.writeFile": {
+      "backend": true,
+      "description": "写入文件",
+      "location": "tool_operations.py:240",
+      "params": [],
+      "plural": false
+    },
+    "tools.activityGroupSep": {
+      "description": "、",
+      "location": "designs/browser/app.js:80",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.already_linked": {
+      "description": "候选调用已有同命令执行记录，未重复关联。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.ambiguous_command": {
+      "description": "同一命令存在多个候选调用，未猜测归属。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.ambiguous_id": {
+      "description": "调用 ID 对应多条记录，未猜测归属。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.ambiguous_pending": {
+      "description": "存在多个待返回调用，无法确认归属。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.ambiguous_process": {
+      "description": "同一进程编号存在多个启动来源，未猜测归属。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.conflicting_cwd": {
+      "description": "调用参数与执行事件的工作目录冲突，未合并。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.conflicting_process": {
+      "description": "进程编号对应的调用与已记录命令或工作目录冲突。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.database_record": {
+      "description": "来自数据库的执行记录，未记录对应工具请求。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.independent_source": {
+      "description": "这是一条独立的命令执行或终端交互记录。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.missing_turn": {
+      "description": "缺少轮次信息，未关联已返回的调用。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.no_matching_call": {
+      "description": "未找到可确认关联的工具调用。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.unknown_id": {
+      "description": "记录中的调用 ID 未找到同轮请求。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.assoc.unlinked_event": {
+      "description": "未找到可确认关联的工具调用。",
+      "location": "designs/browser/app.js:665",
+      "params": [],
+      "plural": false
+    },
+    "tools.call.structuredReturn": {
+      "description": "结构化返回 · 查看原始字段",
+      "location": "designs/browser/app.js:1052",
+      "params": [],
+      "plural": false
+    },
+    "tools.call.thisOutput": {
+      "description": "本次调用的输出",
+      "location": "designs/browser/app.js:1054",
+      "params": [],
+      "plural": false
+    },
+    "tools.callFallback": {
+      "description": "工具调用",
+      "location": "designs/browser/app.js:80",
+      "params": [],
+      "plural": false
+    },
+    "tools.cell.firstReturn": {
+      "description": "首次返回运行单元 {cell}",
+      "location": "designs/browser/app.js:1094",
+      "params": [
+        {
+          "name": "cell",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "tools.cell.viewFinal": {
+      "description": "查看最终返回",
+      "location": "designs/browser/app.js:1099",
+      "params": [],
+      "plural": false
+    },
+    "tools.cell.viewOrigin": {
+      "description": "查看发起调用",
+      "location": "designs/browser/app.js:1097",
+      "params": [],
+      "plural": false
+    },
+    "tools.cell.viewWait": {
+      "description": "查看等待记录",
+      "location": "designs/browser/app.js:1099",
+      "params": [],
+      "plural": false
+    },
+    "tools.cell.viewWaitN": {
+      "description": "查看等待记录 {n}",
+      "location": "designs/browser/app.js:1099",
+      "params": [
+        {
+          "name": "n",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "tools.codeAria": {
+      "description": "工具代码，JavaScript 语法高亮",
+      "location": "designs/browser/app.js:696",
+      "params": [],
+      "plural": false
+    },
+    "tools.collapseContent": {
+      "description": "收起内容",
+      "location": "designs/browser/app.js:829,864,882",
+      "params": [],
+      "plural": false
+    },
+    "tools.commandSource": {
+      "description": "命令源码",
+      "location": "designs/browser/app.js:654,893-894,925",
+      "params": [],
+      "plural": false
+    },
+    "tools.commandSourceFolded": {
+      "description": "命令源码 · {language} · {lines} 行",
+      "location": "designs/browser/app.js:893",
+      "params": [
+        {
+          "name": "language",
+          "type": "string"
+        },
+        {
+          "name": "lines",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.copyCommandAria": {
+      "description": "复制完整命令源码",
+      "location": "designs/browser/app.js:892",
+      "params": [],
+      "plural": false
+    },
+    "tools.dialog.fullJson": {
+      "description": "执行记录 · 完整 JSON",
+      "location": "designs/browser/app.js:1298",
+      "params": [],
+      "plural": false
+    },
+    "tools.dialog.noRaw": {
+      "description": "没有可读取的原始记录。",
+      "location": "designs/browser/app.js:1344",
+      "params": [],
+      "plural": false
+    },
+    "tools.dialog.parsed": {
+      "description": "解析详情",
+      "location": "designs/browser/app.js:1320",
+      "params": [],
+      "plural": false
+    },
+    "tools.dialog.rawLog": {
+      "description": "日志原文",
+      "location": "designs/browser/app.js:1320",
+      "params": [],
+      "plural": false
+    },
+    "tools.dialog.returns": {
+      "description": "返回结果",
+      "location": "designs/browser/app.js:1298",
+      "params": [],
+      "plural": false
+    },
+    "tools.diffAria": {
+      "description": "文件差异，旧行号与新行号",
+      "location": "designs/browser/app.js:758",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.agentPath": {
+      "description": "子任务",
+      "location": "designs/browser/app.js:1182",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.agentStates": {
+      "description": "本次返回的代理状态",
+      "location": "designs/browser/app.js:1191",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.agentThreadId": {
+      "description": "子会话 ID",
+      "location": "designs/browser/app.js:1182",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.callReturn": {
+      "description": "调用回包",
+      "location": "designs/browser/app.js:1196",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.durationMs": {
+      "description": "耗时（毫秒）",
+      "location": "designs/browser/app.js:1158",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.model": {
+      "description": "模型",
+      "location": "designs/browser/app.js:1183",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.noFailureReason": {
+      "description": "未记录具体失败原因。",
+      "location": "designs/browser/app.js:1178",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.reasoning": {
+      "description": "推理力度",
+      "location": "designs/browser/app.js:1183",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.receiverAgents": {
+      "description": "目标代理",
+      "location": "designs/browser/app.js:1189",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.receivers": {
+      "description": "目标会话",
+      "location": "designs/browser/app.js:1189",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.revisedPrompt": {
+      "description": "修订提示词",
+      "location": "designs/browser/app.js:1174",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.savedPath": {
+      "description": "保存路径",
+      "location": "designs/browser/app.js:1176",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.sender": {
+      "description": "发起会话",
+      "location": "designs/browser/app.js:1188",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.status": {
+      "description": "调用状态",
+      "location": "designs/browser/app.js:1159",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.success": {
+      "description": "成功回执",
+      "location": "designs/browser/app.js:1160",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.task": {
+      "description": "任务",
+      "location": "designs/browser/app.js:1190",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.tool": {
+      "description": "工具",
+      "location": "designs/browser/app.js:1157",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.transparentBg": {
+      "description": "透明背景",
+      "location": "designs/browser/app.js:1175",
+      "params": [],
+      "plural": false
+    },
+    "tools.event.waitMs": {
+      "description": "请求等待（毫秒）",
+      "location": "designs/browser/app.js:1172",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.cellAmbiguous": {
+      "backend": true,
+      "description": "此编号对应多条未结束的调用，无法确定来源。",
+      "location": "exec_presentation.py:95",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.cellNoOrigin": {
+      "backend": true,
+      "description": "等待发出时没有可关联的运行单元。",
+      "location": "exec_presentation.py:96",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.defaultFile": {
+      "backend": true,
+      "description": "文件",
+      "location": "exec_presentation.py:297,301",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.failedState": {
+      "description": "编排失败",
+      "location": "designs/browser/app.js:1131",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.findTools": {
+      "backend": true,
+      "description": "查找可用工具",
+      "location": "exec_presentation.py:516",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.label.edit": {
+      "backend": true,
+      "description": "修改文件",
+      "location": "exec_presentation.py:12",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.label.list": {
+      "backend": true,
+      "description": "列举",
+      "location": "exec_presentation.py:12",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.label.read": {
+      "backend": true,
+      "description": "读取",
+      "location": "exec_presentation.py:12",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.label.search": {
+      "backend": true,
+      "description": "搜索",
+      "location": "exec_presentation.py:12",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.listLimit": {
+      "backend": true,
+      "description": "· 前 {count} 行",
+      "location": "exec_presentation.py:303",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.exec.listPrefix": {
+      "backend": true,
+      "description": "列举 {path}",
+      "location": "exec_presentation.py:301",
+      "params": [
+        {
+          "name": "path",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.multiLabel": {
+      "backend": true,
+      "description": "{labels} · {count} 项",
+      "location": "exec_presentation.py:513",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        },
+        {
+          "name": "labels",
+          "type": "string"
+        }
+      ],
+      "plural": true
+    },
+    "tools.exec.noResult": {
+      "backend": true,
+      "description": "未记录结果",
+      "location": "exec_presentation.py:508",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.requestPrefix": {
+      "backend": true,
+      "description": "请求{label}",
+      "location": "exec_presentation.py:371,480",
+      "params": [
+        {
+          "name": "label",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.searchPrefix": {
+      "backend": true,
+      "description": "搜索 {query}",
+      "location": "exec_presentation.py:299",
+      "params": [
+        {
+          "name": "query",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.serviceError": {
+      "backend": true,
+      "description": "· 服务返回错误",
+      "location": "exec_presentation.py:477",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.state.aborted": {
+      "backend": true,
+      "description": "用户中止",
+      "location": "exec_presentation.py:116,498",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.state.failed": {
+      "backend": true,
+      "description": "编排失败",
+      "location": "exec_presentation.py:116,498",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.state.imageReturned": {
+      "backend": true,
+      "description": "图片已返回",
+      "location": "exec_presentation.py:114,135",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.state.pending": {
+      "backend": true,
+      "description": "待取回",
+      "location": "exec_presentation.py:129,498",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.state.resultReturned": {
+      "backend": true,
+      "description": "结果已返回",
+      "location": "exec_presentation.py:114,135",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.state.retrieveFailed": {
+      "backend": true,
+      "description": "取回失败",
+      "location": "exec_presentation.py:137",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.state.terminated": {
+      "backend": true,
+      "description": "编排已终止",
+      "location": "exec_presentation.py:116,137,498",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.state.waitInterrupted": {
+      "backend": true,
+      "description": "等待被中断 · cell 最终状态未记录",
+      "location": "exec_presentation.py:126",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.tryWriteFail": {
+      "backend": true,
+      "description": "尝试{label} · 写入失败",
+      "location": "exec_presentation.py:422",
+      "params": [
+        {
+          "name": "label",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.userRun": {
+      "backend": true,
+      "description": "用户{label}",
+      "location": "exec_presentation.py:427",
+      "params": [
+        {
+          "name": "label",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.verb.add": {
+      "backend": true,
+      "description": "新增",
+      "location": "exec_presentation.py:294",
+      "params": [
+        {
+          "name": "path",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.verb.delete": {
+      "backend": true,
+      "description": "删除",
+      "location": "exec_presentation.py:294",
+      "params": [
+        {
+          "name": "path",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.verb.move": {
+      "backend": true,
+      "description": "移动 {old} → {new}",
+      "location": "exec_presentation.py:296",
+      "params": [
+        {
+          "name": "new",
+          "type": "string"
+        },
+        {
+          "name": "old",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.waitCompleted": {
+      "backend": true,
+      "description": "等待已完成",
+      "location": "exec_presentation.py:500",
+      "params": [],
+      "plural": false
+    },
+    "tools.exec.waitReturn": {
+      "backend": true,
+      "description": "等待编排返回",
+      "location": "exec_presentation.py:467",
+      "params": [
+        {
+          "name": "cell",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.waitTerminate": {
+      "backend": true,
+      "description": "请求终止编排",
+      "location": "exec_presentation.py:467",
+      "params": [
+        {
+          "name": "cell",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.exec.waitUserAbort": {
+      "backend": true,
+      "description": "等待被用户中断",
+      "location": "exec_presentation.py:500",
+      "params": [],
+      "plural": false
+    },
+    "tools.expandMoreOutput": {
+      "description": "展开更多输出（余 {remaining} 行）",
+      "location": "designs/browser/app.js:881",
+      "params": [
+        {
+          "name": "remaining",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.expandRemainingItems": {
+      "description": "展开余下 {remaining} 项",
+      "location": "designs/browser/app.js:829",
+      "params": [
+        {
+          "name": "remaining",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.expandRemainingLines": {
+      "description": "展开余下 {remaining} 行",
+      "location": "designs/browser/app.js:863",
+      "params": [
+        {
+          "name": "remaining",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.fallbackName": {
+      "description": "工具",
+      "location": "designs/browser/app.js:689",
+      "params": [],
+      "plural": false
+    },
+    "tools.field.args": {
+      "description": "调用参数",
+      "location": "designs/browser/app.js:705,1036",
+      "params": [],
+      "plural": false
+    },
+    "tools.field.name": {
+      "description": "工具",
+      "location": "designs/browser/app.js:705",
+      "params": [],
+      "plural": false
+    },
+    "tools.field.nativeResults": {
+      "description": "原生执行结果",
+      "location": "designs/browser/app.js:705",
+      "params": [],
+      "plural": false
+    },
+    "tools.field.output": {
+      "description": "工具返回",
+      "location": "designs/browser/app.js:705",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.changeAttempt": {
+      "description": "尝试的文件变更",
+      "location": "designs/browser/app.js:849",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.changes": {
+      "description": "文件变更",
+      "location": "designs/browser/app.js:849",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.editFeedback": {
+      "description": "本次修改的反馈",
+      "location": "designs/browser/app.js:1074",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.feedback": {
+      "description": "执行反馈",
+      "location": "designs/browser/app.js:854",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.feedbackExit": {
+      "description": "执行反馈 · 退出码 {code}",
+      "location": "designs/browser/app.js:854",
+      "params": [
+        {
+          "name": "code",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "tools.file.file": {
+      "description": "文件",
+      "location": "designs/browser/app.js:845",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.mergedCallOutput": {
+      "description": "所属调用的合并输出",
+      "location": "designs/browser/app.js:856",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.mergedOps": {
+      "description": "同一命令的合并输出 · {count} 项操作",
+      "location": "designs/browser/app.js:1084",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.file.modify": {
+      "description": "修改文件",
+      "location": "designs/browser/app.js:845",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.noConcreteChange": {
+      "description": "未记录具体文件变更。",
+      "location": "designs/browser/app.js:1076",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.noDiff": {
+      "description": "原生日志未记录文件 diff，可展开原始调用查看。",
+      "location": "designs/browser/app.js:853",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.noReadOutput": {
+      "description": "尚未记录读取输出。",
+      "location": "designs/browser/app.js:861",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.operation": {
+      "description": "操作",
+      "location": "designs/browser/app.js:845",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.outputLineNote": {
+      "description": "左侧为输出行号。",
+      "location": "designs/browser/app.js:859",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.readRange": {
+      "description": "读取范围",
+      "location": "designs/browser/app.js:845",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.readResult": {
+      "description": "读取结果",
+      "location": "designs/browser/app.js:856",
+      "params": [],
+      "plural": false
+    },
+    "tools.file.sharedReadNote": {
+      "description": "包含同一调用的多项操作输出，未按文件拆分；按当前文件类型着色，行号为输出行号。",
+      "location": "designs/browser/app.js:858",
+      "params": [],
+      "plural": false
+    },
+    "tools.image.alt": {
+      "description": "工具返回的图片",
+      "location": "designs/browser/app.js:960",
+      "params": [],
+      "plural": false
+    },
+    "tools.image.badFormat": {
+      "description": "记录包含图像数据，格式不可预览。",
+      "location": "designs/browser/app.js:1144",
+      "params": [],
+      "plural": false
+    },
+    "tools.image.decodeFail": {
+      "description": "图片数据无法解码。",
+      "location": "designs/browser/app.js:1357",
+      "params": [],
+      "plural": false
+    },
+    "tools.image.missingEmbed": {
+      "description": "记录包含图片，缺少可预览的内嵌内容。",
+      "location": "designs/browser/app.js:961",
+      "params": [],
+      "plural": false
+    },
+    "tools.image.pathUnfixed": {
+      "description": "图片路径未记录为固定值。",
+      "location": "designs/browser/app.js:1240",
+      "params": [],
+      "plural": false
+    },
+    "tools.image.seeReturn": {
+      "description": "图片见本次调用的返回。",
+      "location": "designs/browser/app.js:1179",
+      "params": [],
+      "plural": false
+    },
+    "tools.list.outputLimit": {
+      "description": "标准输出最多 {count} 行",
+      "location": "designs/browser/app.js:841",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.list.outputRange": {
+      "description": "输出范围",
+      "location": "designs/browser/app.js:842",
+      "params": [],
+      "plural": false
+    },
+    "tools.list.results": {
+      "description": "列举结果",
+      "location": "designs/browser/app.js:843",
+      "params": [],
+      "plural": false
+    },
+    "tools.list.scope": {
+      "description": "范围",
+      "location": "designs/browser/app.js:842",
+      "params": [],
+      "plural": false
+    },
+    "tools.list.unspecifiedPath": {
+      "description": "未指定路径",
+      "location": "designs/browser/app.js:842",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.audio": {
+      "description": "音频",
+      "location": "designs/browser/app.js:977",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.binary": {
+      "description": "二进制内容",
+      "location": "designs/browser/app.js:984",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.completed": {
+      "description": "调用完成",
+      "location": "designs/browser/app.js:1007",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.completedNoContent": {
+      "description": "调用完成，未记录结果内容。",
+      "location": "designs/browser/app.js:1019",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.embeddedResource": {
+      "description": "嵌入资源",
+      "location": "designs/browser/app.js:982",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.emptyList": {
+      "description": "返回内容为空列表。",
+      "location": "designs/browser/app.js:992",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.emptyString": {
+      "description": "返回为空字符串。",
+      "location": "designs/browser/app.js:1021",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.emptyText": {
+      "description": "空文本",
+      "location": "designs/browser/app.js:969",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.failed": {
+      "description": "调用失败",
+      "location": "designs/browser/app.js:1007",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.failedNoDetail": {
+      "description": "调用失败，未记录错误详情。",
+      "location": "designs/browser/app.js:1019",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.noAssignableReturn": {
+      "description": "没有可单独归给此操作的回包。",
+      "location": "designs/browser/app.js:1019",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.noResultContent": {
+      "description": "未记录结果内容。",
+      "location": "designs/browser/app.js:1029",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.noReturn": {
+      "description": "未记录返回内容。",
+      "location": "designs/browser/app.js:1019,1167",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.resourceLink": {
+      "description": "资源链接",
+      "location": "designs/browser/app.js:982",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.serviceError": {
+      "description": "服务返回错误",
+      "location": "designs/browser/app.js:1008",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.stillRunningNote": {
+      "description": "上次记录时仍在运行。",
+      "location": "designs/browser/app.js:1167",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.structured": {
+      "description": "结构化结果",
+      "location": "designs/browser/app.js:1028",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.viewBlock": {
+      "description": "查看内容块",
+      "location": "designs/browser/app.js:988",
+      "params": [],
+      "plural": false
+    },
+    "tools.mcp.viewBlockTyped": {
+      "description": "查看内容块 · {type}",
+      "location": "designs/browser/app.js:988",
+      "params": [
+        {
+          "name": "type",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.mcp.wasRunning": {
+      "description": "上次记录时仍在运行",
+      "location": "designs/browser/app.js:1007",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.agent.completed": {
+      "backend": true,
+      "description": "子任务已完成",
+      "location": "native_events.py:23",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.agent.interacted": {
+      "backend": true,
+      "description": "子任务发生交互",
+      "location": "native_events.py:23",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.agent.interrupted": {
+      "backend": true,
+      "description": "子任务已中断",
+      "location": "native_events.py:23",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.agent.started": {
+      "backend": true,
+      "description": "子任务已启动",
+      "location": "native_events.py:23",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.followup": {
+      "backend": true,
+      "description": "追加子任务",
+      "location": "native_events.py:25",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.interrupt": {
+      "backend": true,
+      "description": "请求中断子任务",
+      "location": "native_events.py:25",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.list": {
+      "backend": true,
+      "description": "查看子任务",
+      "location": "native_events.py:25",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.send": {
+      "backend": true,
+      "description": "发送子任务消息",
+      "location": "native_events.py:24",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.spawn": {
+      "backend": true,
+      "description": "启动子任务",
+      "location": "native_events.py:24",
+      "params": [],
+      "plural": false
+    },
+    "tools.native.wait": {
+      "backend": true,
+      "description": "等待子任务",
+      "location": "native_events.py:24",
+      "params": [],
+      "plural": false
+    },
+    "tools.noConfirmedOutput": {
+      "description": "尚无可确认的输出。",
+      "location": "designs/browser/app.js:879",
+      "params": [],
+      "plural": false
+    },
+    "tools.notYetReturned": {
+      "description": "尚未返回",
+      "location": "designs/browser/app.js:689",
+      "params": [],
+      "plural": false
+    },
+    "tools.opUnavailable": {
+      "description": "操作记录不可用。",
+      "location": "designs/browser/app.js:1218",
+      "params": [],
+      "plural": false
+    },
+    "tools.operationCountTitle": {
+      "description": "{count} 项操作",
+      "location": "designs/browser/app.js:177",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.orchestration": {
+      "description": "编排脚本",
+      "location": "designs/browser/app.js:686",
+      "params": [],
+      "plural": false
+    },
+    "tools.orchestrationAria": {
+      "description": "JavaScript 编排脚本",
+      "location": "designs/browser/app.js:686",
+      "params": [],
+      "plural": false
+    },
+    "tools.orchestrationMeta": {
+      "description": "JS · {lines} 行",
+      "location": "designs/browser/app.js:686",
+      "params": [
+        {
+          "name": "lines",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.outputEmpty": {
+      "description": "无输出",
+      "location": "designs/browser/app.js:651",
+      "params": [],
+      "plural": false
+    },
+    "tools.outputEmptyNote": {
+      "description": "输出为空",
+      "location": "designs/browser/app.js:758,854",
+      "params": [],
+      "plural": false
+    },
+    "tools.outputHeading": {
+      "description": "输出",
+      "location": "designs/browser/app.js:655,928,1080",
+      "params": [],
+      "plural": false
+    },
+    "tools.outputUnrecorded": {
+      "description": "未记录输出",
+      "location": "designs/browser/app.js:651",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.call_id": {
+      "description": "调用 ID",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.chars": {
+      "description": "输入字符",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.chunk_id": {
+      "description": "输出块",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.command": {
+      "description": "命令",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.cwd": {
+      "description": "工作目录",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.duration_ms": {
+      "description": "耗时（毫秒）",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.effort": {
+      "description": "推理力度",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.exit_code": {
+      "description": "退出码",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.index": {
+      "description": "记录序号（从 0 开始）",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.max_output_tokens": {
+      "description": "输出上限（token）",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.model": {
+      "description": "模型",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.name": {
+      "description": "工具",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.original_token_count": {
+      "description": "截断前输出（token）",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.path": {
+      "description": "文件路径",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.process_id": {
+      "description": "进程标识",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.session_id": {
+      "description": "执行会话",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.time": {
+      "description": "记录时间",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.turn_id": {
+      "description": "轮次 ID",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.wall_time_seconds": {
+      "description": "本次等待（秒）",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.workdir": {
+      "description": "工作目录",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.param.yield_time_ms": {
+      "description": "返回等待（ms）",
+      "location": "designs/browser/app.js:679",
+      "params": [],
+      "plural": false
+    },
+    "tools.rawJsonAria": {
+      "description": "查看这条执行记录的完整 JSON",
+      "location": "designs/browser/app.js:633",
+      "params": [],
+      "plural": false
+    },
+    "tools.rawToolCall": {
+      "description": "原始工具调用 · {name}",
+      "location": "designs/browser/app.js:689",
+      "params": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.rawToolCallNote": {
+      "description": "保留原始输入与工具返回。",
+      "location": "designs/browser/app.js:689",
+      "params": [],
+      "plural": false
+    },
+    "tools.readOutputLabel": {
+      "description": "读取输出",
+      "location": "designs/browser/app.js:745",
+      "params": [],
+      "plural": false
+    },
+    "tools.readRange.byCommand": {
+      "description": "由读取命令决定",
+      "location": "designs/browser/app.js:715,725",
+      "params": [],
+      "plural": false
+    },
+    "tools.readRange.fromLine": {
+      "description": "从第 {start} 行起",
+      "location": "designs/browser/app.js:721",
+      "params": [
+        {
+          "name": "start",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.readRange.full": {
+      "description": "全文",
+      "location": "designs/browser/app.js:724",
+      "params": [],
+      "plural": false
+    },
+    "tools.readRange.head": {
+      "description": "前 {count} 行",
+      "location": "designs/browser/app.js:722",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.readRange.line": {
+      "description": "第 {start} 行",
+      "location": "designs/browser/app.js:717",
+      "params": [
+        {
+          "name": "start",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.readRange.lines": {
+      "description": "第 {start}–{end} 行",
+      "location": "designs/browser/app.js:717",
+      "params": [
+        {
+          "name": "end",
+          "type": "string"
+        },
+        {
+          "name": "start",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.readRange.tail": {
+      "description": "最后 {count} 行",
+      "location": "designs/browser/app.js:722",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.resultN": {
+      "description": "结果 {n}",
+      "location": "designs/browser/app.js:653",
+      "params": [
+        {
+          "name": "n",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "tools.returnResults": {
+      "description": "返回结果 · {count}",
+      "location": "designs/browser/app.js:647",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.search.command": {
+      "description": "命令",
+      "location": "designs/browser/app.js:810",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.content": {
+      "description": "搜索内容",
+      "location": "designs/browser/app.js:810",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.defaultCwd": {
+      "description": "工作目录",
+      "location": "designs/browser/app.js:810",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.fileLines": {
+      "description": "{count} 行",
+      "location": "designs/browser/app.js:820",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.search.lineAria": {
+      "description": "第 {line} 行",
+      "location": "designs/browser/app.js:820",
+      "params": [
+        {
+          "name": "line",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.search.matchesAria": {
+      "description": "搜索匹配结果",
+      "location": "designs/browser/app.js:820",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.mergedOutput": {
+      "description": "所属命令的合并输出",
+      "location": "designs/browser/app.js:823,856",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.noOutputYet": {
+      "description": "尚未记录搜索输出。",
+      "location": "designs/browser/app.js:826",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.noResults": {
+      "description": "没有匹配结果",
+      "location": "designs/browser/app.js:816",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.rawOutput": {
+      "description": "搜索输出",
+      "location": "designs/browser/app.js:823",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.results": {
+      "description": "搜索结果",
+      "location": "designs/browser/app.js:815",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.scope": {
+      "description": "搜索范围",
+      "location": "designs/browser/app.js:793,810",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.sharedNote": {
+      "description": "同一命令包含多项操作，保留合并输出，不按搜索结果拆分。",
+      "location": "designs/browser/app.js:824",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.statsFiles": {
+      "description": "{count} 个文件",
+      "location": "designs/browser/app.js:814",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.search.statsMatches": {
+      "description": "{matches} 行匹配 · {files} 个文件",
+      "location": "designs/browser/app.js:814",
+      "params": [
+        {
+          "name": "files",
+          "type": "number"
+        },
+        {
+          "name": "matches",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.search.statsScopeOnly": {
+      "description": "{matches} 行匹配 · 按搜索范围展示",
+      "location": "designs/browser/app.js:814",
+      "params": [
+        {
+          "name": "matches",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.search.unparsedNote": {
+      "description": "保留原始格式，未推断匹配行数。",
+      "location": "designs/browser/app.js:825",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.unrecorded": {
+      "description": "未记录",
+      "location": "designs/browser/app.js:810",
+      "params": [],
+      "plural": false
+    },
+    "tools.search.workdir": {
+      "description": "工作目录",
+      "location": "designs/browser/app.js:810",
+      "params": [],
+      "plural": false
+    },
+    "tools.shell.argsInRaw": {
+      "description": "命令参数见原始调用。",
+      "location": "designs/browser/app.js:928",
+      "params": [],
+      "plural": false
+    },
+    "tools.shell.unknownArgs": {
+      "description": "未静态解析的调用参数：{fields}。原始表达式见调用源码。",
+      "location": "designs/browser/app.js:932",
+      "params": [
+        {
+          "name": "fields",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.showMore200": {
+      "description": "再显示 200 项",
+      "location": "designs/browser/app.js:829",
+      "params": [],
+      "plural": false
+    },
+    "tools.showMore200Lines": {
+      "description": "再显示 200 行",
+      "location": "designs/browser/app.js:863",
+      "params": [],
+      "plural": false
+    },
+    "tools.standaloneEvent": {
+      "description": "独立事件记录",
+      "location": "designs/browser/app.js:660",
+      "params": [],
+      "plural": false
+    },
+    "tools.standaloneExecution": {
+      "description": "独立执行记录",
+      "location": "designs/browser/app.js:660",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.completed": {
+      "description": "已完成",
+      "location": "designs/browser/app.js:670,1250",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.declined": {
+      "description": "执行请求被拒绝",
+      "location": "designs/browser/app.js:671",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.endedNoCode": {
+      "description": "执行已结束 · 退出码未记录",
+      "location": "designs/browser/app.js:676",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.event.failed": {
+      "description": "失败",
+      "location": "designs/browser/app.js:1250",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.event.inProgress": {
+      "description": "进行中",
+      "location": "designs/browser/app.js:1250",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.exited": {
+      "description": "已退出 · 退出码 {code}",
+      "location": "designs/browser/app.js:670",
+      "params": [
+        {
+          "name": "code",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "tools.status.failed": {
+      "description": "执行失败",
+      "location": "designs/browser/app.js:672",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.inProgress": {
+      "description": "命令进行中",
+      "location": "designs/browser/app.js:674",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.noMatch": {
+      "description": "无匹配",
+      "location": "designs/browser/app.js:1238",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.outputOnly": {
+      "description": "仅记录输出 · 退出码未记录",
+      "location": "designs/browser/app.js:675",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.stillRunning": {
+      "description": "命令仍在运行（本次返回时）",
+      "location": "designs/browser/app.js:673",
+      "params": [],
+      "plural": false
+    },
+    "tools.status.unconfirmed": {
+      "description": "命令结果未确认",
+      "location": "designs/browser/app.js:676",
+      "params": [],
+      "plural": false
+    },
+    "tools.term.emptyInput": {
+      "description": "空输入",
+      "location": "designs/browser/app.js:1067",
+      "params": [],
+      "plural": false
+    },
+    "tools.term.input": {
+      "description": "输入内容",
+      "location": "designs/browser/app.js:906",
+      "params": [],
+      "plural": false
+    },
+    "tools.term.inputHeading": {
+      "description": "终端输入",
+      "location": "designs/browser/app.js:1067",
+      "params": [],
+      "plural": false
+    },
+    "tools.term.inputUnrecorded": {
+      "description": "本次终端输入未记录。",
+      "location": "designs/browser/app.js:1066",
+      "params": [],
+      "plural": false
+    },
+    "tools.term.interactEmpty": {
+      "description": "此次交互返回空输出。",
+      "location": "designs/browser/app.js:916",
+      "params": [],
+      "plural": false
+    },
+    "tools.term.pollEmpty": {
+      "description": "此次轮询没有新增输出。",
+      "location": "designs/browser/app.js:916",
+      "params": [],
+      "plural": false
+    },
+    "tools.term.thisReturn": {
+      "description": "此次终端返回",
+      "location": "designs/browser/app.js:918",
+      "params": [],
+      "plural": false
+    },
+    "tools.toolInput": {
+      "description": "工具输入",
+      "location": "designs/browser/app.js:689",
+      "params": [],
+      "plural": false
+    },
+    "tools.toolOutputLabel": {
+      "description": "工具输出",
+      "location": "designs/browser/app.js:880",
+      "params": [],
+      "plural": false
+    },
+    "tools.toolReturn": {
+      "description": "工具返回",
+      "location": "designs/browser/app.js:689",
+      "params": [],
+      "plural": false
+    },
+    "tools.truncatedNotice": {
+      "description": "原始工具输出已被截断。",
+      "location": "designs/browser/app.js:1256",
+      "params": [],
+      "plural": false
+    },
+    "tools.verb.command": {
+      "description": "命令",
+      "location": "designs/browser/app.js:1082",
+      "params": [],
+      "plural": false
+    },
+    "tools.verb.list": {
+      "description": "列举",
+      "location": "designs/browser/app.js:1082",
+      "params": [],
+      "plural": false
+    },
+    "tools.verb.read": {
+      "description": "读取",
+      "location": "designs/browser/app.js:1082",
+      "params": [],
+      "plural": false
+    },
+    "tools.verb.search": {
+      "description": "搜索",
+      "location": "designs/browser/app.js:1082",
+      "params": [],
+      "plural": false
+    },
+    "tools.viewChildAgent": {
+      "description": "查看子代理 · {title}",
+      "location": "designs/browser/app.js:708",
+      "params": [
+        {
+          "name": "title",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "tools.viewChildSession": {
+      "description": "查看子会话",
+      "location": "designs/browser/app.js:1185",
+      "params": [],
+      "plural": false
+    },
+    "tools.web.emptyResults": {
+      "description": "结果列表为空。",
+      "location": "designs/browser/app.js:1155",
+      "params": [],
+      "plural": false
+    },
+    "tools.web.expandRemaining": {
+      "description": "展开余下结果（{remaining} 条）",
+      "location": "designs/browser/app.js:953",
+      "params": [
+        {
+          "name": "remaining",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "tools.web.results": {
+      "description": "网页结果",
+      "location": "designs/browser/app.js:946",
+      "params": [],
+      "plural": false
+    },
+    "tools.web.searchParams": {
+      "description": "搜索参数",
+      "location": "designs/browser/app.js:939",
+      "params": [],
+      "plural": false
+    },
+    "tools.wrappedMultiNames": {
+      "description": "{names}（{count} 个调用）",
+      "location": "designs/browser/app.js:90",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        },
+        {
+          "name": "names",
+          "type": "string"
+        }
+      ],
+      "plural": true
+    },
+    "tools.wrappedMultiSame": {
+      "description": "{summary} 等 {count} 个工具调用",
+      "location": "designs/browser/app.js:90",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        },
+        {
+          "name": "summary",
+          "type": "string"
+        }
+      ],
+      "plural": true
+    },
+    "usage.axis.cost": {
+      "description": "成本",
+      "location": "designs/browser/token-usage.js:233",
+      "params": [],
+      "plural": false
+    },
+    "usage.axis.spend": {
+      "description": "消耗",
+      "location": "designs/browser/token-usage.js:233",
+      "params": [],
+      "plural": false
+    },
+    "usage.axis.token": {
+      "description": "Token",
+      "location": "designs/browser/token-usage.js:233",
+      "params": [],
+      "plural": false
+    },
+    "usage.axis.unrated": {
+      "description": "未估算",
+      "location": "designs/browser/token-usage.js:239",
+      "params": [],
+      "plural": false
+    },
+    "usage.axis.withUnit": {
+      "description": "{label} · {unit}",
+      "location": "designs/browser/token-usage.js:233",
+      "params": [
+        {
+          "name": "label",
+          "type": "string"
+        },
+        {
+          "name": "unit",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.badTimezone": {
+      "backend": true,
+      "description": "无法识别统计时区",
+      "location": "token_usage.py:187",
+      "params": [],
+      "plural": false
+    },
+    "usage.barAria": {
+      "description": "{label}，总量 {total} token，{breakdown}，{costHeading} {cost}",
+      "location": "designs/browser/token-usage.js:249",
+      "params": [
+        {
+          "name": "breakdown",
+          "type": "string"
+        },
+        {
+          "name": "cost",
+          "type": "string"
+        },
+        {
+          "name": "costHeading",
+          "type": "string"
+        },
+        {
+          "name": "label",
+          "type": "string"
+        },
+        {
+          "name": "total",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "usage.breadcrumbAria": {
+      "description": "用量统计层级",
+      "location": "designs/browser/token-usage.js:14",
+      "params": [],
+      "plural": false
+    },
+    "usage.cacheHit": {
+      "description": "缓存命中率",
+      "location": "designs/browser/token-usage.js:347,351",
+      "params": [],
+      "plural": false
+    },
+    "usage.cacheHitRatio": {
+      "description": "缓存读取 / 输入总量：{cached} / {input} token",
+      "location": "designs/browser/token-usage.js:347,351",
+      "params": [
+        {
+          "name": "cached",
+          "type": "string"
+        },
+        {
+          "name": "input",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.chart.empty": {
+      "description": "这个范围没有带时间的用量记录。",
+      "location": "designs/browser/token-usage.js:220",
+      "params": [],
+      "plural": false
+    },
+    "usage.chart.headingDay": {
+      "description": "每日用量与成本 · 点击日期查看小时",
+      "location": "designs/browser/token-usage.js:408",
+      "params": [],
+      "plural": false
+    },
+    "usage.chart.headingHour": {
+      "description": "{day} · 每小时用量与成本",
+      "location": "designs/browser/token-usage.js:408",
+      "params": [
+        {
+          "name": "day",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.chart.sub": {
+      "description": "Token 堆叠柱 · {heading}折线",
+      "location": "designs/browser/token-usage.js:408",
+      "params": [
+        {
+          "name": "heading",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.chartAria": {
+      "description": "{grain} Token 类型堆叠与{costHeading}趋势",
+      "location": "designs/browser/token-usage.js:262",
+      "params": [
+        {
+          "name": "costHeading",
+          "type": "string"
+        },
+        {
+          "name": "grain",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.closeAria": {
+      "description": "关闭 Token 用量",
+      "location": "designs/browser/token-usage.js:13",
+      "params": [],
+      "plural": false
+    },
+    "usage.coverage.base": {
+      "description": "{timezone} · 按调用发生时间统计",
+      "location": "designs/browser/token-usage.js:410",
+      "params": [
+        {
+          "name": "timezone",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.coverage.missingSessions": {
+      "description": "· 此范围内 {count} 个会话缺少可统计用量",
+      "location": "designs/browser/token-usage.js:410",
+      "params": [
+        {
+          "name": "count",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "usage.coverage.undated": {
+      "description": "· {tokens} token 缺少时间",
+      "location": "designs/browser/token-usage.js:410",
+      "params": [
+        {
+          "name": "tokens",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "usage.crumb.all": {
+      "description": "全部",
+      "location": "designs/browser/token-usage.js:377",
+      "params": [],
+      "plural": false
+    },
+    "usage.crumb.session": {
+      "description": "会话",
+      "location": "designs/browser/token-usage.js:382",
+      "params": [],
+      "plural": false
+    },
+    "usage.crumb.turn": {
+      "description": "本轮",
+      "location": "designs/browser/token-usage.js:385",
+      "params": [],
+      "plural": false
+    },
+    "usage.crumb.turnTitle": {
+      "description": "本轮用量与成本",
+      "location": "designs/browser/token-usage.js:386",
+      "params": [],
+      "plural": false
+    },
+    "usage.dim.directory": {
+      "description": "目录",
+      "location": "designs/browser/token-usage.js:411",
+      "params": [],
+      "plural": false
+    },
+    "usage.dim.session": {
+      "description": "会话",
+      "location": "designs/browser/token-usage.js:411",
+      "params": [],
+      "plural": false
+    },
+    "usage.dim.turn": {
+      "description": "轮次",
+      "location": "designs/browser/token-usage.js:411",
+      "params": [],
+      "plural": false
+    },
+    "usage.filter.allDates": {
+      "description": "全部日期",
+      "location": "designs/browser/token-usage.js:405",
+      "params": [],
+      "plural": false
+    },
+    "usage.filter.aria": {
+      "description": "筛选统计明细",
+      "location": "designs/browser/token-usage.js:411",
+      "params": [],
+      "plural": false
+    },
+    "usage.filter.clearTurn": {
+      "description": "查看整个会话",
+      "location": "designs/browser/token-usage.js:404",
+      "params": [],
+      "plural": false
+    },
+    "usage.filter.placeholder": {
+      "description": "筛选明细",
+      "location": "designs/browser/token-usage.js:411",
+      "params": [],
+      "plural": false
+    },
+    "usage.filter.unrecorded": {
+      "description": "未记录用量",
+      "location": "designs/browser/token-usage.js:404",
+      "params": [],
+      "plural": false
+    },
+    "usage.globalButtonAria": {
+      "description": "查看全部会话的用量与成本",
+      "location": "designs/browser/token-usage.js:32",
+      "params": [],
+      "plural": false
+    },
+    "usage.globalButtonTitle": {
+      "description": "用量与成本 · 全部记录",
+      "location": "designs/browser/token-usage.js:31",
+      "params": [],
+      "plural": false
+    },
+    "usage.grain.day": {
+      "description": "日期",
+      "location": "designs/browser/token-usage.js:262",
+      "params": [],
+      "plural": false
+    },
+    "usage.grain.hour": {
+      "description": "小时",
+      "location": "designs/browser/token-usage.js:262",
+      "params": [],
+      "plural": false
+    },
+    "usage.group.modelLine": {
+      "description": "模型：{models}",
+      "location": "designs/browser/token-usage.js:460",
+      "params": [
+        {
+          "name": "models",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.group.modelUnrecorded": {
+      "description": "模型未记录",
+      "location": "designs/browser/token-usage.js:464",
+      "params": [],
+      "plural": false
+    },
+    "usage.group.noDialog": {
+      "description": "未记录对话内容",
+      "location": "designs/browser/token-usage.js:455,464",
+      "params": [],
+      "plural": false
+    },
+    "usage.group.replySummary": {
+      "description": "· 回复摘要",
+      "location": "designs/browser/token-usage.js:464",
+      "params": [],
+      "plural": false
+    },
+    "usage.group.root": {
+      "description": "根目录",
+      "location": "designs/browser/token-usage.js:453",
+      "params": [],
+      "plural": false
+    },
+    "usage.group.timeUnrecorded": {
+      "description": "时间未记录",
+      "location": "designs/browser/token-usage.js:464",
+      "params": [],
+      "plural": false
+    },
+    "usage.group.turnIdLine": {
+      "description": "轮次 ID：{id}",
+      "location": "designs/browser/token-usage.js:460",
+      "params": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.group.turnN": {
+      "description": "第 {n} 轮",
+      "location": "designs/browser/token-usage.js:455",
+      "params": [
+        {
+          "name": "n",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "usage.group.unlinkedTurn": {
+      "description": "未关联轮次",
+      "location": "designs/browser/token-usage.js:455",
+      "params": [],
+      "plural": false
+    },
+    "usage.groups.heading": {
+      "description": "{dimension}明细 · 全时段",
+      "location": "designs/browser/token-usage.js:411",
+      "params": [
+        {
+          "name": "dimension",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.handleEndAria": {
+      "description": "结束日期",
+      "location": "designs/browser/token-usage.js:191",
+      "params": [],
+      "plural": false
+    },
+    "usage.handleStartAria": {
+      "description": "起始日期",
+      "location": "designs/browser/token-usage.js:191",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.captionDay": {
+      "description": "按本年每日最大值分级",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.captionHour": {
+      "description": "按当天每小时最大值分级",
+      "location": "designs/browser/token-usage.js:319",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.captionMax": {
+      "description": "· 最高 {value}",
+      "location": "designs/browser/token-usage.js:308,319",
+      "params": [
+        {
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.heat.captionPartial": {
+      "description": "· 虚线边框表示部分用量未估算",
+      "location": "designs/browser/token-usage.js:308,319",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.dailyAria": {
+      "description": "每日用量热度",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.dailyTitle": {
+      "description": "每日热度",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.hourlyAria": {
+      "description": "每小时用量热度",
+      "location": "designs/browser/token-usage.js:319",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.hourlyTitle": {
+      "description": "小时热度",
+      "location": "designs/browser/token-usage.js:319",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.hoursAria": {
+      "description": "{day} 24 小时{metric}热度",
+      "location": "designs/browser/token-usage.js:319",
+      "params": [
+        {
+          "name": "day",
+          "type": "string"
+        },
+        {
+          "name": "metric",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.heat.inspectDay": {
+      "description": "悬浮或聚焦查看数值，点击日期查看小时明细",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.inspectHour": {
+      "description": "悬浮或点击小时查看数值",
+      "location": "designs/browser/token-usage.js:319",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.metric.cost": {
+      "description": "估算成本",
+      "location": "designs/browser/token-usage.js:272",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.metric.total": {
+      "description": "Token 总量",
+      "location": "designs/browser/token-usage.js:272",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.metricFallback": {
+      "description": "金额",
+      "location": "designs/browser/token-usage.js:312",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.month": {
+      "description": "{month}月",
+      "location": "designs/browser/token-usage.js:305",
+      "params": [
+        {
+          "name": "month",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "usage.heat.nextYear": {
+      "description": "下一年",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.noUsage": {
+      "description": "无已记录用量",
+      "location": "designs/browser/token-usage.js:280,360",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.partialSuffix": {
+      "description": "· 部分用量未估算",
+      "location": "designs/browser/token-usage.js:302,316",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.prevYear": {
+      "description": "上一年",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.scaleLess": {
+      "description": "少",
+      "location": "designs/browser/token-usage.js:308,319",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.scaleMore": {
+      "description": "多",
+      "location": "designs/browser/token-usage.js:308,319",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.scaleUnrated": {
+      "description": "未估算",
+      "location": "designs/browser/token-usage.js:308,319",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.weekday.fri": {
+      "description": "五",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.weekday.mon": {
+      "description": "一",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.weekday.wed": {
+      "description": "三",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [],
+      "plural": false
+    },
+    "usage.heat.yearAria": {
+      "description": "{year} 年每日{metric}热度",
+      "location": "designs/browser/token-usage.js:308",
+      "params": [
+        {
+          "name": "metric",
+          "type": "string"
+        },
+        {
+          "name": "year",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "usage.invalidScope": {
+      "backend": true,
+      "description": "无效的统计范围",
+      "location": "token_usage.py:179",
+      "params": [],
+      "plural": false
+    },
+    "usage.legend.costLine": {
+      "description": "{heading}折线",
+      "location": "designs/browser/token-usage.js:407",
+      "params": [
+        {
+          "name": "heading",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.loadingHint": {
+      "description": "首次统计需要读取本地记录，请稍候",
+      "location": "designs/browser/token-usage.js:83",
+      "params": [],
+      "plural": false
+    },
+    "usage.loadingProgressAria": {
+      "description": "会话检查进度",
+      "location": "designs/browser/token-usage.js:83",
+      "params": [],
+      "plural": false
+    },
+    "usage.loadingReading": {
+      "description": "正在读取会话…",
+      "location": "designs/browser/token-usage.js:83",
+      "params": [],
+      "plural": false
+    },
+    "usage.loadingTitle": {
+      "description": "正在计算用量与成本",
+      "location": "designs/browser/token-usage.js:83",
+      "params": [],
+      "plural": false
+    },
+    "usage.metric.listMax": {
+      "description": "{label} · 当前列表最大值的 {pct}%",
+      "location": "designs/browser/token-usage.js:429",
+      "params": [
+        {
+          "name": "label",
+          "type": "string"
+        },
+        {
+          "name": "pct",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "usage.models.colModel": {
+      "description": "模型",
+      "location": "designs/browser/token-usage.js:396",
+      "params": [],
+      "plural": false
+    },
+    "usage.models.colTotal": {
+      "description": "Token 总量",
+      "location": "designs/browser/token-usage.js:396",
+      "params": [],
+      "plural": false
+    },
+    "usage.models.title": {
+      "description": "按模型统计",
+      "location": "designs/browser/token-usage.js:396",
+      "params": [],
+      "plural": false
+    },
+    "usage.models.unrecorded": {
+      "description": "未记录模型",
+      "location": "designs/browser/token-usage.js:395",
+      "params": [],
+      "plural": false
+    },
+    "usage.note.directory": {
+      "description": "按调用时的工作目录归属统计，不含子目录。",
+      "location": "designs/browser/token-usage.js:413",
+      "params": [],
+      "plural": false
+    },
+    "usage.note.methodology": {
+      "description": "用量来自日志中的 token_count。累计记录已去重，缓存与推理部分拆分展示。缺少用量的记录保留为未记录。",
+      "location": "designs/browser/token-usage.js:413",
+      "params": [],
+      "plural": false
+    },
+    "usage.rangeTo": {
+      "description": "{start} 至 {end}",
+      "location": "designs/browser/token-usage.js:170",
+      "params": [
+        {
+          "name": "end",
+          "type": "string"
+        },
+        {
+          "name": "start",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.refreshAria": {
+      "description": "刷新统计",
+      "location": "designs/browser/token-usage.js:14",
+      "params": [],
+      "plural": false
+    },
+    "usage.requestFailed": {
+      "description": "统计请求失败",
+      "location": "designs/browser/token-usage.js:96",
+      "params": [],
+      "plural": false
+    },
+    "usage.retry": {
+      "description": "重试",
+      "location": "designs/browser/token-usage.js:138",
+      "params": [],
+      "plural": false
+    },
+    "usage.scanProgress": {
+      "description": "已检查 {completed} / {total} 个会话",
+      "location": "designs/browser/token-usage.js:88",
+      "params": [
+        {
+          "name": "completed",
+          "type": "number"
+        },
+        {
+          "name": "total",
+          "type": "number"
+        }
+      ],
+      "plural": true
+    },
+    "usage.scanSummarizing": {
+      "description": "正在汇总用量与成本…",
+      "location": "designs/browser/token-usage.js:88",
+      "params": [],
+      "plural": false
+    },
+    "usage.sessionButtonAria": {
+      "description": "查看当前会话的用量与成本",
+      "location": "designs/browser/token-usage.js:20",
+      "params": [],
+      "plural": false
+    },
+    "usage.sessionButtonTitle": {
+      "description": "用量与成本 · 当前会话",
+      "location": "designs/browser/token-usage.js:19",
+      "params": [],
+      "plural": false
+    },
+    "usage.streamInterrupted": {
+      "description": "统计连接已中断，请重试",
+      "location": "designs/browser/token-usage.js:113",
+      "params": [],
+      "plural": false
+    },
+    "usage.summary.totalAll": {
+      "description": "Token 总量 · 全时段",
+      "location": "designs/browser/token-usage.js:406",
+      "params": [],
+      "plural": false
+    },
+    "usage.summary.totalDay": {
+      "description": "Token 总量 · {day}",
+      "location": "designs/browser/token-usage.js:406",
+      "params": [
+        {
+          "name": "day",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.summary.unrecorded": {
+      "description": "未记录",
+      "location": "designs/browser/token-usage.js:406",
+      "params": [],
+      "plural": false
+    },
+    "usage.table.requestSummary": {
+      "description": "请求摘要",
+      "location": "designs/browser/token-usage.js:412",
+      "params": [],
+      "plural": false
+    },
+    "usage.table.scope": {
+      "description": "范围",
+      "location": "designs/browser/token-usage.js:412",
+      "params": [],
+      "plural": false
+    },
+    "usage.table.share": {
+      "description": "类型占比",
+      "location": "designs/browser/token-usage.js:412",
+      "params": [],
+      "plural": false
+    },
+    "usage.table.sort": {
+      "description": "按{label}{direction}排序",
+      "location": "designs/browser/token-usage.js:442",
+      "params": [
+        {
+          "name": "direction",
+          "type": "string"
+        },
+        {
+          "name": "label",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.table.sortAsc": {
+      "description": "升序",
+      "location": "designs/browser/token-usage.js:442",
+      "params": [],
+      "plural": false
+    },
+    "usage.table.sortDesc": {
+      "description": "降序",
+      "location": "designs/browser/token-usage.js:442",
+      "params": [],
+      "plural": false
+    },
+    "usage.title": {
+      "description": "用量与成本",
+      "location": "designs/browser/token-usage.js:13",
+      "params": [],
+      "plural": false
+    },
+    "usage.title.all": {
+      "description": "全部用量与成本",
+      "location": "designs/browser/token-usage.js:391",
+      "params": [],
+      "plural": false
+    },
+    "usage.title.directory": {
+      "description": "目录用量与成本",
+      "location": "designs/browser/token-usage.js:391",
+      "params": [],
+      "plural": false
+    },
+    "usage.title.session": {
+      "description": "会话用量与成本",
+      "location": "designs/browser/token-usage.js:391",
+      "params": [],
+      "plural": false
+    },
+    "usage.title.turn": {
+      "description": "本轮用量与成本",
+      "location": "designs/browser/token-usage.js:391",
+      "params": [],
+      "plural": false
+    },
+    "usage.tooltip.exact": {
+      "description": "{n} token",
+      "location": "designs/browser/token-usage.js:360",
+      "params": [
+        {
+          "name": "n",
+          "type": "number"
+        }
+      ],
+      "plural": false
+    },
+    "usage.tooltip.partialCost": {
+      "description": "部分用量未估算，仅显示可估算部分。",
+      "location": "designs/browser/token-usage.js:360",
+      "params": [],
+      "plural": false
+    },
+    "usage.tooltip.total": {
+      "description": "Token 总量",
+      "location": "designs/browser/token-usage.js:360",
+      "params": [],
+      "plural": false
+    },
+    "usage.tooltip.unratedCost": {
+      "description": "该时段成本暂无法估算。",
+      "location": "designs/browser/token-usage.js:360",
+      "params": [],
+      "plural": false
+    },
+    "usage.tooltip.viewHours": {
+      "description": "查看当天小时明细",
+      "location": "designs/browser/token-usage.js:360",
+      "params": [],
+      "plural": false
+    },
+    "usage.trendNote.base": {
+      "description": "柱形读左轴 Token，折线读右轴{unit}；两轴分别缩放。",
+      "location": "designs/browser/token-usage.js:212",
+      "params": [
+        {
+          "name": "unit",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.trendNote.breaks": {
+      "description": "断线处未估算。",
+      "location": "designs/browser/token-usage.js:214",
+      "params": [],
+      "plural": false
+    },
+    "usage.trendNote.needRule": {
+      "description": "设置换算规则后显示成本趋势。",
+      "location": "designs/browser/token-usage.js:213",
+      "params": [],
+      "plural": false
+    },
+    "usage.trendNote.partial": {
+      "description": "空心点与虚线仅含已估算部分。",
+      "location": "designs/browser/token-usage.js:215",
+      "params": [],
+      "plural": false
+    },
+    "usage.type.cacheWrite": {
+      "description": "缓存写入",
+      "location": "designs/browser/token-usage.js:5",
+      "params": [],
+      "plural": false
+    },
+    "usage.type.cached": {
+      "description": "缓存读取",
+      "location": "designs/browser/token-usage.js:4",
+      "params": [],
+      "plural": false
+    },
+    "usage.type.input": {
+      "description": "输入（未缓存）",
+      "location": "designs/browser/token-usage.js:3",
+      "params": [],
+      "plural": false
+    },
+    "usage.type.output": {
+      "description": "输出",
+      "location": "designs/browser/token-usage.js:6",
+      "params": [],
+      "plural": false
+    },
+    "usage.type.reasoning": {
+      "description": "推理输出",
+      "location": "designs/browser/token-usage.js:7",
+      "params": [],
+      "plural": false
+    },
+    "usage.unknownDimension": {
+      "backend": true,
+      "description": "未知统计维度",
+      "location": "token_usage.py:183",
+      "params": [],
+      "plural": false
+    },
+    "usage.unrecordedDirectory": {
+      "backend": true,
+      "description": "未记录目录",
+      "location": "token_usage.py:230",
+      "params": [],
+      "plural": false
+    },
+    "usage.windowHint": {
+      "description": "每日 Token 总量 · 拖动选区平移，拖动两端调整日期",
+      "location": "designs/browser/token-usage.js:177",
+      "params": [],
+      "plural": false
+    },
+    "usage.windowReset": {
+      "description": "最近 30 天",
+      "location": "designs/browser/token-usage.js:175",
+      "params": [],
+      "plural": false
+    },
+    "usage.breakdownPart": {
+      "description": "Token type share line in charts/tooltips",
+      "location": "designs/browser/token-usage.js",
+      "params": [
+        {
+          "name": "label",
+          "type": "string"
+        },
+        {
+          "name": "count",
+          "type": "string"
+        },
+        {
+          "name": "percent",
+          "type": "string"
+        }
+      ],
+      "plural": false
+    },
+    "usage.breakdownSep": {
+      "description": "Separator between token breakdown parts",
+      "location": "designs/browser/token-usage.js",
+      "params": [],
+      "plural": false
+    },
+    "errors.unexpected": {
+      "description": "Unexpected backend error; diagnostic details remain raw.",
+      "location": "message_i18n.py",
+      "params": [],
+      "plural": false
+    }
+  }
+}

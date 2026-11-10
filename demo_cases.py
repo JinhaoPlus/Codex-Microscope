@@ -76,6 +76,20 @@ def command(cmd, actions, output, code=0):
 
 CASES = {}
 
+GROUP_KEYS = {
+    'exec · 编排与结果': 'demo.group.exec',
+    '命令、文件与终端': 'demo.group.files',
+    '其他内建工具': 'demo.group.builtin',
+    '外部 MCP · 通用展示': 'demo.group.mcp',
+    '补充边界': 'demo.group.edge',
+}
+EVIDENCE_KEYS = {
+    '合成协议案例': 'demo.evidence.protocol',
+    '合成长命令与短输出案例': 'demo.evidence.longCmd',
+    '本轮关联排查：回包先于原生命令事件（合成重建）': 'demo.evidence.lateCmd',
+    '主历史库 #351': 'demo.evidence.db351',
+}
+
 
 def case(id,group,title,guide,source,events):
     names=set()
@@ -88,7 +102,11 @@ def case(id,group,title,guide,source,events):
             item=payload['item']
             names.add(item['type'])
             if item.get('server'):names.add(item['server']+'.'+item['tool'])
-    CASES[id]=(dict(id=id,title=title,group=group,guide=guide,evidence=source,tools=sorted(names)),events)
+    CASES[id]=(dict(
+        id=id, title=title, guide=guide, group=group, evidence=source, tools=sorted(names),
+        title_key=f'demo.case.{id}.title', guide_key=f'demo.case.{id}.guide',
+        group_key=GROUP_KEYS.get(group), evidence_key=EVIDENCE_KEYS.get(source) if source else None,
+    ), events)
 
 
 X='exec · 编排与结果'; F='命令、文件与终端'; B='其他内建工具'; M='外部 MCP · 通用展示'; E='补充边界'

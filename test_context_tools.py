@@ -9,8 +9,11 @@ class ContextToolDefinitions(unittest.TestCase):
     def test_schema_variants_custom_format_and_missing_metadata(self):
         script = r'''
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const zh=JSON.parse(fs.readFileSync('designs/browser/locales/zh-CN.json','utf8'));
+function t(key,params={}){let value=zh[key];if(value&&typeof value==='object'){const count=params.count;value=count===1&&value.one?value.one:value.other??value.one??key;}if(!value)value=key;return String(value).replace(/\{(\w+)\}/g,(_,n)=>String(params[n]??''));}
+function tp(key,count,params={}){return t(key,{...params,count});}
 const source=fs.readFileSync('designs/browser/app.js','utf8');
-const ctx={md:s=>s};vm.createContext(ctx);
+const ctx={md:s=>s,t,tp};vm.createContext(ctx);
 vm.runInContext(source.slice(source.indexOf('const esc='),source.indexOf('\n',source.indexOf('const esc=')))+'\n'+source.slice(source.indexOf('function schemaPreview('),source.indexOf('function contextPresentation(')),ctx);
 for(const key of ['parameters','input_schema','inputSchema','schema']){
  const definition={name:'lookup',description:'Long description', [key]:{type:'object',properties:{query:{type:'string'}},required:['query']}};

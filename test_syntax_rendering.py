@@ -9,7 +9,10 @@ class SyntaxRendering(unittest.TestCase):
     def test_language_selection_multiline_and_safe_fallback(self):
         script = r'''
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const source=fs.readFileSync('designs/browser/app.js','utf8'),ctx={actionIcon:()=>'',toolJsonMarker:()=>'',orchestrationBody:()=>'',commandStatus:()=>({label:'执行已结束 · 退出码未记录'})};
+const zh=JSON.parse(fs.readFileSync('designs/browser/locales/zh-CN.json','utf8'));
+function t(key,params={}){let value=zh[key];if(value&&typeof value==='object'){const count=params.count;value=count===1&&value.one?value.one:value.other??value.one??key;}if(!value)value=key;return String(value).replace(/\{(\w+)\}/g,(_,n)=>String(params[n]??''));}
+function tp(key,count,params={}){return t(key,{...params,count});}
+const source=fs.readFileSync('designs/browser/app.js','utf8'),ctx={actionIcon:()=>'',toolJsonMarker:()=>'',orchestrationBody:()=>'',commandStatus:()=>({label:'执行已结束 · 退出码未记录'}),t,tp};
 vm.createContext(ctx);
 vm.runInContext(fs.readFileSync('designs/browser/vendor/highlight.min.js','utf8'),ctx);
 vm.runInContext(source.slice(source.indexOf('const esc='),source.indexOf('\n',source.indexOf('const esc=')))+'\n'+source.slice(source.indexOf('function nativeReadRange('),source.indexOf('function toolDetailBody(')),ctx);

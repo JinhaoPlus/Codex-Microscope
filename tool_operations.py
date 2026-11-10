@@ -4,6 +4,7 @@ import re
 import shlex
 import native_events
 import tool_icons
+from message_i18n import legacy, msg
 from urllib.parse import unquote
 
 # A deliberately limited JS lexer. Strings, comments, templates and regular
@@ -205,57 +206,127 @@ def short_command(command):
     return command if len(command)<=160 and '\n' not in command and '\r' not in command else ''
 
 
+BUILTIN_ACTION_KEYS = {
+    'clock__curr_time': 'tools.action.readTime',
+    'image_gen__imagegen': 'tools.action.imageGen',
+    'list_mcp_resources': 'tools.action.listResources',
+    'list_mcp_resource_templates': 'tools.action.listResourceTemplates',
+    'read_mcp_resource': 'tools.action.readResource',
+    'get_goal': 'tools.action.getGoal',
+    'create_goal': 'tools.action.createGoal',
+    'update_goal': 'tools.action.updateGoal',
+}
+FILE_TOOL_KEYS = {
+    'read_file': ('read', 'tools.action.readFile'),
+    'readfile': ('read', 'tools.action.readFile'),
+    'write_file': ('edit', 'tools.action.writeFile'),
+    'edit_file': ('edit', 'tools.action.editFile'),
+}
+SESSION_ACTION_KEYS = {
+    '': 'tools.action.sessionWait',
+    '\x03': 'tools.action.sessionInterrupt',
+}
+
+
+def operation_summary(action_key, summary_params):
+    clean = {k: v for k, v in summary_params.items() if not str(k).startswith('_')}
+    text = legacy(action_key, **clean)
+    for suffix_key in summary_params.get('_suffix_keys', ()):
+        text += legacy(suffix_key, **summary_params)
+    return text.strip()[:250]
+
+
+def operation_fields(kind, action_key, summary_params):
+    clean = {k: v for k, v in summary_params.items() if not str(k).startswith('_')}
+    return dict(
+        kind=kind,
+        action_key=action_key,
+        summary_key=action_key,
+        summary_params=dict(summary_params),
+        action=legacy(action_key, **clean),
+        summary=operation_summary(action_key, summary_params),
+    )
+
+
+def operation_message(op):
+    """Keep UI semantics separate from raw subjects and legacy Chinese labels."""
+    key = op.get('summary_key') or op.get('action_key')
+    if not key:
+        return op.get('summary', '')
+    params = op.get('summary_params') or {}
+    clean = {k: v for k, v in params.items() if not str(k).startswith('_')}
+    base = msg(key, **clean)
+    subject = clean.get('detail') or clean.get('filename') or clean.get('path') or clean.get('cmd') or ''
+    if clean.get('status_key'):
+        subject = msg(clean['status_key'])
+    elif isinstance(subject, str):
+        subject = subject.strip()
+    parts = [base]
+    if subject and key != 'tools.action.agentToolFallback':
+        parts.append(subject)
+    parts.extend(msg(suffix, **clean) for suffix in params.get('_suffix_keys', ()))
+    return {'join': parts, 'separator': ' '}
+
+
 def classify(tool, args):
     fields = args if isinstance(args, dict) else {}
     if tool in ('exec_command', 'functions.exec_command'):
         cmd = fields.get('cmd') or fields.get('command') or ''
-        return 'run', '运行命令', short_command(cmd)
+        brief = short_command(cmd)
+        detail = (' ' + brief) if brief else ''
+        return 'run', 'tools.action.runCommand', {'detail': detail, 'cmd': brief}
     if tool in ('write_stdin', 'functions.write_stdin'):
-        # Codex TUI UnifiedExecInteractionCell distinguishes empty stdin from input.
         chars = fields.get('chars', '') if isinstance(args, dict) else None
-        action = '后台终端交互'
-        if isinstance(chars,str):
-            action = {'':'等待后台终端','\x03':'请求中断后台终端'}.get(chars,'向后台终端输入')
-        return 'session', action, f"· 会话 {fields['session_id']}" if fields.get('session_id') is not None else ''
+        action_key = 'tools.action.sessionInteract'
+        if isinstance(chars, str):
+            action_key = SESSION_ACTION_KEYS.get(chars, 'tools.action.sessionInput')
+        summary_params = {}
+        if fields.get('session_id') is not None:
+            summary_params['sessionId'] = fields['session_id']
+            summary_params['_suffix_keys'] = ('tools.action.sessionSuffix',)
+        return 'session', action_key, summary_params
     if tool in ('view_image', 'functions.view_image'):
         path = fields.get('path')
         filename = re.split(r'[/\\]', path)[-1] if isinstance(path, str) else ''
-        return 'image', '查看图片', re.sub(r'[\r\n\t]', ' ', filename)
-    builtin_labels = {'clock__curr_time':'读取时间', 'image_gen__imagegen':'生成或编辑图片',
-                      'list_mcp_resources':'列出资源', 'list_mcp_resource_templates':'列出资源模板',
-                      'read_mcp_resource':'读取资源', 'get_goal':'查看目标',
-                      'create_goal':'创建目标', 'update_goal':'更新目标'}
-    if tool in builtin_labels:
-        return 'other', builtin_labels[tool], ''
+        clean = re.sub(r'[\r\n\t]', ' ', filename)
+        return 'image', 'tools.action.viewImage', {'filename': clean}
+    if tool in BUILTIN_ACTION_KEYS:
+        return 'other', BUILTIN_ACTION_KEYS[tool], {}
     if tool in ('web__run', 'web.run', 'mcp__codex_apps__search_service_web_run'):
         queries = fields.get('search_query')
         if isinstance(queries, list):
-            return 'web', '网页搜索', f'{len(queries)} 条查询'
-        return 'web', '网页工具', '、'.join(k for k in fields if k != 'response_length')
+            return 'web', 'tools.action.webSearch', {
+                'count': len(queries),
+                '_suffix_keys': ('tools.action.webSearchQueries',),
+            }
+        return 'web', 'tools.action.webTool', {'detail': '、'.join(k for k in fields if k != 'response_length')}
     if tool in ('apply_patch', 'functions.apply_patch', 'fileChange'):
-        return 'edit', '修改文件', ''
+        return 'edit', 'tools.action.editFile', {}
     if (tool or '').startswith(('mcp__cua_repl.', 'mcp__cua_repl__')):
-        return 'browser', '电脑操作', fields.get('title') or fields.get('completion_summary') or ''
-    file_tools = {'read_file': ('read','读取文件'), 'readfile': ('read','读取文件'),
-                  'write_file': ('edit','写入文件'), 'edit_file': ('edit','修改文件')}
-    if tool in file_tools:
-        kind, label = file_tools[tool]
-        return kind, label, fields.get('path') or fields.get('file_path') or ''
+        detail = fields.get('title') or fields.get('completion_summary') or ''
+        return 'browser', 'tools.action.computer', {'title': detail, 'detail': detail}
+    if tool in FILE_TOOL_KEYS:
+        kind, action_key = FILE_TOOL_KEYS[tool]
+        detail = fields.get('path') or fields.get('file_path') or ''
+        return kind, action_key, {'path': detail, 'detail': detail}
     if (tool or '').removeprefix('collaboration.') in ('spawn_agent', 'wait_agent', 'send_message', 'list_agents', 'followup_task', 'interrupt_agent'):
-        return 'agent', '子代理工具', tool
+        return 'agent', 'tools.action.agentTool', {'tool': tool, 'detail': tool}
     if (tool or '').startswith('mcp__'):
         service, _, name = tool[5:].partition('__')
-        identity_label = service + (' · ' + name if name else '')
+        detail = service + (' · ' + name if name else '')
         title = fields.get('title')
-        return 'other', identity_label, title.strip() if isinstance(title,str) else ''
-    return 'other', tool or '工具类型未确认', ''
+        if isinstance(title, str) and title.strip():
+            detail = (detail + ' ' + title.strip()).strip()
+        return 'other', 'tools.action.dynamicTool', {'identity': detail, 'detail': detail}
+    return 'other', 'tools.action.unknownType', {'detail': tool or ''}
 
 
 def operation(tool, args, evidence):
-    kind, action, detail = classify(tool, args)
-    op=dict(tool=tool, kind=kind, action=action, summary=(action+' '+str(detail)).strip()[:250],
-            arguments=dict(args) if isinstance(args,PartialArguments) else args, evidence=[evidence])
-    if isinstance(args,PartialArguments) and args.unknown:op['unknown_arguments']=list(args.unknown)
+    kind, action_key, summary_params = classify(tool, args)
+    op = dict(tool=tool, arguments=dict(args) if isinstance(args, PartialArguments) else args, evidence=[evidence],
+              **operation_fields(kind, action_key, summary_params))
+    if isinstance(args, PartialArguments) and args.unknown:
+        op['unknown_arguments'] = list(args.unknown)
     return op
 
 
@@ -293,8 +364,10 @@ def source_operations(item):
                 if old[group] is not None:
                     result[key]=int(old[group])
             op['returned']=result
-        if is_quiet_poll(op,op.get('returned',item['output'])):
-            op['summary']+=' · 无新增输出'
+        if is_quiet_poll(op, op.get('returned', item['output'])):
+            suffix = tuple(op['summary_params'].get('_suffix_keys', ())) + ('tools.action.noNewOutput',)
+            op['summary_params']['_suffix_keys'] = suffix
+            op['summary'] = operation_summary(op['action_key'], op['summary_params'])
     return [op]
 
 
@@ -341,49 +414,85 @@ def event_matches(op, event):
     return (op['tool'] or '').replace('.', '__') == tool and op['arguments'] == event.get('arguments')
 
 
+WEB_NATIVE_KEYS = {
+    'search': 'tools.action.webSearch',
+    'openPage': 'tools.action.openPage',
+    'findInPage': 'tools.action.findInPage',
+}
+GENERATION_STATUS_KEYS = {
+    'completed': 'tools.action.status.completed',
+    'failed': 'tools.action.status.failed',
+    'inProgress': 'tools.action.status.inProgress',
+}
+
+
 def event_operation(event):
-    if event.get('type') in ('imageView','ImageView'):
-        return operation('view_image', {'path':image_path(event.get('path'))}, 'native')
+    if event.get('type') in ('imageView', 'ImageView'):
+        return operation('view_image', {'path': image_path(event.get('path'))}, 'native')
     if event.get('type') == 'McpToolCall':
-        op=operation('mcp__'+str(event.get('server'))+'__'+str(event.get('tool')),event.get('arguments'),'native')
-        result=event.get('result')
-        if event.get('error') is not None or event.get('status')=='failed' or (isinstance(result,dict) and result.get('isError') is True):
-            op['summary']+=' · 失败'
-        elif event.get('status') in ('inProgress','in_progress'):
-            op['summary']+=' · 上次记录时仍在运行'
+        op = operation('mcp__' + str(event.get('server')) + '__' + str(event.get('tool')), event.get('arguments'), 'native')
+        result = event.get('result')
+        suffix = ()
+        if event.get('error') is not None or event.get('status') == 'failed' or (isinstance(result, dict) and result.get('isError') is True):
+            suffix = ('tools.action.failedSuffix',)
+        elif event.get('status') in ('inProgress', 'in_progress'):
+            suffix = ('tools.action.wasRunningSuffix',)
+        if suffix:
+            op['summary_params']['_suffix_keys'] = tuple(op['summary_params'].get('_suffix_keys', ())) + suffix
+            op['summary'] = operation_summary(op['action_key'], op['summary_params'])
         return op
-    family=native_events.family(event)
-    if family=='web':
-        args=event.get('action') if isinstance(event.get('action'),dict) else {}
-        label={'search':'网页搜索','openPage':'打开网页','findInPage':'页内查找'}.get(args.get('type'),'网页操作')
-        subject=args.get('pattern') or args.get('url') or args.get('query') or event.get('query')
-        if not subject and isinstance(args.get('queries'),list):
-            subject=' · '.join(q for q in args['queries'] if isinstance(q,str))
-        tool,kind='web__run','web'
-    elif family=='dynamic':
-        tool=native_events.dynamic_name(event)
-        args,kind=event.get('arguments'),'other'
-        label=tool.replace('__',' · ') or '动态工具'
-        subject='失败' if event.get('success') is False or event.get('status')=='failed' else ''
-    elif family=='sleep':
-        tool,kind,label,args='clock.sleep','other','等待时钟',{}
-        duration=event.get('durationMs')
-        subject=f'{duration} ms' if duration is not None else ''
-    elif family=='generation':
-        tool,kind,label,args='image_gen__imagegen','image','生成图片',{}
-        subject={'completed':'已完成','failed':'失败','inProgress':'处理中'}.get(event.get('status'),'')
-    elif family=='agent_activity':
-        tool,kind,args='SubAgentActivity','agent',{}
-        label=native_events.AGENT_LABELS.get(event.get('kind'),'子任务活动')
-        subject=event.get('agentPath') or event.get('agentThreadId')
+    family = native_events.family(event)
+    summary_params = {}
+    if family == 'web':
+        args = event.get('action') if isinstance(event.get('action'), dict) else {}
+        action_key = WEB_NATIVE_KEYS.get(args.get('type'), 'tools.action.webOp')
+        subject = args.get('pattern') or args.get('url') or args.get('query') or event.get('query')
+        if not subject and isinstance(args.get('queries'), list):
+            subject = ' · '.join(q for q in args['queries'] if isinstance(q, str))
+        tool, kind = 'web__run', 'web'
+        summary_params['detail'] = subject or ''
+    elif family == 'dynamic':
+        tool = native_events.dynamic_name(event)
+        args = event.get('arguments')
+        kind = 'other'
+        action_key = 'tools.action.dynamicTool'
+        identity = tool.replace('__', ' · ') if tool else ''
+        summary_params['identity'] = identity
+        summary_params['detail'] = identity
+        if event.get('success') is False or event.get('status') == 'failed':
+            summary_params['_suffix_keys'] = ('tools.action.failedSuffix',)
+    elif family == 'sleep':
+        tool, args, kind = 'clock.sleep', {}, 'other'
+        action_key = 'tools.action.waitClock'
+        duration = event.get('durationMs')
+        summary_params['detail'] = f'{duration} ms' if duration is not None else ''
+    elif family == 'generation':
+        tool, args, kind = 'image_gen__imagegen', {}, 'image'
+        action_key = 'tools.action.generateImage'
+        status = event.get('status')
+        status_key = GENERATION_STATUS_KEYS.get(status)
+        if status_key:
+            summary_params['detail'] = legacy(status_key)
+            summary_params['status_key'] = status_key
+    elif family == 'agent_activity':
+        tool, args, kind = 'SubAgentActivity', {}, 'agent'
+        kind_key = event.get('kind')
+        action_key = native_events.AGENT_LABEL_KEYS.get(kind_key, 'tools.action.agentActivity')
+        subject = event.get('agentPath') or event.get('agentThreadId')
+        summary_params['detail'] = (' ' + str(subject)) if subject else ''
     else:
-        tool=native_events.COLLAB_ACTIONS.get(event.get('tool'),event.get('tool'))
-        kind,args='agent',{}
-        label=native_events.TOOL_LABELS.get(tool,'代理工具 '+str(tool or ''))
-        targets=event.get('receiverThreadIds')
-        subject=f'{len(targets)} 个目标' if isinstance(targets,list) else ''
-    op=operation(tool,args,'native')
-    op.update(kind=kind,action=label,summary=(label+' '+str(subject or '')).strip()[:250])
+        tool = native_events.COLLAB_ACTIONS.get(event.get('tool'), event.get('tool'))
+        kind, args = 'agent', {}
+        action_key = native_events.TOOL_LABEL_KEYS.get(tool, 'tools.action.agentToolFallback')
+        if action_key == 'tools.action.agentToolFallback':
+            summary_params['tool'] = str(tool or '')
+        targets = event.get('receiverThreadIds')
+        if isinstance(targets, list):
+            summary_params['count'] = len(targets)
+            summary_params['_suffix_keys'] = ('tools.action.targetsCount',)
+    op = operation(tool, args, 'native')
+    if family:
+        op.update(**operation_fields(kind, action_key, summary_params))
     return op
 
 
@@ -405,7 +514,14 @@ def operations(item):
                 args = op.get('arguments')
                 op['arguments'] = {**(args if isinstance(args,dict) else {}), **native['arguments']}
             op['evidence'].append('native')
-            op.update(action=native['action'], summary=native['summary'],kind=native['kind'])
+            op.update(
+                action=native['action'],
+                summary=native['summary'],
+                kind=native['kind'],
+                action_key=native.get('action_key'),
+                summary_key=native.get('summary_key'),
+                summary_params=native.get('summary_params'),
+            )
         else:
             op = native
             ops.append(op)
@@ -413,8 +529,18 @@ def operations(item):
 
     merged = list(ops)
     for index, result in enumerate(item.get('native_results', [])):
-        merged.append(dict(operation(None,None,'native'),kind='run',action='执行结果',
-                           summary=('执行结果 '+' '.join((result.get('command') or '').split())).strip()[:250],resultRef=index))
+        cmd = ' '.join((result.get('command') or '').split()).strip()
+        params = {'detail': cmd[:250], 'command': cmd[:250]}
+        merged.append(dict(
+            operation(None, None, 'native'),
+            kind='run',
+            action_key='tools.action.execResult',
+            summary_key='tools.action.execResult',
+            summary_params=params,
+            action=legacy('tools.action.execResult'),
+            summary=operation_summary('tools.action.execResult', params),
+            resultRef=index,
+        ))
     for op in merged:
         if op['kind'] != 'run' or 'native' in op['evidence']:
             continue
@@ -430,15 +556,26 @@ def operations(item):
         while words and words[0] in ('-n','--line-number','-i','--ignore-case','-S','--smart-case','-F'):
             words.pop(0)
         if len(words)==2 and all(w and not w.startswith('-') for w in words):
-            op.update(kind='search', search=dict(type='search',cmd=cmd,query=words[0],path=words[1]), action='搜索内容', summary=('搜索内容 '+words[0]+' · '+words[1])[:250])
+            params = {'query': words[0], 'path': words[1], 'detail': words[0] + ' · ' + words[1]}
+            op.update(
+                kind='search',
+                search=dict(type='search', cmd=cmd, query=words[0], path=words[1]),
+                action_key='tools.action.searchContent',
+                summary_key='tools.action.searchContent',
+                summary_params=params,
+                action=legacy('tools.action.searchContent'),
+                summary=operation_summary('tools.action.searchContent', {**params, 'detail': params['detail'][:250]}),
+            )
     if not merged and identity(item) in WRAPPERS:
-        return [dict(operation(None, None, 'script'), action='编排脚本', summary='编排脚本')]
+        orch = operation_fields('other', 'tools.action.orchestration', {})
+        return [dict(operation(None, None, 'script'), **orch)]
     return merged or [operation(None, None, 'script')]
 
 
 def summaries(ops):
-    keys = ('tool','kind','action','summary','resultRef','sourceIndex','evidence','icon')
-    return [{k:op[k] for k in keys if k in op} for op in ops]
+    keys = ('tool', 'kind', 'action', 'action_key', 'summary', 'summary_key', 'summary_params',
+            'summary_message', 'action_message', 'resultRef', 'sourceIndex', 'evidence', 'icon')
+    return [{k: op[k] for k in keys if k in op} for op in ops]
 
 
 def describe(item):
@@ -446,6 +583,10 @@ def describe(item):
     ops = operations(item)
     for op in ops:
         op['icon']=tool_icons.operation(op)
+        op['summary_message'] = operation_message(op)
+        op['action_message'] = msg(op['action_key'], **(op.get('summary_params') or {})) if op.get('action_key') else op.get('action', '')
+        if item.get('name_key') and op.get('tool') == item.get('name'):
+            op['summary_message'] = op['action_message'] = msg(item['name_key'])
     tool = identity(item)
     wrapped = tool in WRAPPERS and not any('direct' in op['evidence'] for op in ops)
     item.update(operations=ops, envelope={'tool': tool, 'script': wrapped})

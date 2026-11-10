@@ -14,6 +14,8 @@ from decimal import Decimal, InvalidOperation
 from html.parser import HTMLParser
 from pathlib import Path
 
+from message_i18n import PricingError, PricingOSError
+
 LOCAL = Path(__file__).parent / '.local' / 'pricing'
 SOURCES = {
     'litellm': 'https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json',
@@ -63,9 +65,9 @@ def configure(value):
     allowed = {'source': ('litellm', 'modelsdev'), 'basis': ('api', 'credits', 'purchase'),
                'missing_tier': ('unrated', 'standard')}
     if not isinstance(value, dict) or any(key not in {*allowed, 'credit_rule'} for key in value):
-        raise ValueError('无效的价格设置')
+        raise PricingError('pricing.err.invalidSettings')
     if any(key in value and value[key] not in choices for key, choices in allowed.items()):
-        raise ValueError('无效的价格设置')
+        raise PricingError('pricing.err.invalidSettings')
     value = dict(value)
     if value.get('basis') == 'credits':
         value['basis'] = 'purchase'
@@ -81,20 +83,20 @@ def validate_credit_rule(rule):
     if rule is None:
         return None
     if not isinstance(rule, dict) or set(rule) != {'currency', 'amount', 'credits'}:
-        raise ValueError('换算规则只需支付金额和获得 credits')
+        raise PricingError('pricing.err.ruleFields')
     if rule['currency'] != 'USD':
-        raise ValueError('换算金额仅使用 USD')
+        raise PricingError('pricing.err.usdOnly')
     normalized = {'currency': 'USD'}
     for key in ('amount', 'credits'):
         raw = rule[key]
         if isinstance(raw, bool) or not isinstance(raw, (str, int, float)) or len(str(raw)) > 40:
-            raise ValueError('金额和 credits 应为正数')
+            raise PricingError('pricing.err.positive')
         try:
             number_value = Decimal(str(raw))
         except InvalidOperation as error:
-            raise ValueError('金额和 credits 应为正数') from error
+            raise PricingError('pricing.err.positive') from error
         if not number_value.is_finite() or number_value <= 0 or number_value > Decimal('1e12') or number_value.as_tuple().exponent < -12:
-            raise ValueError('金额和 credits 应为正数，最多 12 位小数且不超过 1 万亿')
+            raise PricingError('pricing.err.positiveRange')
         normalized[key] = format(number_value, 'f')
     return normalized
 
@@ -147,7 +149,7 @@ def credit_prices(text):
                 models[model] = dict(zip(('input', 'cached', 'output'),
                                         [float(match[1].replace(',', '')) for match in numbers]))
         if not models:
-            raise ValueError('官方 credits 表未解析到模型，保留已有缓存')
+            raise PricingError('pricing.err.creditsNoModels')
         # Multipliers are accepted only when explicitly returned in the source.
         speed = {}
         for name in ('Fast', 'Ultrafast'):
@@ -155,16 +157,16 @@ def credit_prices(text):
             if match:
                 speed[name.lower()] = float(match[1])
         return {'models': models, 'speed': speed}
-    raise ValueError('官方 credits 页面格式发生变化，保留已有缓存')
+    raise PricingError('pricing.err.creditsFormat')
 
 
 def validate(source, data):
     if source == 'litellm':
         candidates = [value for value in data.values() if isinstance(value, dict) and value.get('litellm_provider') == 'openai']
         if not any('input_cost_per_token' in value for value in candidates):
-            raise ValueError('接口未返回 OpenAI 单价，保留已有缓存')
+            raise PricingError('pricing.err.noOpenAIPrices')
     if source == 'modelsdev' and not data.get('openai', {}).get('models'):
-        raise ValueError('接口未返回 OpenAI 模型，保留已有缓存')
+        raise PricingError('pricing.err.noOpenAIModels')
 
 
 def download_prices(url):
@@ -174,7 +176,7 @@ def download_prices(url):
     if not executable and Path('/usr/bin/curl').is_file():
         executable = '/usr/bin/curl'
     if not executable:
-        raise OSError('更新价格需要系统 curl，请安装 curl 后重试；已有缓存已保留')
+        raise PricingOSError('pricing.err.needCurl')
     limit = 24 * 1024 * 1024
     with tempfile.TemporaryFile() as output:
         try:
@@ -186,24 +188,24 @@ def download_prices(url):
                 '--user-agent', 'CodexSessions/1', '--url', url,
             ], stdout=output, stderr=subprocess.PIPE, timeout=30)
         except subprocess.TimeoutExpired as error:
-            raise OSError('价格下载超时，已有缓存已保留') from error
+            raise PricingOSError('pricing.err.timeout') from error
         if result.returncode:
             if result.returncode == 60:
-                raise OSError('系统 curl 无法验证价格源的 HTTPS 证书，请检查系统证书配置；已有缓存已保留')
+                raise PricingOSError('pricing.err.tls')
             if result.returncode == 63:
-                raise ValueError('价格响应超出大小限制')
+                raise PricingError('pricing.err.tooLarge')
             detail = result.stderr.decode(errors='replace').strip()[:500]
-            raise OSError(f'价格下载失败（curl {result.returncode}）：{detail}')
+            raise PricingOSError('pricing.err.download', params=dict(code=result.returncode, detail=detail))
         output.seek(0)
         raw = output.read(limit + 1)
     if len(raw) > limit:
-        raise ValueError('价格响应超出大小限制')
+        raise PricingError('pricing.err.tooLarge')
     return raw
 
 
 def refresh(source):
     if source not in SOURCES:
-        raise ValueError('未知价格源')
+        raise PricingError('pricing.err.unknownSource')
     raw = download_prices(SOURCES[source])
     data = credit_prices(raw.decode()) if source == 'credits' else json.loads(raw)
     validate(source, data)
@@ -235,48 +237,48 @@ def number(value):
 
 def quote(event, settings, cached):
     if not cached:
-        return None, '价格尚未缓存'
+        return None, 'pricing.reason.notCached'
     model = event.get('model')
     if not model:
-        return None, '模型未记录'
+        return None, 'pricing.reason.modelMissing'
     tier = event.get('tier')
     if tier is None:
         if settings['missing_tier'] == 'standard':
             tier = 'standard'
         else:
-            return None, '速度档位未记录'
+            return None, 'pricing.reason.tierMissing'
     tokens = event['tokens']
     data = cached['data']
     if settings['basis'] in ('credits', 'purchase'):
         rates = data.get('models', {}).get(model)
         if not rates:
-            return None, 'credits 模型价格未收录'
+            return None, 'pricing.reason.creditsModel'
         if tier in ('standard', 'default'):
             multiplier = Decimal(1)
         else:
             multiplier = number(data.get('speed', {}).get(tier))
             if multiplier is None:
-                return None, 'credits 档位价格未收录'
+                return None, 'pricing.reason.creditsTier'
         quantities = {'input': tokens['input'] + tokens['cache_write'], 'cached': tokens['cached'],
                       'output': tokens['output'] + tokens['reasoning']}
     else:
         request_input = event.get('request_input')
         if request_input is None:
-            return None, '调用输入长度未记录'
+            return None, 'pricing.reason.inputLen'
         long_context = request_input > 272000
         if settings['source'] == 'litellm':
             entry = data.get(model)
             if not isinstance(entry, dict) or entry.get('litellm_provider') != 'openai':
-                return None, 'OpenAI 模型价格未收录'
+                return None, 'pricing.reason.openaiModel'
             suffix = {'standard': '', 'default': '', 'fast': '_priority',
                       'flex': '_flex', 'ultrafast': '_ultrafast', 'batch': '_batches'}.get(tier)
             if suffix is None:
-                return None, '档位价格未收录'
+                return None, 'pricing.reason.tierPrice'
             quantities = {'input': tokens['input'], 'cached': tokens['cached'],
                           'output': tokens['output'] + tokens['reasoning']}
             # Cache-write retention is not present in our logs, so do not pick a duration.
             if tokens['cache_write']:
-                return None, '缓存写入时长未记录'
+                return None, 'pricing.reason.cacheWrite'
             keys = {'input': 'input_cost_per_token', 'cached': 'cache_read_input_token_cost',
                     'output': 'output_cost_per_token'}
             rates = {key: entry.get(base + ('_above_272k_tokens' if long_context else '') + suffix)
@@ -284,15 +286,15 @@ def quote(event, settings, cached):
             scale = Decimal(1)
         else:
             if tier not in ('standard', 'default'):
-                return None, '此价格源未提供该档位'
+                return None, 'pricing.reason.tierUnavailable'
             cost = data.get('openai', {}).get('models', {}).get(model, {}).get('cost')
             if not cost:
-                return None, 'OpenAI 模型价格未收录'
+                return None, 'pricing.reason.openaiModel'
             if long_context:
                 cost = next((row for row in cost.get('tiers', []) if row.get('tier', {}).get('size') == 272000), {})
             rates = {'input': cost.get('input'), 'cached': cost.get('cache_read'), 'output': cost.get('output')}
             if tokens['cache_write']:
-                return None, '缓存写入时长未记录'
+                return None, 'pricing.reason.cacheWrite'
             quantities = {'input': tokens['input'], 'cached': tokens['cached'],
                           'output': tokens['output'] + tokens['reasoning']}
             scale = Decimal(1000000)
@@ -306,7 +308,7 @@ def quote(event, settings, cached):
             continue
         rate = number(rates.get(key))
         if rate is None:
-            return None, '所需单价缺失'
+            return None, 'pricing.reason.unitMissing'
         total += quantity * rate * multiplier / scale
     return total, None
 
