@@ -1514,21 +1514,39 @@ agentPreview.addEventListener('click',e=>{if(e.target===agentPreview){const r=ag
 agentPreview.addEventListener('click',openMessageImage);
 agentPreview.addEventListener('close',()=>{previewRequest++;previewTarget=null;if(previewOpener?.isConnected)previewOpener.focus({preventScroll:true});previewOpener=null});
 
-function setupLocaleSelect(){
- const select=$('#locale-select');if(!select||!I18n.getManifest())return;
- const stored=localStorage.getItem(I18n.STORAGE_KEY);
- const manifest=I18n.getManifest();
- select.replaceChildren();
- const add=(value,label)=>{const opt=document.createElement('option');opt.value=value;opt.textContent=label;select.append(opt)};
- add('',t('common.followBrowser'));
- for(const [id,cfg] of Object.entries(manifest.locales||{})){
-  if(cfg?.enabled===false)continue;
-  add(id,cfg.name||id);
+function setupLocaleMenu(){
+ const button=$('#locale-toggle'),menu=$('#locale-menu'),manifest=I18n.getManifest();
+ if(!button||!menu||!manifest)return;
+ let stored=null;try{stored=localStorage.getItem(I18n.STORAGE_KEY)}catch{}
+ const selected=stored?I18n.getLocale():'';
+ const options=[['',t('common.followBrowser')],...Object.entries(manifest.locales||{}).filter(([,cfg])=>cfg?.enabled!==false).map(([id,cfg])=>[id,cfg.name||id])];
+ button.innerHTML=uiIcon('Languages');
+ button.title=t('common.language')+' · '+(options.find(([id])=>id===selected)?.[1]||t('common.followBrowser'));
+ menu.replaceChildren();
+ for(const [id,label] of options){
+  const option=document.createElement('button');
+  option.type='button';option.dataset.locale=id;option.setAttribute('role','menuitemradio');
+  option.setAttribute('aria-checked',String(id===selected));option.tabIndex=-1;
+  const name=document.createElement('span');name.textContent=label;
+  option.append(name);
+  const check=document.createElement('span');check.className='locale-check';check.innerHTML=uiIcon('Check');option.append(check);
+  menu.append(option);
  }
- select.value=stored==null||stored===''?'':I18n.getLocale();
- select.setAttribute('aria-label',t('common.language'));
- const hint=$('#locale-reload-hint');if(hint)hint.textContent=t('common.languageReloadHint');
- select.onchange=()=>I18n.setLocale(select.value);
+ const close=(restore=false)=>{menu.hidden=true;button.setAttribute('aria-expanded','false');if(restore)button.focus()};
+ const open=()=>{closeSourceMenu();menu.hidden=false;button.setAttribute('aria-expanded','true');(menu.querySelector('[aria-checked="true"]')||menu.querySelector('button'))?.focus()};
+ button.onclick=()=>menu.hidden?open():close(true);
+ button.onkeydown=event=>{if(['ArrowDown','ArrowUp'].includes(event.key)){event.preventDefault();open()}};
+ menu.onclick=event=>{const option=event.target.closest('[data-locale]');if(!option)return;close();I18n.setLocale(option.dataset.locale)};
+ menu.onkeydown=event=>{
+  if(event.key==='Escape'){event.preventDefault();event.stopPropagation();close(true);return}
+  if(['ArrowDown','ArrowUp','Home','End'].includes(event.key)){
+   event.preventDefault();const items=[...menu.querySelectorAll('button')],i=items.indexOf(document.activeElement);
+   const next=event.key==='Home'?0:event.key==='End'?items.length-1:(i+(event.key==='ArrowDown'?1:-1)+items.length)%items.length;
+   items[next]?.focus();
+  }
+ };
+ document.addEventListener('pointerdown',event=>{if(!event.target.closest('.locale-control'))close()});
+ document.addEventListener('focusin',event=>{if(!event.target.closest('.locale-control'))close()});
 }
 function localizeShellChrome(){
  sidebarResize.setAttribute('aria-label',t('navigation.sidebarResizeAria'));sidebarResize.title=t('navigation.sidebarResizeTitle');
@@ -1587,7 +1605,7 @@ async function startApp(){
  const cfg=I18n.getManifest()?.locales?.[I18n.getLocale()]||{};
  document.documentElement.lang=cfg.intl||I18n.getLocale();
  document.documentElement.dir=cfg.dir||'ltr';
- setupLocaleSelect();
+ setupLocaleMenu();
  localizeShellChrome();
  if(localStorage.getItem('dark')==='true')document.body.classList.add('dark');
  if(demoMode){setupDemo();window.addEventListener('hashchange',()=>{if(location.hash)openThread(location.hash.slice(1))})}

@@ -36,10 +36,9 @@
 </div>
 <div id="list"></div>
 <div class="sidebar-footer">
-<div class="locale-select">
-<label for="locale-select" class="visually-hidden" data-i18n="common.language">语言</label>
-<select id="locale-select" aria-label="语言"></select>
-<small id="locale-reload-hint" class="locale-reload-hint" data-i18n="common.languageReloadHint"></small>
+<div class="locale-control">
+<button id="locale-toggle" type="button" data-i18n="common.language" data-i18n-attr="aria-label,title" aria-label="语言" aria-haspopup="menu" aria-expanded="false" aria-controls="locale-menu"></button>
+<div id="locale-menu" role="menu" data-i18n="common.language" data-i18n-attr="aria-label" hidden></div>
 </div>
 <button id="theme" data-i18n="accessibility.theme" data-i18n-attr="aria-label" aria-label="切换深浅色"></button>
 </div>

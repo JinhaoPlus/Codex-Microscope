@@ -148,15 +148,22 @@ function usageTrendControl(view){
   '<div class="usage-overview"><div class="usage-window-slider"></div></div>'+
   '<small>'+t('usage.windowHint')+'</small></div>';
 }
+function usageOverviewSVG(view){
+ const dayMs=86400000,origin=view.last-(view.count-1)*dayMs;
+ const byDay=new Map(usageData.buckets.map(bucket=>[bucket.label,bucket.total]));
+ // The navigator can include padding before the first record and after the
+ // last one. Plot those days too, rather than drawing a ramp across the gap.
+ const totals=Array.from({length:view.count},(_,index)=>byDay.get(new Date(origin+index*dayMs).toISOString().slice(0,10))||0);
+ const peak=totals.reduce((max,total)=>Math.max(max,total),1);
+ const points=totals.map((total,index)=>((index+.5)/view.count*1000).toFixed(2)+','+(34-32*total/peak).toFixed(2));
+ return '<svg aria-hidden="true" viewBox="0 0 1000 36" preserveAspectRatio="none"><polygon points="0,36 0,34 '+points.join(' ')+' 1000,34 1000,36"/></svg>';
+}
 function mountUsageNavigator(view){
  const slider=usageDialog.querySelector('.usage-window-slider');
  if(!slider)return;
  const dayMs=86400000,origin=view.last-(view.count-1)*dayMs;
  const dateAt=index=>formatDate(new Date(origin+index*dayMs),{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'});
- const buckets=usageData.buckets,firstIndex=(Date.parse(buckets[0].label)-origin)/dayMs;
- const peak=buckets.reduce((max,bucket)=>Math.max(max,bucket.total),1);
- const points=buckets.map((bucket,i)=>((firstIndex+i+.5)/view.count*1000).toFixed(2)+','+(34-32*bucket.total/peak).toFixed(2));
- slider.insertAdjacentHTML('beforebegin','<svg aria-hidden="true" viewBox="0 0 1000 36" preserveAspectRatio="none"><polygon points="0,36 0,34 '+points.join(' ')+' '+((firstIndex+buckets.length)/view.count*1000)+',34 1000,34 1000,36"/></svg>');
+ slider.insertAdjacentHTML('beforebegin',usageOverviewSVG(view));
  const end=view.count-view.offset;
  const api=noUiSlider.create(slider,{start:[end-view.size,end],range:{min:0,max:view.count},
   step:1,margin:1,connect:true,behaviour:'tap-drag',animate:false,

@@ -38,7 +38,6 @@ const detail = {thread, items: [{kind: 'message', role: 'user', text: rawText, i
    const page = await browser.newPage({viewport: {width, height: 850}, locale});
    const errors = [];
    page.on('pageerror', error => errors.push(error.message));
-   await page.addInitScript(locale => {if(localStorage.getItem('ui-locale')==null)localStorage.setItem('ui-locale', locale)}, locale);
    await page.route('**/locales/*.json', async route => {
     await new Promise(resolve => setTimeout(resolve, 75));
     await route.continue();
@@ -109,13 +108,29 @@ const detail = {thread, items: [{kind: 'message', role: 'user', text: rawText, i
    if (locale === 'en') assert.equal(messages.duration, '1 min 5 sec');
    const turnHtml=await page.evaluate(() => turnPresentation([{type:'turn_context',payload:{turn_id:'synthetic-turn',model:'gpt-example',effort:'high',cwd:'/demo'}}]));
    assert.ok(!turnHtml.includes('[missing:'));
+   assert.equal(await page.evaluate(() => localStorage.getItem(I18n.STORAGE_KEY)),null);
+   assert.equal(await page.locator('#locale-menu [aria-checked="true"]').getAttribute('data-locale'),'');
+   assert.equal((await page.locator('#locale-toggle').innerText()).trim(),'');
    for(const nextLocale of [locale==='en'?'zh-CN':'en',locale]){
     if(width===390)await page.locator('#back').click();
-    await Promise.all([page.waitForEvent('load'),page.locator('#locale-select').selectOption(nextLocale)]);
+    await page.locator('#locale-toggle').focus();await page.keyboard.press('ArrowDown');
+    assert.equal(await page.locator('#locale-menu').isVisible(),true);
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#locale-menu').isVisible(),false);
+    assert.equal(await page.locator('#locale-toggle').evaluate(element => element===document.activeElement),true);
+    await page.locator('#locale-toggle').click();
+    await Promise.all([page.waitForEvent('load'),page.locator('#locale-menu [data-locale="'+nextLocale+'"]').click()]);
     await page.evaluate(() => window.__usageStarted);
     assert.equal(await page.evaluate(() => I18n.getLocale()),nextLocale);
+    assert.equal(await page.evaluate(() => localStorage.getItem(I18n.STORAGE_KEY)),nextLocale);
     assert.equal(new URL(page.url()).hash,'#synthetic');
    }
+   if(width===390)await page.locator('#back').click();
+   await page.locator('#locale-toggle').click();
+   await Promise.all([page.waitForEvent('load'),page.locator('#locale-menu [data-locale=""]').click()]);
+   await page.evaluate(() => window.__usageStarted);
+   assert.equal(await page.evaluate(() => localStorage.getItem(I18n.STORAGE_KEY)),null);
+   assert.equal(await page.evaluate(() => I18n.getLocale()),locale);
    const headers = (await page.request.get(base + '/')).headers();
    const csp = headers['content-security-policy'];
    assert.ok(csp.includes("script-src 'self'") && !csp.includes("'unsafe-inline'"));

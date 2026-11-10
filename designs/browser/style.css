@@ -215,9 +215,18 @@ summary{list-style:none}summary::-webkit-details-marker{display:none}summary:not
 
 .sidebar-footer{display:flex;align-items:flex-end;gap:4px;flex:none;border-top:1px solid var(--line);margin-top:8px;padding:6px 2px 0}.sidebar-footer .usage-global{margin:0;align-self:auto}.sidebar-footer #theme{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;min-height:36px;padding:8px;color:var(--muted)}.sidebar-footer #theme:hover{color:var(--ink)}@media(max-width:700px){.sidebar-footer #theme{width:40px;height:40px;min-height:40px}}
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.sidebar-footer .locale-select{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;max-width:9rem}
-.sidebar-footer .locale-select select{font:inherit;font-size:12px;padding:6px 24px 6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--side);color:var(--ink);width:100%;min-height:36px}
-.locale-reload-hint{font-size:10px;color:var(--muted);line-height:1.3}
+.locale-control{position:relative;flex:none}
+.sidebar-footer #locale-toggle{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;min-height:36px;padding:8px;color:var(--muted)}
+.sidebar-footer #locale-toggle:hover,.sidebar-footer #locale-toggle[aria-expanded=true]{color:var(--ink);background:var(--hover)}
+#locale-menu{position:absolute;bottom:calc(100% + 8px);left:0;z-index:25;width:192px;max-width:calc(100vw - 32px);padding:5px;border:1px solid var(--line);border-radius:12px;background:var(--bg);box-shadow:0 8px 28px #0002}
+#locale-menu[hidden]{display:none}
+#locale-menu button{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:9px 10px;min-height:38px;text-align:left;font-size:13px;white-space:nowrap}
+#locale-menu button:focus-visible{background:var(--hover);outline:2px solid var(--muted);outline-offset:-2px}
+.locale-check{display:inline-flex;visibility:hidden;color:var(--ink)}
+.locale-check .ui-icon{width:15px;height:15px}
+#locale-menu [aria-checked=true] .locale-check{visibility:visible}
+@media(max-width:700px){.sidebar-footer #locale-toggle{width:40px;height:40px;min-height:40px}}
+@media(pointer:coarse){.sidebar-footer #locale-toggle,.sidebar-footer #theme{width:44px;height:44px;min-height:44px}#locale-menu button{min-height:44px}}
 
 .turn-usage-link{justify-content:center;width:30px;height:30px;min-height:30px;padding:6px}.turn-usage-link .usage-icon{width:16px;height:16px}@media(max-width:700px){.turn-usage-link{width:36px;height:36px;min-height:36px;padding:9px}}
 

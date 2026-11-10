@@ -36,6 +36,22 @@ assert.notEqual(ctx.usageCostAxisNumber(1e-12),'0');assert.notEqual(ctx.usageCos
 html=render([bucket(100,1)],{basis:'credits',unit:'credits'});assert.match(html,/消耗 · credits/);assert.doesNotMatch(html,/USD/);
 ctx.usageDay='2026-11-06';html=render([{...bucket(100,1),label:'13:00'}]);assert.match(html,/data-usage-hour="13:00"/);assert.match(html,/小时 Token/);
 assert.doesNotMatch(render([]),/<svg/);
+// Sparse records must not create ramps across the navigator's zero padding.
+const dayMs=86400000,last=Date.parse('2026-11-10'),count=30;
+ctx.usageData={buckets:[{label:'2026-11-05',total:100}]};
+const overview=ctx.usageOverviewSVG({last,count});
+const outline=overview.match(/points="([^"]+)"/)[1].split(' ').map(pair=>pair.split(',').map(Number));
+const daily=outline.slice(2,-2);
+assert.equal(daily.length,30);
+assert.equal(daily.filter(([,y])=>y<34).length,1);
+assert.equal(daily[24][1],2);
+assert.equal(daily[23][1],34);assert.equal(daily[25][1],34);
+assert.ok(Math.abs(daily[24][0]-((24.5)/30*1000))<.01);
+ctx.usageData={buckets:[{label:'2026-10-12',total:100},{label:'2026-11-10',total:50}]};
+const edge=ctx.usageOverviewSVG({last,count}).match(/points="([^"]+)"/)[1].split(' ').slice(2,-2).map(pair=>pair.split(',').map(Number));
+assert.equal(edge[0][1],2);assert.equal(edge[29][1],18);assert.equal(edge[1][1],34);assert.equal(edge[28][1],34);
+ctx.usageData={buckets:[{label:'2026-11-05',total:0}]};
+assert.doesNotMatch(ctx.usageOverviewSVG({last,count}),/NaN|Infinity/);
 '''
         result = subprocess.run([shutil.which('node'), '-e', script], cwd=Path(__file__).parent, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
