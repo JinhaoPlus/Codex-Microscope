@@ -4,9 +4,11 @@ import json
 import math
 import os
 import re
+import shutil
+import subprocess
+import sys
 import tempfile
 import threading
-import urllib.request
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from html.parser import HTMLParser
@@ -165,14 +167,44 @@ def validate(source, data):
         raise ValueError('接口未返回 OpenAI 模型，保留已有缓存')
 
 
+def download_prices(url):
+    # macOS LaunchAgents may omit /usr/bin from PATH. Use curl's TLS stack,
+    # not Python's certificate installation; never load user .curlrc options.
+    executable = '/usr/bin/curl' if sys.platform == 'darwin' and Path('/usr/bin/curl').is_file() else shutil.which('curl')
+    if not executable and Path('/usr/bin/curl').is_file():
+        executable = '/usr/bin/curl'
+    if not executable:
+        raise OSError('更新价格需要系统 curl，请安装 curl 后重试；已有缓存已保留')
+    limit = 24 * 1024 * 1024
+    with tempfile.TemporaryFile() as output:
+        try:
+            result = subprocess.run([
+                executable, '--disable', '--silent', '--show-error', '--fail',
+                '--location', '--max-redirs', '5', '--proto', '=https',
+                '--proto-redir', '=https', '--connect-timeout', '10',
+                '--max-time', '25', '--max-filesize', str(limit),
+                '--user-agent', 'CodexSessions/1', '--url', url,
+            ], stdout=output, stderr=subprocess.PIPE, timeout=30)
+        except subprocess.TimeoutExpired as error:
+            raise OSError('价格下载超时，已有缓存已保留') from error
+        if result.returncode:
+            if result.returncode == 60:
+                raise OSError('系统 curl 无法验证价格源的 HTTPS 证书，请检查系统证书配置；已有缓存已保留')
+            if result.returncode == 63:
+                raise ValueError('价格响应超出大小限制')
+            detail = result.stderr.decode(errors='replace').strip()[:500]
+            raise OSError(f'价格下载失败（curl {result.returncode}）：{detail}')
+        output.seek(0)
+        raw = output.read(limit + 1)
+    if len(raw) > limit:
+        raise ValueError('价格响应超出大小限制')
+    return raw
+
+
 def refresh(source):
     if source not in SOURCES:
         raise ValueError('未知价格源')
-    request = urllib.request.Request(SOURCES[source], headers={'User-Agent': 'CodexSessions/1'})
-    with urllib.request.urlopen(request, timeout=25) as response:
-        raw = response.read(24 * 1024 * 1024 + 1)
-    if len(raw) > 24 * 1024 * 1024:
-        raise ValueError('价格响应超出大小限制')
+    raw = download_prices(SOURCES[source])
     data = credit_prices(raw.decode()) if source == 'credits' else json.loads(raw)
     validate(source, data)
     snapshot = {'url': SOURCES[source], 'fetched_at': datetime.now(timezone.utc).isoformat(),

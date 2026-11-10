@@ -6,6 +6,8 @@
 
 需要 Python 3.10+，以及本机已有的 Codex 会话记录。普通 JSONL 无额外依赖；压缩日志需要 Python 3.14+ 的标准库 zstd，或系统安装 `zstd` 命令（macOS 可用 `brew install zstd`）。缺少解压支持时页面会明确提示。
 
+更新价格数据需要系统 `curl`（macOS 自带；其他系统可通过包管理器安装）。下载使用 curl 的 HTTPS 与证书配置，不依赖 Python 的根证书安装，始终校验证书；不读取用户 `.curlrc`。缺少 curl、下载失败或证书校验失败时，会明确提示并保留已有价格缓存。浏览已有记录不需要 curl。
+
 macOS 建议使用 Homebrew Python。可运行 `python3 diagnose_sqlite.py` 检查当前运行时：本机系统 Python 的 SQLite 在 WAL 辅助文件缺失时，只读查询会报 `unable to open database file`；Codex 再次写入并创建辅助文件后才恢复。若 `readable_without_sidecars` 为 `false`，请换用通过检查的 Python，并用同一个解释器运行服务与安装器。诊断只操作临时合成库，不访问真实会话。只读连接不修改会话表；标准 SQLite 仍可能创建用于协调并发读取的 `-wal`、`-shm` 辅助文件。
 
 ```sh

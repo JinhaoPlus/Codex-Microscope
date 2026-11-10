@@ -1,4 +1,5 @@
 import json
+import subprocess
 import tempfile
 import unittest
 from decimal import Decimal
@@ -86,7 +87,7 @@ class SourcePricing(unittest.TestCase):
             pricing.save_json(Path(directory)/'litellm.json', original)
             pricing.configure({'basis':'credits', 'source':'modelsdev'})
             self.assertEqual(pricing.preferences()['basis'], 'purchase')
-            with patch.object(pricing.urllib.request, 'urlopen', side_effect=OSError('offline')):
+            with patch.object(pricing, 'download_prices', side_effect=OSError('offline')):
                 with self.assertRaises(OSError):
                     pricing.refresh('litellm')
             self.assertEqual(pricing.snapshot('litellm'), original)
@@ -94,6 +95,53 @@ class SourcePricing(unittest.TestCase):
                 pricing.configure({'input_price':123})
             with self.assertRaises(ValueError):
                 pricing.refresh('https://example.com/arbitrary-url')
+
+    def test_curl_download_ignores_config_and_restricts_https(self):
+        def run(args, **kwargs):
+            self.assertEqual(args[:2], ['synthetic-curl', '--disable'])
+            self.assertEqual(args[args.index('--proto') + 1], '=https')
+            self.assertEqual(args[args.index('--proto-redir') + 1], '=https')
+            self.assertNotIn('--insecure', args)
+            self.assertNotIn('-k', args)
+            self.assertIn('--fail', args)
+            self.assertIn('--max-filesize', args)
+            self.assertEqual(kwargs['timeout'], 30)
+            kwargs['stdout'].write(b'{"synthetic":true}')
+            return subprocess.CompletedProcess(args, 0, stderr=b'')
+        with patch.object(pricing.sys, 'platform', 'synthetic'), \
+             patch.object(pricing.shutil, 'which', return_value='synthetic-curl'), \
+             patch.object(pricing.subprocess, 'run', side_effect=run):
+            self.assertEqual(pricing.download_prices('https://example.test/prices'), b'{"synthetic":true}')
+
+    def test_curl_failures_preserve_previous_cache(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(pricing, 'LOCAL', Path(directory)), \
+             patch.object(pricing.sys, 'platform', 'synthetic'), \
+             patch.object(pricing.shutil, 'which', return_value='synthetic-curl'):
+            original = {'data': {'example': 1}, 'sha256': 'previous'}
+            pricing.save_json(pricing.LOCAL/'litellm.json', original)
+            for code in (22, 60, 63):
+                with self.subTest(code=code), patch.object(pricing.subprocess, 'run',
+                        return_value=subprocess.CompletedProcess([], code, stderr=b'synthetic failure')):
+                    with self.assertRaises((OSError, ValueError)):
+                        pricing.refresh('litellm')
+                    self.assertEqual(pricing.snapshot('litellm'), original)
+            with patch.object(pricing.subprocess, 'run', side_effect=subprocess.TimeoutExpired('curl', 30)):
+                with self.assertRaisesRegex(OSError, '超时'):
+                    pricing.refresh('litellm')
+                self.assertEqual(pricing.snapshot('litellm'), original)
+
+    def test_missing_curl_and_invalid_download_do_not_replace_cache(self):
+        with patch.object(pricing.shutil, 'which', return_value=None), \
+             patch.object(pricing.Path, 'is_file', return_value=False):
+            with self.assertRaisesRegex(OSError, '需要系统 curl'):
+                pricing.download_prices('https://example.test/prices')
+        with tempfile.TemporaryDirectory() as directory, patch.object(pricing, 'LOCAL', Path(directory)):
+            original = {'sha256': 'previous'}
+            pricing.save_json(pricing.LOCAL/'litellm.json', original)
+            with patch.object(pricing, 'download_prices', return_value=b'not json'):
+                with self.assertRaises(ValueError):
+                    pricing.refresh('litellm')
+                self.assertEqual(pricing.snapshot('litellm'), original)
 
 
 if __name__ == '__main__':
