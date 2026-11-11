@@ -274,7 +274,7 @@ function contextToolDetail(item){
  const schemaKeys=['parameters','input_schema','inputSchema','schema'];
  const fields=schemaKeys.filter(key=>Object.hasOwn(tool,key));
  const format=Object.hasOwn(tool,'format');
- const schemas=fields.map(key=>'<section class="tool-input-schema tool-schema-section"><h4>'+t('context.inputSchemaKey',{key})+' <code>'+esc(key)+'</code></h4>'+schemaPreview(tool[key])+'</section>').join('');
+ const schemas=fields.map(key=>'<section class="tool-input-schema tool-schema-section"><h4>'+t('context.inputSchema')+' <code>'+esc(key)+'</code></h4>'+schemaPreview(tool[key])+'</section>').join('');
  const input=schemas||(format?'<section class="tool-input-schema"><h4>'+t('context.inputFormat')+'</h4><p class="context-note">'+t('context.customFormatNote')+'</p>'+contextValue({format:tool.format})+'</section>':'<section class="tool-input-schema tool-schema-section"><h4>'+t('context.inputSchema')+'</h4><p class="context-note">'+t('context.noInputSchemaNote')+'</p></section>');
  const rest=Object.fromEntries(Object.entries(tool).filter(([key])=>key!=='description'&&!fields.includes(key)&&!(format&&key==='format')));
  const detail=tool===item?rest:{...item,function:rest};

@@ -1,0 +1,19 @@
+{
+  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
+  "source_sha256": "42677c2cfeaa9c5012806ae1f73c35779eeefa37ae8b8d29396b0f1412710325",
+  "observed_date": "2026-11-10",
+  "data": {
+    "gpt-6.1-sol": {
+      "litellm_provider": "openai",
+      "input_cost_per_token": 2e-06,
+      "output_cost_per_token": 1e-05,
+      "cache_read_input_token_cost": 1e-07
+    },
+    "gpt-6-astra": {
+      "litellm_provider": "openai",
+      "input_cost_per_token": 1e-05,
+      "output_cost_per_token": 5e-05,
+      "cache_read_input_token_cost": 1e-06
+    }
+  }
+}

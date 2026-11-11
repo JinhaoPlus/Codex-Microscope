@@ -21,3 +21,8 @@ Source adapters, pinned build dependencies and supplemental notices are in
 OpenAI, Codex and ChatGPT names belong to their respective owner. References identify
 the compatible product; this project is independent and does not imply endorsement.
 No official OpenAI application icon is included in this source distribution.
+
+The README screenshot fixtures include tool input definitions transcribed from
+OpenAI Codex under Apache-2.0. See [fixture provenance](docs/fixtures/README.md),
+[license](docs/fixtures/codex-tools.LICENSE) and [upstream notice](docs/fixtures/codex-tools.NOTICE).
+These data fixtures do not replace the project's own MIT license.
